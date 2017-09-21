@@ -24,10 +24,11 @@ import java.util.regex.Pattern;
 /**
  * Created by Teju on 19/09/2017.
  */
-public class Login extends AppCompatActivity {
+public class Login extends AppCompatActivity implements View.OnClickListener{
 
     private View rootView;
     private EditText phone,otp;
+    private TextView sign_up;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,8 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.login);
         rootView=findViewById(android.R.id.content);
         phone=(EditText)findViewById(R.id.phone);
+        sign_up=(TextView)findViewById(R.id.sign_up);
+        sign_up.setOnClickListener(this);
     }
 
     @Override
@@ -96,4 +99,9 @@ public class Login extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onClick(View v) {
+        Intent i=new Intent(this,UserRegister.class);
+        startActivity(i);
+    }
 }

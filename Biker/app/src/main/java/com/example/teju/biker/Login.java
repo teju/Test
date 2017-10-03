@@ -42,12 +42,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     private View rootView;
     private EditText phone,otp;
     private TextView sign_up;
-<<<<<<< HEAD
     private SharedPreferences prefrence;
     private SharedPreferences.Editor editor;
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
-=======
->>>>>>> origin/master
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -59,7 +56,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         phone=(EditText)findViewById(R.id.phone);
         sign_up=(TextView)findViewById(R.id.sign_up);
         sign_up.setOnClickListener(this);
-<<<<<<< HEAD
 
         prefrence = getSharedPreferences("My_Pref", 0);
         editor = prefrence.edit();
@@ -81,8 +77,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         }else {
             //Toast.makeText(AddContactsActivity.this, "Contact Permission is already granted", Toast.LENGTH_LONG).show();
         }
-=======
->>>>>>> origin/master
     }
 
     @Override
@@ -213,7 +207,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
 
                 JSONObject errorjsonObject = jsonObject.getJSONObject("errors");
 
-<<<<<<< HEAD
                 if(errorjsonObject.has("otp_code")) {
                     JSONArray jsonArray =errorjsonObject.getJSONArray("otp_code");
                     new CustomToast().Show_Toast(getApplicationContext(), rootView,
@@ -231,13 +224,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        Intent i=new Intent(this,UserRegister.class);
-        i.putExtra("type","signup");
-=======
-    @Override
-    public void onClick(View v) {
-        Intent i=new Intent(this,UserRegister.class);
->>>>>>> origin/master
+        Intent i = new Intent(this, UserRegister.class);
+        i.putExtra("type", "signup");
         startActivity(i);
     }
 }

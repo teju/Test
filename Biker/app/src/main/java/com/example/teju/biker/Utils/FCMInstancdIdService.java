@@ -4,14 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.teju.biker.R;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.FirebaseInstanceIdService;
+/*import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceIdService;*/
 
 /**
  * Created by nz160 on 08-06-2017.
  */
 
-<<<<<<< HEAD
 public class    FCMInstancdIdService { /* extends FirebaseInstanceIdService{
 =======
 public class    FCMInstancdIdService  extends FirebaseInstanceIdService{
@@ -29,7 +28,5 @@ public class    FCMInstancdIdService  extends FirebaseInstanceIdService{
         editor.commit();
 <<<<<<< HEAD
     }*/
-=======
-    }
->>>>>>> origin/master
+
 }

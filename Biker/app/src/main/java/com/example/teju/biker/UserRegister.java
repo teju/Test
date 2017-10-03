@@ -7,6 +7,7 @@ import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -44,6 +45,7 @@ public class UserRegister extends AppCompatActivity {
 
         rootView=findViewById(android.R.id.content);
         name=(EditText)findViewById(R.id.name);
+        Button click=(Button)findViewById(R.id.buttonclick);
         phone=(EditText)findViewById(R.id.phone);
         email=(EditText)findViewById(R.id.email);
 
@@ -52,6 +54,7 @@ public class UserRegister extends AppCompatActivity {
 
         if(type.equals("edit")) {
             getProfileInfo();
+            click.setText("UPDATE");
         } else {
             name.setText("");
             email.setText("");

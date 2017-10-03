@@ -11,9 +11,7 @@ import com.google.firebase.iid.FirebaseInstanceIdService;*/
  * Created by nz160 on 08-06-2017.
  */
 
-public class    FCMInstancdIdService  {
-
-}/*FirebaseInstanceIdService{
+public class    FCMInstancdIdService { /* extends FirebaseInstanceIdService{
     @Override
     public void onTokenRefresh() {
         super.onTokenRefresh();
@@ -25,5 +23,5 @@ public class    FCMInstancdIdService  {
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putString(getString(R.string.fcm_token),resent_token);
         editor.commit();
-    }
-}*/
+    }*/
+}

@@ -16,7 +16,9 @@
         android:text="BIKER"
         android:textColor="@color/white"
         android:layout_centerHorizontal="true"
-        android:textSize="20dp"
+        android:textSize="@dimen/heading"
+        android:id="@+id/title_val"
+        android:textStyle="bold"
         android:layout_centerVertical="true"/>
     <ImageView
         android:layout_width="wrap_content"

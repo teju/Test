@@ -20,9 +20,8 @@ import com.google.firebase.messaging.RemoteMessage;*/
  * Created by nz160 on 08-06-2017.
  */
 
-public class FireBaseMessagingService {
-
-}/* extends FirebaseMessagingService {
+public class FireBaseMessagingService  {
+    /* extends FirebaseMessagingService {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -48,6 +47,5 @@ public class FireBaseMessagingService {
         builder.setContentIntent(pendingIntent);
         NotificationManager notificationManager=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0,builder.build());*//*
-    }
+    }*/
 }
-*/

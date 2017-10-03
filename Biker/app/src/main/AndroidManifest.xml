@@ -31,14 +31,19 @@
             android:value="AIzaSyCq3oZMCqlcyh5ReBCpYeqCORpCs3THIzc" />
         <activity
             android:name=".Login"
+<<<<<<< HEAD
             android:label="@string/app_name"
             android:screenOrientation="portrait">
 
+=======
+            android:label="@string/app_name">
+>>>>>>> origin/master
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
         <activity android:name=".UserRegister"
             android:screenOrientation="portrait"></activity>
         <activity android:name=".MainActivity"
@@ -54,6 +59,12 @@
         <activity android:name=".PaymentHistory"
             android:screenOrientation="landscape"></activity>
      <service android:name=".Utils.FireBaseMessagingService">
+=======
+        <activity android:name=".UserRegister"></activity>
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".BookingSuccessful"></activity>
+        <service android:name=".Utils.FireBaseMessagingService">
+>>>>>>> origin/master
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>

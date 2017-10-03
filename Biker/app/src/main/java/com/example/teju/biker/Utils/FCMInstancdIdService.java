@@ -4,14 +4,18 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.teju.biker.R;
-/*import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.FirebaseInstanceIdService;*/
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceIdService;
 
 /**
  * Created by nz160 on 08-06-2017.
  */
 
+<<<<<<< HEAD
 public class    FCMInstancdIdService { /* extends FirebaseInstanceIdService{
+=======
+public class    FCMInstancdIdService  extends FirebaseInstanceIdService{
+>>>>>>> origin/master
     @Override
     public void onTokenRefresh() {
         super.onTokenRefresh();
@@ -23,5 +27,9 @@ public class    FCMInstancdIdService { /* extends FirebaseInstanceIdService{
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putString(getString(R.string.fcm_token),resent_token);
         editor.commit();
+<<<<<<< HEAD
     }*/
+=======
+    }
+>>>>>>> origin/master
 }

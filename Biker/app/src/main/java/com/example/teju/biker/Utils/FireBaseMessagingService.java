@@ -12,22 +12,26 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 
-/*import com.google.firebase.messaging.FirebaseMessagingService;
-import com.google.firebase.messaging.RemoteMessage;*/
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
 
 
 /**
  * Created by nz160 on 08-06-2017.
  */
 
+<<<<<<< HEAD
 public class FireBaseMessagingService  {
     /* extends FirebaseMessagingService {
+=======
+public class FireBaseMessagingService extends FirebaseMessagingService {
+>>>>>>> origin/master
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         PrintClass.printValue("FireBaseMessagingService RESPONSE ",""+remoteMessage.getNotification().getClickAction());
-       *//* String title=remoteMessage.getNotification().getTitle();
+       /* String title=remoteMessage.getNotification().getTitle();
         String message=remoteMessage.getNotification().getClickAction();
         String body=(remoteMessage.getNotification().getBody());
         Intent i=new Intent(message);
@@ -46,6 +50,11 @@ public class FireBaseMessagingService  {
         builder.setAutoCancel(true);
         builder.setContentIntent(pendingIntent);
         NotificationManager notificationManager=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+<<<<<<< HEAD
         notificationManager.notify(0,builder.build());*//*
     }*/
+=======
+        notificationManager.notify(0,builder.build());*/
+    }
+>>>>>>> origin/master
 }

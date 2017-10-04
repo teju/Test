@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -57,6 +58,7 @@ public class BookingHistory extends AppCompatActivity
     int limit=5;
     BookingHistoryRecyclerView mAdapter ;
     private int total_count=0;
+    private TextView no_records;
 
     @Override
     protected void onResume() {
@@ -68,6 +70,7 @@ public class BookingHistory extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.booking_history);
+        no_records=(TextView)findViewById(R.id.no_records);
         rootView=findViewById(android.R.id.content);
         bookingList_l.clear();
         prefrence = getSharedPreferences("My_Pref", 0);
@@ -154,6 +157,8 @@ public class BookingHistory extends AppCompatActivity
                 alertDialog.setMessage("Are you sure you want to Logout ?");
                 alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        editor.putString("isLoggedIn","false");
+                        editor.commit();
                         Intent i = new Intent(BookingHistory.this, Login.class);
                         startActivity(i);
                     }
@@ -174,8 +179,9 @@ public class BookingHistory extends AppCompatActivity
     }
 
     public void ResponseOfBookingList(String resultString) {
+        JSONObject jsonObject = null;
         try {
-            final JSONObject jsonObject = new JSONObject(resultString);
+            jsonObject = new JSONObject(resultString);
             PrintClass.printValue("ResponseOfBookingList resultString "," has data "+jsonObject.toString());
             if(jsonObject.getString("status").equalsIgnoreCase("success")) {
                 JSONArray jsonarr_bookinglist=jsonObject.getJSONArray("bookinglist");
@@ -194,40 +200,53 @@ public class BookingHistory extends AppCompatActivity
                 if(jsonObject.has("totalCount")) {
                     total_count = Integer.parseInt(jsonObject.getString("totalCount"));
                 }
-                mAdapter = new BookingHistoryRecyclerView();
-                recyclerView.setAdapter(mAdapter);
-                if(jsonObject.has("bookinglist")) {
-                    mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
-                        @Override
-                        public void onLoadMore() {
+                if(bookingList_l.size() !=0) {
+                    mAdapter = new BookingHistoryRecyclerView();
+                    recyclerView.setAdapter(mAdapter);
+                    if (jsonObject.has("bookinglist")) {
+                        final JSONObject finalJsonObject = jsonObject;
+                        mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+                            @Override
+                            public void onLoadMore() {
                             Log.e("haint", "Load More");
                             bookingList_l.add(null);
                             mAdapter.notifyItemInserted(bookingList_l.size() - 1);
                             //Load more data for reyclerview
                             new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Log.e("haint", "Load More 2");
-                                    if (jsonObject.has("bookinglist")) {
-                                        PrintClass.printValue("ResponseOfBookingList onLoadMore "
-                                                ,"LOOPED");
-                                        //Remove loading item
-                                        bookingList_l.remove(bookingList_l.size() - 1);
-                                        mAdapter.notifyItemRemoved(bookingList_l.size());
-                                        //Load data
-                                        offset = offset + limit;
-                                        getBookingList("BookingHistoryReload");
-                                    }
-                                }
+                                  @Override
+                                  public void run() {
+                                      Log.e("haint", "Load More 2");
+                                      if (finalJsonObject.has("bookinglist")) {
+                                          PrintClass.printValue("ResponseOfBookingList onLoadMore "
+                                                  , "LOOPED");
+                                          //Remove loading item
+                                          bookingList_l.remove(bookingList_l.size() - 1);
+                                          mAdapter.notifyItemRemoved(bookingList_l.size());
+                                          //Load data
+                                          offset = offset + limit;
+                                          getBookingList("BookingHistoryReload");
+                                      }
+                                  }
                             },
-                            1000);
+                        1000);
                         }
                     });
 
+                    }
+                } else {
+                    recyclerView.setVisibility(View.GONE);
+                    no_records.setVisibility(View.VISIBLE);
+                    no_records.setText(jsonObject.getString("message"));
                 }
             }
         }catch (Exception e){
             PrintClass.printValue("ResponseOfBookingList Exception ",e.toString());
+            no_records.setVisibility(View.VISIBLE);
+            try {
+                no_records.setText(jsonObject.getString("message"));
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
 
         }
     }

@@ -194,6 +194,8 @@ public class PaymentHistory extends AppCompatActivity
             alertDialog.setMessage("Are you sure you want to Logout ?");
             alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,int which) {
+                    editor.putString("isLoggedIn","false");
+                    editor.commit();
                     Intent i=new Intent(PaymentHistory.this,Login.class);
                     startActivity(i);
                 }

@@ -23,7 +23,9 @@ public class ServerError extends AppCompatActivity{
 
     public void retry(View view){
         int status = NetworkUtil.getConnectivityStatusString(this);
-        if(status == 1) {
+        if(status == 1  ) {
+            super.onBackPressed();
+        } else if(status == 2) {
             super.onBackPressed();
         } else {
             new CustomToast().Show_Toast(getApplicationContext(), rootView,

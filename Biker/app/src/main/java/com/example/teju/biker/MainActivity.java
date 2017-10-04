@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
@@ -30,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.teju.biker.Utils.ConnectivityReceiver;
 import com.example.teju.biker.Utils.Constants;
 import com.example.teju.biker.Utils.CustomToast;
 import com.example.teju.biker.Utils.IsNetworkConnection;
@@ -68,13 +70,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String getAddress="Not Found";
     private SharedPreferences.Editor editor;
     TextView profile_name;
-
-
+    static final String ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
+    ConnectivityReceiver Conn=new ConnectivityReceiver();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google_map);
+
+        IntentFilter filter = new IntentFilter(ACTION);
+        this.registerReceiver(Conn, filter);
+
         prefrence = getSharedPreferences("My_Pref", 0);
         editor = prefrence.edit();
       //  Constants.statusColor(this);
@@ -242,8 +248,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onRestart() {
-        PrintClass.printValue("ONRESUMEISBEING","CALLED");
         super.onResume();
+        PrintClass.printValue("ONRESUMEISBEING","CALLED");
         if(editText.getText().toString().length()==0) {
             if (checkLocationPermission()) {
                 if (ContextCompat.checkSelfPermission(this,
@@ -338,10 +344,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             this.finish();
+            unregisterReceiver(Conn);
 
         }
     }
@@ -372,6 +378,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             alertDialog.setMessage("Are you sure you want to Logout ?");
             alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,int which) {
+                    editor.putString("isLoggedIn","false");
+                    editor.commit();
                     Intent i=new Intent(MainActivity.this,Login.class);
                     startActivity(i);
                 }

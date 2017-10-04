@@ -3,6 +3,7 @@ package com.example.teju.biker;
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
@@ -47,6 +48,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     private SharedPreferences prefrence;
     private SharedPreferences.Editor editor;
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
+    static final String ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
+    ConnectivityReceiver Conn=new ConnectivityReceiver();
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -54,6 +57,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         MultiDex.install(this);
+
+        IntentFilter filter = new IntentFilter(ACTION);
+        this.registerReceiver(Conn, filter);
 
         rootView=findViewById(android.R.id.content);
         phone=(EditText)findViewById(R.id.phone);
@@ -68,6 +74,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         }else {
             requestContactPermission();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(Conn);
     }
 
     private void requestContactPermission() {
@@ -206,6 +218,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 editor.commit();
                 Intent i = new Intent(Login.this, MainActivity.class);
                 startActivity(i);
+                finish();
             } else {
 
                 JSONObject errorjsonObject = jsonObject.getJSONObject("errors");
@@ -223,6 +236,22 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         } catch (Exception e){
             System.out.println("SYSTEMPRINT error UserRegister "+e.toString());
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        this.finish();
+        unregisterReceiver(Conn);
     }
 
     @Override

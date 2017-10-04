@@ -55,7 +55,7 @@ public class UserRegister extends AppCompatActivity {
         PrintClass.printValue("UserRegisterPrint type ",type);
 
         if(type.equals("edit")) {
-            getProfileInfo();
+            getProfileInfo("info");
             click.setText("UPDATE");
         } else {
             name.setText("");
@@ -64,13 +64,17 @@ public class UserRegister extends AppCompatActivity {
         }
     }
 
-    public void getProfileInfo(){
+    public void getProfileInfo(String type){
         if (IsNetworkConnection.checkNetworkConnection(UserRegister.this)) {
             String url = Constants.SERVER_URL + "profile/user-profile";
             JSONObject params = new JSONObject();
             try {
                 params.put("user_id",prefrence.getString("user_id", "") );
                 params.put("access_token",prefrence.getString("access_token", ""));
+                if(type.equals("update")){
+                    Intent i = new Intent(UserRegister.this, MainActivity.class);
+                    startActivity(i);
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
                 PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
@@ -154,7 +158,7 @@ public class UserRegister extends AppCompatActivity {
                 editor.putString("user_id",  jsonObject.getString("user_id"));
                 editor.commit();
                 if(type.equals("edit")) {
-                    getProfileInfo();
+                    getProfileInfo("update");
                 } else {
                     Intent i = new Intent(this, Login.class);
                     startActivity(i);
@@ -168,7 +172,7 @@ public class UserRegister extends AppCompatActivity {
                     new CustomToast().Show_Toast(getApplicationContext(), rootView,
                             jsonArray.getString(0));
                     PrintClass.printValue("UserRegisterREsponse jsonObject errorjsonObject " +
-                            ""," has data "+jsonArray.getString(0));
+                            "", " has data " + jsonArray.getString(0));
                     return;
                 } else if(errorjsonObject.has("email")) {
                     JSONArray jsonArray =errorjsonObject.getJSONArray("email");

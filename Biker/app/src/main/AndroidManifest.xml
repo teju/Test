@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-feature android:name="android.hardware.location.gps"></uses-feature>
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-
+    <uses-permission android:name="android.permission.RECEIVE_SMS"></uses-permission>
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
@@ -20,25 +20,48 @@
         android:glEsVersion="0x00020000"
         android:required="true"></uses-feature>
     <application
+        android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:icon="@drawable/bierlogo"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:screenOrientation="portrait"
         android:theme="@style/AppTheme.NoActionBar">
+        <receiver
+            android:name=".Utils.ConnectivityReceiver"
+            android:label="NetworkChangeReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.STATE_CHANGE"/>
+            </intent-filter>
+        </receiver>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCq3oZMCqlcyh5ReBCpYeqCORpCs3THIzc" />
         <activity
             android:name=".Login"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UserRegister"></activity>
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".BookingSuccessful"></activity>
+        <activity android:name=".UserRegister"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".BookingHistory"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".ServerError"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".BookingSuccessful"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Setting"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".PaymentHistory"
+            android:screenOrientation="landscape"></activity>
         <service android:name=".Utils.FireBaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>

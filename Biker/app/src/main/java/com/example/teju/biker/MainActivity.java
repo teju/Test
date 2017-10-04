@@ -4,7 +4,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -19,19 +21,20 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.teju.biker.Utils.Constants;
 import com.example.teju.biker.Utils.CustomToast;
 import com.example.teju.biker.Utils.IsNetworkConnection;
 import com.example.teju.biker.Utils.PrintClass;
+import com.example.teju.biker.Utils.post_async;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
@@ -43,8 +46,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,15 +62,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private LocationManager locationManager;
     private EditText vehicle_no, email,editText;
     private View rootView;
-    Button search_button;
+    private SharedPreferences prefrence;
+    private int backpress = 0;
+    double getLatitude=0,getLongitude=0;
+    String getAddress="Not Found";
+    private SharedPreferences.Editor editor;
+    TextView profile_name;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google_map);
+        prefrence = getSharedPreferences("My_Pref", 0);
+        editor = prefrence.edit();
+      //  Constants.statusColor(this);
         rootView=findViewById(android.R.id.content);
         editText=(EditText)findViewById(R.id.editText);
-        search_button=(Button)findViewById(R.id.search_button);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -75,6 +91,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View header = navigationView.getHeaderView(0);
+
+        profile_name=(TextView)header.findViewById(R.id.profile_name);
+        profile_name.setText(prefrence.getString("name", ""));
+        Typeface typeface = Typeface.createFromAsset(getAssets(),
+                "fonts/name_font.ttf");
+        profile_name.setTypeface(typeface);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -85,19 +108,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getLatLong();
             }
         }
-
-        search_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (checkLocationPermission()) {
-                    if (ContextCompat.checkSelfPermission(MainActivity.this,
-                            android.Manifest.permission. ACCESS_FINE_LOCATION)
-                            == PackageManager.PERMISSION_GRANTED) {
-                        search();
-                    }
-                }
-            }
-        });
     }
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
@@ -144,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 return;
             }
-
         }
     }
 
@@ -172,14 +181,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (location != null) {
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
+                getLatitude=latitude;
+                getLongitude=longitude;
+                Geocoder geocoder;
+                List<Address> addresses = new ArrayList<>();
+                geocoder = new Geocoder(this, Locale.getDefault());
+                try {
+                    addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Location Not Found", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                getAddress = addresses.get(0).getAddressLine(0);
                 PrintClass.printValue("LATLOGVALUE ", "LAT :" + location.getLatitude() +
-                        " longitude " + location.getLongitude());
+                        " longitude " + getAddress);
                 showMap(latitude,longitude);
             } else {
                 Toast.makeText(getApplicationContext(), "Location Not Found", Toast.LENGTH_LONG).show();
                 PrintClass.printValue("LATLOGVALUE ", "location null");
             }
-
 
         }
     }
@@ -232,6 +253,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         }
+        profile_name.setText(prefrence.getString("name", ""));
+
     }
 
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -245,17 +268,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } catch (GooglePlayServicesRepairableException e) {
             new CustomToast().Show_Toast(getApplicationContext(), rootView,
                     "Service Not Available");
+            PrintClass.printValue("SEARCHAUTOCOMPLETE GooglePlayServicesRepairableException" +
+                    " ", "" + e.toString());
+
             // TODO: Handle the error.
         } catch (GooglePlayServicesNotAvailableException e) {
             new CustomToast().Show_Toast(getApplicationContext(), rootView,
                     "Service Not Available");
+            PrintClass.printValue("SEARCHAUTOCOMPLETE GooglePlayServicesNotAvailableException" +
+                    " ", e.toString() );
+
             // TODO: Handle the error.
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        PrintClass.printValue("SEARCHAUTOCOMPLETE requestCode ","" +requestCode);
+
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            PrintClass.printValue("SEARCHAUTOCOMPLETE requestCode"," ok ");
+
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(this, data);
                 PrintClass.printValue("SEARCHAUTOCOMPLETE ","" +place.getAddress());
@@ -264,6 +297,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 editText.setText(place.getAddress());
                 try {
                     address = coder.getFromLocationName(place.getAddress().toString(), 5);
+                    getAddress=place.getAddress().toString();
                     if (address == null) {
                         new CustomToast().Show_Toast(getApplicationContext(), rootView,
                                 "Address Not Found");
@@ -271,6 +305,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                     Address location = address.get(0);
                     showMap(location.getLatitude(),location.getLongitude());
+                    getLongitude=location.getLatitude();
+                    getLongitude=location.getLongitude();
                 } catch (Exception e){
                     getLatLong();
                 }
@@ -296,7 +332,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            this.finish();
+
         }
     }
 
@@ -306,17 +352,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.profile) {
+            Intent i=new Intent(this,UserRegister.class);
+            i.putExtra("type","edit");
+            startActivity(i);
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.booking_history) {
+            Intent i=new Intent(this,BookingHistory.class);
+            startActivity(i);
+        } else if (id == R.id.payment_history) {
+            Intent i=new Intent(this,PaymentHistory.class);
+            startActivity(i);
+        } else if (id == R.id.setting) {
+            Intent i=new Intent(this,Setting.class);
+            startActivity(i);
+        } else if (id == R.id.logout) {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setTitle("Confirm Logout");
+            alertDialog.setMessage("Are you sure you want to Logout ?");
+            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,int which) {
+                    Intent i=new Intent(MainActivity.this,Login.class);
+                    startActivity(i);
+                }
+            });
+            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+            alertDialog.show();
 
         }
 
@@ -324,6 +390,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 
     private Location getLastKnownLocation() {
         List<String> providers = locationManager.getProviders(true);
@@ -361,7 +429,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         mBottomSheetDialog.show();
-        //mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
         Button submit = (Button) mBottomSheetDialog.findViewById(R.id.submit);
         vehicle_no = (EditText) mBottomSheetDialog.findViewById(R.id.vehicle_no);
         email = (EditText) mBottomSheetDialog.findViewById(R.id.email);
@@ -370,8 +437,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View v) {
                 if(validate()) {
                     if (IsNetworkConnection.checkNetworkConnection(MainActivity.this)) {
-                        Intent i = new Intent(MainActivity.this, BookingSuccessful.class);
-                        startActivity(i);
+
+                        String url = Constants.SERVER_URL + "booking/request";
+
+                        JSONObject jsonBody = new JSONObject();
+                        JSONObject params = new JSONObject();
+                        JSONObject params2 = new JSONObject();
+                        try {
+                            params.put("email_id",email.getText().toString() );
+                            params.put("vehicle_no", vehicle_no.getText().toString());
+                            params2.put("address",getAddress);
+                            params2.put("lattitude",String.valueOf(getLatitude));
+                            params2.put("longitude",String.valueOf(getLongitude));
+                            jsonBody.put("Booking", params);
+                            jsonBody.put("Address", params2);
+                            jsonBody.put("user_id", prefrence.getString("user_id", ""));
+                            jsonBody.put("access_token", prefrence.getString("access_token", ""));
+                            PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + jsonBody.toString());
+                            new post_async(MainActivity.this, "BookingRequest").execute(url, jsonBody.toString());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            PrintClass.printValue("SYSTEMPRINT PARAMS Exception", e.toString());
+                        }
                         mBottomSheetDialog.cancel();
                     } else {
                         new CustomToast().Show_Toast(getApplicationContext(), rootView,
@@ -381,6 +468,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
+
+    public void ResponseOfBooking(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            PrintClass.printValue("UserRegisterREsponse jsonObject "," has data "+jsonObject.toString());
+            if(jsonObject.getString("status").equalsIgnoreCase("success")){
+                Intent i = new Intent(MainActivity.this, BookingSuccessful.class);
+                startActivity(i);
+            } else {
+                new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                        jsonObject.getString("message") );
+            }
+        } catch (Exception e){
+            System.out.println("SYSTEMPRINT error UserRegister "+e.toString());
+        }
+    }
+
 
     public boolean validate(){
 

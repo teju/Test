@@ -41,7 +41,7 @@
         android:id="@+id/findPlace"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="REGISTER"
+        android:text="BOOK MY SERVICE"
         android:onClick="Submit"
         android:layout_margin="8dp"
         android:textSize="@dimen/normal"

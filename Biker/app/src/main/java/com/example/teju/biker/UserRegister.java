@@ -22,6 +22,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -122,7 +124,6 @@ public class UserRegister extends AppCompatActivity {
                 String url = Constants.SERVER_URL + "profile/user-update-profile";
                 JSONObject jsonBody = new JSONObject();
                 JSONObject params = new JSONObject();
-                JSONObject params2 = new JSONObject();
                 try {
                     params.put("first_name",name.getText().toString() );
                     params.put("email", email.getText().toString());

@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:text="SL No               :"
+        android:text="Booking No :"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:paddingBottom="4dp"
@@ -29,13 +29,13 @@
     <TextView
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:text="Vendor Name  :"
+        android:text="Vendor Email  :"
         android:paddingBottom="4dp"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:textSize="@dimen/normal"
         android:textColor="@color/black"
-        android:id="@+id/vendor_name_text"
+        android:id="@+id/vendor_email_text"
         android:layout_below="@+id/booking_id_text"/>
     <TextView
         android:layout_width="wrap_content"
@@ -44,37 +44,37 @@
         android:paddingBottom="4dp"
         android:textSize="@dimen/normal"
         android:textColor="@color/black"
-        android:layout_toRightOf="@+id/vendor_name_text"
+        android:layout_toRightOf="@+id/vendor_email_text"
         android:layout_below="@+id/booking_id_text"
-        android:id="@+id/vendor_name"/>
+        android:id="@+id/vendor_email"/>
     <TextView
         android:layout_width="120dp"
         android:paddingBottom="4dp"
         android:layout_height="wrap_content"
-        android:text="Vendor No :"
-        android:layout_below="@+id/vendor_name_text"
+        android:text="Booking Date:"
+        android:layout_below="@+id/vendor_email_text"
         android:textSize="@dimen/normal"
         android:textColor="@color/black"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:id="@+id/vendor_number_text"/>
+        android:id="@+id/booking_date_text"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="12"
         android:paddingBottom="4dp"
-        android:layout_below="@+id/vendor_name_text"
-        android:layout_toRightOf="@+id/vendor_number_text"
+        android:layout_below="@+id/vendor_email_text"
+        android:layout_toRightOf="@+id/booking_date_text"
         android:textSize="@dimen/normal"
         android:textColor="@color/black"
-        android:id="@+id/vendor_number"/>
+        android:id="@+id/booking_date"/>
     <TextView
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:text="Vehicle No : "
         android:paddingBottom="4dp"
         android:textSize="@dimen/normal"
-        android:layout_below="@+id/vendor_number_text"
+        android:layout_below="@+id/booking_date_text"
         android:textColor="@color/black"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
@@ -83,7 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="4dp"
-        android:layout_below="@+id/vendor_number_text"
+        android:layout_below="@+id/booking_date_text"
         android:layout_toRightOf="@+id/vehicle_no_text"
         android:text="KH1010"
         android:textSize="@dimen/normal"

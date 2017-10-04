@@ -17,8 +17,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.teju.biker.Utils.Constants;
-
 /**
  * Created by Teju on 23/09/2017.
  */
@@ -103,7 +101,7 @@ public class Setting extends AppCompatActivity  implements
             startActivity(i);
             // Handle the camera action
         } else if (id == R.id.booking_history) {
-            Intent i=new Intent(this,BookingPaymentHistory.class);
+            Intent i=new Intent(this,BookingHistory.class);
             startActivity(i);
         } else if (id == R.id.payment_history) {
             Intent i=new Intent(this,PaymentHistory.class);

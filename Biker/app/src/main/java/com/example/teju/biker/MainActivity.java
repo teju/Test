@@ -1,7 +1,6 @@
 package com.example.teju.biker;
 
 import android.app.Dialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,14 +15,12 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.IntentCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -49,7 +46,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -362,7 +358,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(i);
             // Handle the camera action
         } else if (id == R.id.booking_history) {
-            Intent i=new Intent(this,BookingPaymentHistory.class);
+            Intent i=new Intent(this,BookingHistory.class);
             startActivity(i);
         } else if (id == R.id.payment_history) {
             Intent i=new Intent(this,PaymentHistory.class);

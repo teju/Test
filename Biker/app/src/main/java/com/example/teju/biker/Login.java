@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.multidex.MultiDex;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.teju.biker.Utils.ConnectivityReceiver;
 import com.example.teju.biker.Utils.Constants;
 import com.example.teju.biker.Utils.CustomToast;
 import com.example.teju.biker.Utils.IsNetworkConnection;
@@ -51,6 +53,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        MultiDex.install(this);
 
         rootView=findViewById(android.R.id.content);
         phone=(EditText)findViewById(R.id.phone);
@@ -228,4 +231,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         i.putExtra("type", "signup");
         startActivity(i);
     }
+
+
 }

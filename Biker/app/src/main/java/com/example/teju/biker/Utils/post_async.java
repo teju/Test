@@ -19,6 +19,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.teju.biker.BookingHistory;
 import com.example.teju.biker.Login;
 import com.example.teju.biker.MainActivity;
 import com.example.teju.biker.R;
@@ -37,6 +38,7 @@ import java.util.Map;
  */
 public class post_async extends AsyncTask<String, Integer, String> {
     static String action = "", resultString = "";
+    private BookingHistory bookingHistory;
     private  MainActivity mainActivity;
     private  UserRegister userRegister;
     private  Login login;
@@ -47,6 +49,11 @@ public class post_async extends AsyncTask<String, Integer, String> {
         this.action = action;
         this.context=userRegister;
         this.userRegister = userRegister;
+    }
+    public post_async(BookingHistory bookingHistory, String action) {
+        this.action = action;
+        this.context=bookingHistory;
+        this.bookingHistory = bookingHistory;
     }
     public post_async(Login login, String action) {
         this.action = action;
@@ -147,8 +154,12 @@ public class post_async extends AsyncTask<String, Integer, String> {
                 this.login.ResponseOfLogin(resultString);
             } else  if (this.login != null && action.equalsIgnoreCase("LoginOtp")) {
                 this.login.ResponseOfLoginOtp(resultString);
-            }else  if (this.mainActivity != null && action.equalsIgnoreCase("BookingRequest")) {
+            } else  if (this.mainActivity != null && action.equalsIgnoreCase("BookingRequest")) {
                 this.mainActivity.ResponseOfBooking(resultString);
+            } else  if (this.bookingHistory != null && action.equalsIgnoreCase("BookingHistory")) {
+                this.bookingHistory.ResponseOfBookingList(resultString);
+            } else  if (this.bookingHistory != null && action.equalsIgnoreCase("BookingHistoryReload")) {
+                this.bookingHistory.ResponseOfBookingListReload(resultString);
             }
 
         } catch (Exception e) {
@@ -159,12 +170,15 @@ public class post_async extends AsyncTask<String, Integer, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+
         dialog = new Dialog(context);
         dialog.setCancelable(false);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.spinner);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.show();
+        if(!action.equals("BookingHistoryReload")) {
+            dialog.show();
+        }
 
     }
 

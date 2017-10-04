@@ -17,13 +17,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
-import com.example.teju.biker.Utils.Constants;
 
 public class PaymentHistory extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -187,7 +183,7 @@ public class PaymentHistory extends AppCompatActivity
             startActivity(i);
             // Handle the camera action
         } else if (id == R.id.booking_history) {
-            Intent i=new Intent(this,BookingPaymentHistory.class);
+            Intent i=new Intent(this,BookingHistory.class);
             startActivity(i);
         } else if (id == R.id.setting) {
             Intent i=new Intent(this,Setting.class);

@@ -7,21 +7,28 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.example.teju.biker.Utils.ConnectivityReceiver;
+import com.example.teju.biker.Utils.Constants;
+import com.example.teju.biker.Utils.CustomToast;
+import com.example.teju.biker.Utils.IsNetworkConnection;
+import com.example.teju.biker.Utils.PrintClass;
+import com.example.teju.biker.Utils.post_async;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class SplashScreen extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     private SharedPreferences prefrence;
-    static final String ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
-    ConnectivityReceiver Conn=new ConnectivityReceiver();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
         prefrence = getSharedPreferences("My_Pref", 0);
         editor = prefrence.edit();
-        IntentFilter filter = new IntentFilter(ACTION);
-        this.registerReceiver(Conn, filter);
+
         CountDownTimer c = new CountDownTimer(2000, 1000) {
             public void onFinish() {
                 //Display activity_no internet xml
@@ -44,6 +51,6 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(Conn);
     }
+
 }

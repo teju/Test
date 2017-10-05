@@ -12,6 +12,11 @@
             android:icon="@drawable/account"
             android:title="Profile" />
         <item
+            android:id="@+id/booking_details"
+            android:icon="@drawable/message_bulleted"
+            android:title="Booking Details" />
+
+        <item
             android:id="@+id/booking_history"
             android:icon="@drawable/message_bulleted"
             android:title="Booking History" />

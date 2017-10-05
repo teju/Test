@@ -21,6 +21,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.example.teju.biker.Utils.IsNetworkConnection;
+
 public class PaymentHistory extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -178,9 +180,14 @@ public class PaymentHistory extends AppCompatActivity
             startActivity(i);
             // Handle the camera action
         } else if (id == R.id.profile) {
-            Intent i=new Intent(this,UserRegister.class);
-            i.putExtra("type","edit");
-            startActivity(i);
+            if (IsNetworkConnection.checkNetworkConnection(PaymentHistory.this)) {
+                Intent i = new Intent(this, UserRegister.class);
+                i.putExtra("type", "edit");
+                startActivity(i);
+            } else {
+                Intent i=new Intent(this,ServerError.class);
+                startActivity(i);
+            }
             // Handle the camera action
         } else if (id == R.id.booking_history) {
             Intent i=new Intent(this,BookingHistory.class);

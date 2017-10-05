@@ -1,6 +1,8 @@
 package com.example.teju.biker;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +14,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -31,7 +34,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.teju.biker.Utils.ConnectivityReceiver;
 import com.example.teju.biker.Utils.Constants;
 import com.example.teju.biker.Utils.CustomToast;
 import com.example.teju.biker.Utils.IsNetworkConnection;
@@ -70,16 +72,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String getAddress="Not Found";
     private SharedPreferences.Editor editor;
     TextView profile_name;
-    static final String ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
-    ConnectivityReceiver Conn=new ConnectivityReceiver();
+    private BroadcastReceiver receiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google_map);
-
-        IntentFilter filter = new IntentFilter(ACTION);
-        this.registerReceiver(Conn, filter);
 
         prefrence = getSharedPreferences("My_Pref", 0);
         editor = prefrence.edit();
@@ -114,6 +113,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getLatLong();
             }
         }
+
+        if(prefrence.getString("isLoggedIn", "").equals("true")) {
+            receiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    final ConnectivityManager connMgr = (ConnectivityManager) context
+                            .getSystemService(Context.CONNECTIVITY_SERVICE);
+                    System.out.println("NetworkChangeReceiverieieie "+" called");
+                    final android.net.NetworkInfo wifi = connMgr
+                            .getActiveNetworkInfo();
+                    if (wifi != null) {
+                        if (wifi.getType() == ConnectivityManager.TYPE_WIFI) {
+                            // connected to wifi
+                        } else if (wifi.getType() == ConnectivityManager.TYPE_MOBILE) {
+                            // connected to the mobile provider's data plan
+                        }
+                    } else {
+                        System.out.println("NetworkChangeReceiverieieie "+" isNotAvailable");
+                        Intent i=new Intent(context,ServerError.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(i);
+                    }
+                }
+            };
+            registerReceiver(receiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+
+        }
+    }
+
+    public void onTrimMemory(final int level) {
+        System.out.println("registerForActivityCallbacks "+" level "+level);
+
+        if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
+            if(receiver !=null) {
+                unregisterReceiver(receiver);
+                receiver = null;
+            }
+            System.out.println("registerForActivityCallbacks "+" closed ");
+
+        } else {
+            System.out.println("registerForActivityCallbacks "+" open ");
+        }
+
+
     }
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
@@ -347,7 +390,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             this.finish();
-            unregisterReceiver(Conn);
+            onTrimMemory(ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN);
 
         }
     }
@@ -359,12 +402,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.profile) {
-            Intent i=new Intent(this,UserRegister.class);
-            i.putExtra("type","edit");
-            startActivity(i);
+            if (IsNetworkConnection.checkNetworkConnection(MainActivity.this)) {
+                Intent i = new Intent(this, UserRegister.class);
+                i.putExtra("type", "edit");
+                startActivity(i);
+            } else {
+                Intent i=new Intent(this,ServerError.class);
+                startActivity(i);
+            }
             // Handle the camera action
         } else if (id == R.id.booking_history) {
             Intent i=new Intent(this,BookingHistory.class);
+            startActivity(i);
+        }  else if (id == R.id.booking_details) {
+            Intent i=new Intent(this,BookingDetails.class);
             startActivity(i);
         } else if (id == R.id.payment_history) {
             Intent i=new Intent(this,PaymentHistory.class);
@@ -391,7 +442,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
 
             alertDialog.show();
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

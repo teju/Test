@@ -4,14 +4,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -39,12 +40,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Teju on 22/09/2017.
- */
-public class BookingHistory extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-
+public class BookingDetails extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener,SwipeRefreshLayout.OnRefreshListener{
     private RecyclerView recyclerView;
     private LinearLayoutManager mLayoutManager;
     private SharedPreferences.Editor editor;
@@ -54,9 +51,10 @@ public class BookingHistory extends AppCompatActivity
     private View rootView;
     int offset=0;
     int limit=5;
-    BookingHistoryRecyclerView mAdapter ;
+    BookingDetails.BookingDetailsRecyclerView mAdapter ;
     private int total_count=0;
     private TextView no_records;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onResume() {
@@ -73,6 +71,8 @@ public class BookingHistory extends AppCompatActivity
         bookingList_l.clear();
         prefrence = getSharedPreferences("My_Pref", 0);
         editor = prefrence.edit();
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -102,12 +102,15 @@ public class BookingHistory extends AppCompatActivity
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
 
-       // Constants.statusColor(this);
-        getBookingList("BookingHistory");
+        // Constants.statusColor(this);
+        getBookingList("BookingDetails");
     }
 
     public void getBookingList(String action){
-        if (IsNetworkConnection.checkNetworkConnection(BookingHistory.this)) {
+        if (IsNetworkConnection.checkNetworkConnection(BookingDetails.this)) {
+            if(action.equals("BookingDetailsRefresh")) {
+                swipeRefreshLayout.setRefreshing(true);
+            }
             String url = Constants.SERVER_URL + "booking/list";
             JSONObject params = new JSONObject();
             try {
@@ -120,7 +123,7 @@ public class BookingHistory extends AppCompatActivity
                 PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
             }
             PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
-            new post_async(BookingHistory.this,action).execute(url, params.toString());
+            new post_async(BookingDetails.this,action).execute(url, params.toString());
         } else {
             new CustomToast().Show_Toast(getApplicationContext(), rootView,
                     "No Internet Connection");
@@ -139,7 +142,7 @@ public class BookingHistory extends AppCompatActivity
                 startActivity(i);
                 // Handle the camera action
             } else if (id == R.id.profile) {
-                if (IsNetworkConnection.checkNetworkConnection(BookingHistory.this)) {
+                if (IsNetworkConnection.checkNetworkConnection(BookingDetails.this)) {
                     Intent i = new Intent(this, UserRegister.class);
                     i.putExtra("type", "edit");
                     startActivity(i);
@@ -162,7 +165,7 @@ public class BookingHistory extends AppCompatActivity
                     public void onClick(DialogInterface dialog, int which) {
                         editor.putString("isLoggedIn","false");
                         editor.commit();
-                        Intent i = new Intent(BookingHistory.this, Login.class);
+                        Intent i = new Intent(BookingDetails.this, Login.class);
                         startActivity(i);
                     }
                 });
@@ -184,6 +187,8 @@ public class BookingHistory extends AppCompatActivity
     public void ResponseOfBookingList(String resultString) {
         JSONObject jsonObject = null;
         try {
+            swipeRefreshLayout.setRefreshing(false);
+
             jsonObject = new JSONObject(resultString);
             PrintClass.printValue("ResponseOfBookingList resultString "," has data "+jsonObject.toString());
             if(jsonObject.getString("status").equalsIgnoreCase("success")) {
@@ -204,7 +209,7 @@ public class BookingHistory extends AppCompatActivity
                     total_count = Integer.parseInt(jsonObject.getString("totalCount"));
                 }
                 if(bookingList_l.size() !=0) {
-                    mAdapter = new BookingHistoryRecyclerView();
+                    mAdapter = new BookingDetails.BookingDetailsRecyclerView();
                     recyclerView.setAdapter(mAdapter);
                     if (jsonObject.has("bookinglist")) {
                         final JSONObject finalJsonObject = jsonObject;
@@ -227,13 +232,13 @@ public class BookingHistory extends AppCompatActivity
                                           mAdapter.notifyItemRemoved(bookingList_l.size());
                                           //Load data
                                           offset = offset + limit;
-                                          getBookingList("BookingHistoryReload");
+                                          getBookingList("BookingDetailsReload");
                                       }
                                   }
-                            },
+                              },
                         1000);
-                        }
-                    });
+                            }
+                        });
 
                     }
                 } else {
@@ -253,6 +258,7 @@ public class BookingHistory extends AppCompatActivity
 
         }
     }
+
     public void ResponseOfBookingListReload(String resultString) {
         try {
             JSONObject jsonObject = new JSONObject(resultString);
@@ -306,10 +312,17 @@ public class BookingHistory extends AppCompatActivity
         return yourDate;
     }
 
-    static  class BookingHistoryRecyclerViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public void onRefresh() {
+        offset=0;
+        bookingList_l.clear();
+        getBookingList("BookingDetailsRefresh");
+    }
+
+    static  class BookingDetailsRecyclerViewHolder extends RecyclerView.ViewHolder {
         TextView booking_id, vendor_email, booking_date, vehicle_no, status;
 
-        public BookingHistoryRecyclerViewHolder(View itemView) {
+        public BookingDetailsRecyclerViewHolder(View itemView) {
             super(itemView);
             booking_id = (TextView) itemView.findViewById(R.id.booking_id);
             vendor_email = (TextView) itemView.findViewById(R.id.vendor_email);
@@ -328,7 +341,7 @@ public class BookingHistory extends AppCompatActivity
         }
     }
 
-    class BookingHistoryRecyclerView extends RecyclerView.Adapter < RecyclerView.ViewHolder > {
+    class BookingDetailsRecyclerView extends RecyclerView.Adapter < RecyclerView.ViewHolder > {
         private final int VIEW_TYPE_ITEM = 0;
         private final int VIEW_TYPE_LOADING = 1;
         private OnLoadMoreListener mOnLoadMoreListener;
@@ -337,7 +350,7 @@ public class BookingHistory extends AppCompatActivity
         private int lastVisibleItem,
                 totalItemCount;
 
-        public BookingHistoryRecyclerView() {
+        public BookingDetailsRecyclerView() {
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -348,14 +361,14 @@ public class BookingHistory extends AppCompatActivity
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy)
                 {
-                    PrintClass.printValue("BookingHistoryRecyclerView dy "," : "+dy);
+                    PrintClass.printValue("BookingDetailsRecyclerView dy "," : "+dy);
 
                     final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                     if (dy > 0 && bookingList_l.size() <total_count) //check for scroll down
                     {
                         totalItemCount = linearLayoutManager.getItemCount();
                         lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-                        PrintClass.printValue("BookingHistoryRecyclerView ","lastVisibleItem : "
+                        PrintClass.printValue("BookingDetailsRecyclerView ","lastVisibleItem : "
                                 +lastVisibleItem+ " totalItemCount : "
                                 +totalItemCount+" visibleThreshold : "+visibleThreshold+" isLoading : "+isLoading);
 
@@ -384,27 +397,28 @@ public class BookingHistory extends AppCompatActivity
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if (viewType == VIEW_TYPE_ITEM) {
                 View view = LayoutInflater.from(
-                        BookingHistory.this).inflate(R.layout.booking_history_content, parent, false);
-                return new BookingHistoryRecyclerViewHolder(view);
+                        BookingDetails.this).inflate(R.layout.booking_history_content, parent, false);
+                return new BookingDetails.BookingDetailsRecyclerViewHolder(view);
             } else if (viewType == VIEW_TYPE_LOADING) {
-                View view = LayoutInflater.from(BookingHistory.this).inflate(R.layout.spinner, parent, false);
-                return new LoadingViewHolder(view);
+                View view = LayoutInflater.from(BookingDetails.this).inflate(R.layout.spinner, parent, false);
+                return new BookingDetails.LoadingViewHolder(view);
             }
             return null;
         }
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            if (holder instanceof BookingHistoryRecyclerViewHolder) {
+            if (holder instanceof BookingDetails.BookingDetailsRecyclerViewHolder) {
                 BookingList bookings = bookingList_l.get(position);
-                BookingHistoryRecyclerViewHolder userViewHolder = (BookingHistoryRecyclerViewHolder) holder;
+                BookingDetails.BookingDetailsRecyclerViewHolder userViewHolder =
+                        (BookingDetails.BookingDetailsRecyclerViewHolder) holder;
                 userViewHolder.booking_id.setText(bookings.getBooking_no());
                 userViewHolder.vendor_email.setText(bookings.getEmail_id());
                 userViewHolder.vehicle_no.setText(bookings.getVehicle_no());
                 userViewHolder.booking_date.setText(getformatteddate(bookings.getBooked_on()));
                 userViewHolder.status.setText(bookings.getStatus());
-            } else if (holder instanceof LoadingViewHolder) {
-                LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
+            } else if (holder instanceof BookingDetails.LoadingViewHolder) {
+                BookingDetails.LoadingViewHolder loadingViewHolder = (BookingDetails.LoadingViewHolder) holder;
                 loadingViewHolder.progressBar.setIndeterminate(true);
             }
         }

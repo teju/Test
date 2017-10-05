@@ -2,11 +2,15 @@ package com.example.teju.biker;
 
 import android.annotation.TargetApi;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.ComponentCallbacks2;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
@@ -23,7 +27,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.teju.biker.Utils.ConnectivityReceiver;
 import com.example.teju.biker.Utils.Constants;
 import com.example.teju.biker.Utils.CustomToast;
 import com.example.teju.biker.Utils.IsNetworkConnection;
@@ -34,12 +37,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-/**
- * Created by Teju on 19/09/2017.
- */
 public class Login extends AppCompatActivity implements View.OnClickListener{
 
     private View rootView;
@@ -48,8 +45,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     private SharedPreferences prefrence;
     private SharedPreferences.Editor editor;
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
-    static final String ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
-    ConnectivityReceiver Conn=new ConnectivityReceiver();
+    private BroadcastReceiver receiver;
+    private SharedPreferences notiprefrence;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -58,8 +55,29 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         setContentView(R.layout.login);
         MultiDex.install(this);
 
-        IntentFilter filter = new IntentFilter(ACTION);
-        this.registerReceiver(Conn, filter);
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                final ConnectivityManager connMgr = (ConnectivityManager) context
+                        .getSystemService(Context.CONNECTIVITY_SERVICE);
+                System.out.println("NetworkChangeReceiverieieie "+" called");
+                final android.net.NetworkInfo wifi = connMgr
+                        .getActiveNetworkInfo();
+                if (wifi != null) {
+                    if (wifi.getType() == ConnectivityManager.TYPE_WIFI) {
+                        // connected to wifi
+                    } else if (wifi.getType() == ConnectivityManager.TYPE_MOBILE) {
+                        // connected to the mobile provider's data plan
+                    }
+                } else {
+                    System.out.println("NetworkChangeReceiverieieie "+" isNotAvailable");
+                    Intent i=new Intent(context,ServerError.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(i);
+                }
+            }
+        };
+        registerReceiver(receiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
 
         rootView=findViewById(android.R.id.content);
         phone=(EditText)findViewById(R.id.phone);
@@ -67,19 +85,40 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         sign_up.setOnClickListener(this);
 
         prefrence = getSharedPreferences("My_Pref", 0);
+        notiprefrence = getSharedPreferences(getString(R.string.fcm_pref), 0);
         editor = prefrence.edit();
 
         if(Build.VERSION.SDK_INT < 23){
             //your code here
-        }else {
+        } else {
             requestContactPermission();
+        }
+    }
+
+    public void notificationService(){
+        if (IsNetworkConnection.checkNetworkConnection(Login.this)) {
+            String url = Constants.SERVER_URL + "user/push-notification";
+            JSONObject params = new JSONObject();
+            JSONObject jsonobject = new JSONObject();
+            try {
+                params.put("google_fcm_id",notiprefrence.getString(getString(R.string.fcm_token), "") );
+                params.put("mobile_no",phone.getText().toString());
+                jsonobject.put("PushNotification",params);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
+            }
+            PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + jsonobject.toString());
+            new post_async(Login.this,"notificationService").execute(url, jsonobject.toString());
+        } else {
+            new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                    "No Internet Connection");
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(Conn);
     }
 
     private void requestContactPermission() {
@@ -95,7 +134,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[]           permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case REQUEST_CODE_ASK_PERMISSIONS:
                 // Check if the only required permission has been granted
@@ -111,6 +150,20 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     protected void onResume() {
         super.onResume();
         phone.setText("");
+    }
+
+    public void onTrimMemory(final int level) {
+        System.out.println("registerForActivityCallbacks "+" level "+level);
+
+        if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
+            if(receiver !=null) {
+                unregisterReceiver(receiver);
+                receiver = null;
+            }
+            System.out.println("registerForActivityCallbacks "+" closed ");
+        } else {
+            System.out.println("registerForActivityCallbacks "+" open ");
+        }
     }
 
     public void login(View v){
@@ -216,6 +269,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 editor.putString("name",jsonObject.getString("name"));
                 editor.putString("access_token",jsonObject.getString("access_token"));
                 editor.commit();
+                notificationService();
                 Intent i = new Intent(Login.this, MainActivity.class);
                 startActivity(i);
                 finish();
@@ -251,7 +305,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         this.finish();
-        unregisterReceiver(Conn);
+        onTrimMemory(ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN);
     }
 
     @Override

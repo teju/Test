@@ -60,7 +60,6 @@ public class PaymentHistory extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         View header = navigationView.getHeaderView(0);
-
         profile_name=(TextView)header.findViewById(R.id.profile_name);
         profile_name.setText(prefrence.getString("name", ""));
         Typeface typeface = Typeface.createFromAsset(getAssets(),
@@ -68,7 +67,7 @@ public class PaymentHistory extends AppCompatActivity
         profile_name.setTypeface(typeface);
 
         TextView title = (TextView) findViewById(R.id.title_val);
-        title.setText("PAyment History");
+        title.setText("Payment History");
 
         TableLayout table_layout =(TableLayout)findViewById(R.id.tableLayout);
 

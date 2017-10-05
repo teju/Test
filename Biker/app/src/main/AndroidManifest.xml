@@ -82,7 +82,8 @@
         </service>
 
         <activity android:name=".Login" />
-        <activity android:name=".BookingDetails"></activity>
+        <activity android:name=".BookingDetails"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

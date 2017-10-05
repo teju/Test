@@ -87,8 +87,7 @@ public class BookingDetails extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         TextView title = (TextView) findViewById(R.id.title_val);
-        title.setText("Booking History");
-
+        title.setText("Booking Details");
         View header = navigationView.getHeaderView(0);
 
         profile_name=(TextView)header.findViewById(R.id.profile_name);
@@ -246,6 +245,10 @@ public class BookingDetails extends AppCompatActivity
                     no_records.setVisibility(View.VISIBLE);
                     no_records.setText(jsonObject.getString("message"));
                 }
+            } else {
+                recyclerView.setVisibility(View.GONE);
+                no_records.setVisibility(View.VISIBLE);
+                no_records.setText(jsonObject.getString("message"));
             }
         }catch (Exception e){
             PrintClass.printValue("ResponseOfBookingList Exception ",e.toString());
@@ -320,13 +323,13 @@ public class BookingDetails extends AppCompatActivity
     }
 
     static  class BookingDetailsRecyclerViewHolder extends RecyclerView.ViewHolder {
-        TextView booking_id, vendor_email, booking_date, vehicle_no, status;
+        TextView booking_id, vendor_name, vendor_number, vehicle_no, status;
 
         public BookingDetailsRecyclerViewHolder(View itemView) {
             super(itemView);
             booking_id = (TextView) itemView.findViewById(R.id.booking_id);
-            vendor_email = (TextView) itemView.findViewById(R.id.vendor_email);
-            booking_date = (TextView) itemView.findViewById(R.id.booking_date);
+            vendor_name = (TextView) itemView.findViewById(R.id.vendor_name);
+            vendor_number = (TextView) itemView.findViewById(R.id.vendor_number);
             vehicle_no = (TextView) itemView.findViewById(R.id.vehicle_no);
             status = (TextView) itemView.findViewById(R.id.status);
         }
@@ -413,9 +416,9 @@ public class BookingDetails extends AppCompatActivity
                 BookingDetails.BookingDetailsRecyclerViewHolder userViewHolder =
                         (BookingDetails.BookingDetailsRecyclerViewHolder) holder;
                 userViewHolder.booking_id.setText(bookings.getBooking_no());
-                userViewHolder.vendor_email.setText(bookings.getEmail_id());
+               // userViewHolder.vendor_name.setText(bookings.getEmail_id());
                 userViewHolder.vehicle_no.setText(bookings.getVehicle_no());
-                userViewHolder.booking_date.setText(getformatteddate(bookings.getBooked_on()));
+               // userViewHolder.vendor_number.setText(getformatteddate(bookings.getBooked_on()));
                 userViewHolder.status.setText(bookings.getStatus());
             } else if (holder instanceof BookingDetails.LoadingViewHolder) {
                 BookingDetails.LoadingViewHolder loadingViewHolder = (BookingDetails.LoadingViewHolder) holder;

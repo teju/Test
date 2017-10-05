@@ -108,7 +108,7 @@ public class Setting extends AppCompatActivity  implements
             }
             // Handle the camera action
         } else if (id == R.id.booking_history) {
-            Intent i=new Intent(this,BookingHistory.class);
+            Intent i=new Intent(this,BookingDetails.class);
             startActivity(i);
         } else if (id == R.id.payment_history) {
             Intent i=new Intent(this,PaymentHistory.class);

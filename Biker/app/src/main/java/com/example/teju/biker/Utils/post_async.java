@@ -5,42 +5,34 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
-import android.provider.SyncStateContract;
 import android.view.Window;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.teju.biker.BookingDetails;
-import com.example.teju.biker.BookingHistory;
 import com.example.teju.biker.Login;
 import com.example.teju.biker.MainActivity;
+import com.example.teju.biker.PaymentHistory;
 import com.example.teju.biker.R;
 import com.example.teju.biker.ServerError;
 import com.example.teju.biker.UserRegister;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Teju on 19/09/2017.
  */
 public class post_async extends AsyncTask<String, Integer, String> {
     static String action = "", resultString = "";
+    private PaymentHistory paymentHistory;
     private BookingDetails bookingDetails;
-    private BookingHistory bookingHistory;
     private  MainActivity mainActivity;
     private  UserRegister userRegister;
     private  Login login;
@@ -53,15 +45,15 @@ public class post_async extends AsyncTask<String, Integer, String> {
         this.userRegister = userRegister;
     }
 
-    public post_async(BookingHistory bookingHistory, String action) {
-        this.action = action;
-        this.context=bookingHistory;
-        this.bookingHistory = bookingHistory;
-    }
     public post_async(BookingDetails bookingDetails, String action) {
         this.action = action;
         this.context=bookingDetails;
         this.bookingDetails = bookingDetails;
+    }
+    public post_async(PaymentHistory paymentHistory, String action) {
+        this.action = action;
+        this.context=paymentHistory;
+        this.paymentHistory = paymentHistory;
     }
     public post_async(Login login, String action) {
         this.action = action;
@@ -174,6 +166,14 @@ public class post_async extends AsyncTask<String, Integer, String> {
                 this.bookingDetails.ResponseOfBookingListReload(resultString);
             }
 
+            else  if (this.paymentHistory != null &&
+                    (action.equalsIgnoreCase("PaymentHistory")
+                            || action.equals("PaymentHistoryRefresh"))) {
+                this.paymentHistory.ResponseOfPaymentList(resultString);
+            } else  if (this.paymentHistory != null && action.equalsIgnoreCase("PaymentHistoryReload")) {
+                this.paymentHistory.ResponseOfPaymentListReload(resultString);
+            }
+
         } catch (Exception e) {
             dialog.cancel();
         }
@@ -187,7 +187,9 @@ public class post_async extends AsyncTask<String, Integer, String> {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.spinner);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        if(!action.equals("BookingDetailsReload") && !action.equals("BookingDetailsRefresh")) {
+        if(!action.equals("BookingDetailsReload") &&
+                !action.equals("BookingDetailsRefresh") && !action.equals("PaymentHistoryReload") &&
+                !action.equals("PaymentHistoryRefresh") ) {
             dialog.show();
         }
     }

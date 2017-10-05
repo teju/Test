@@ -55,9 +55,6 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".BookingHistory"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ServerError"
             android:screenOrientation="portrait" />
         <activity
@@ -68,7 +65,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".PaymentHistory"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="portrait" />
 
         <service android:name=".Utils.FireBaseMessagingService">
             <intent-filter>
@@ -83,7 +80,7 @@
 
         <activity android:name=".Login" />
         <activity android:name=".BookingDetails"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

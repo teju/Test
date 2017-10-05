@@ -412,7 +412,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             // Handle the camera action
         } else if (id == R.id.booking_history) {
-            Intent i=new Intent(this,BookingHistory.class);
+            Intent i=new Intent(this,BookingDetails.class);
             startActivity(i);
         }  else if (id == R.id.booking_details) {
             Intent i=new Intent(this,BookingDetails.class);

@@ -7,45 +7,77 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.example.teju.biker.Utils.Constants;
+import com.example.teju.biker.Utils.CustomToast;
 import com.example.teju.biker.Utils.IsNetworkConnection;
+import com.example.teju.biker.Utils.PrintClass;
+import com.example.teju.biker.Utils.post_async;
+import com.example.teju.biker.model.BookingList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class PaymentHistory extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-
-    private SharedPreferences prefrence;
+        implements NavigationView.OnNavigationItemSelectedListener,SwipeRefreshLayout.OnRefreshListener{
+    private RecyclerView recyclerView;
+    private LinearLayoutManager mLayoutManager;
     private SharedPreferences.Editor editor;
+    private SharedPreferences prefrence;
+    List<BookingList> PaymentList_l=new ArrayList<>();
     TextView profile_name;
+    private View rootView;
+    int offset=0;
+    int limit=5;
+    PaymentHistory.PaymentHistoryRecyclerView mAdapter ;
+    private int total_count=0;
+    private TextView no_records;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onResume() {
         super.onResume();
         profile_name.setText(prefrence.getString("name", ""));
-
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.payment_history);
-       // Constants.statusColor(this);
-
+        no_records=(TextView)findViewById(R.id.no_records);
+        rootView=findViewById(android.R.id.content);
+        PaymentList_l.clear();
         prefrence = getSharedPreferences("My_Pref", 0);
         editor = prefrence.edit();
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -59,166 +91,355 @@ public class PaymentHistory extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        TextView title = (TextView) findViewById(R.id.title_val);
+        title.setText("Payment Details");
         View header = navigationView.getHeaderView(0);
+
         profile_name=(TextView)header.findViewById(R.id.profile_name);
         profile_name.setText(prefrence.getString("name", ""));
         Typeface typeface = Typeface.createFromAsset(getAssets(),
                 "fonts/name_font.ttf");
         profile_name.setTypeface(typeface);
 
-        TextView title = (TextView) findViewById(R.id.title_val);
-        title.setText("Payment History");
+        recyclerView =(RecyclerView)findViewById(R.id.payment_history);
+        recyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(mLayoutManager);
 
-        TableLayout table_layout =(TableLayout)findViewById(R.id.tableLayout);
+        // Constants.statusColor(this);
+        getPaymentList("PaymentHistory");
+    }
 
-        TableRow headerrow = new TableRow(this);
-        headerrow.setBackgroundColor(getResources().getColor(R.color.dark_gray));
-
-        TextView headerorderId = new TextView(this);
-        headerorderId.setText("SL No");
-        headerorderId.setTextSize(16);
-        headerorderId.setTextColor(getResources().getColor(R.color.black));
-        headerorderId.setGravity(Gravity.CENTER);
-        headerorderId.setPadding(8, 8, 8, 8);
-
-
-        TextView headerorderDate = new TextView(this);
-        headerorderDate.setText("Vendor Name");
-        headerorderDate.setGravity(Gravity.CENTER);
-        headerorderDate.setTextSize(16);
-        headerorderDate.setTextColor(getResources().getColor(R.color.black));
-        headerorderDate.setPadding(8, 8, 8, 8);
-
-        TextView headervoucherId = new TextView(this);
-        headervoucherId.setText("Vendor No");
-        headervoucherId.setGravity(Gravity.CENTER);
-        headervoucherId.setTextSize(16);
-        headervoucherId.setTextColor(getResources().getColor(R.color.black));
-        headervoucherId.setPadding(8, 8, 8, 8);
-
-        TextView headeramount = new TextView(this);
-        headeramount.setText("Vehicle No");
-        headeramount.setGravity(Gravity.CENTER);
-        headeramount.setTextSize(16);
-        headeramount.setTextColor(getResources().getColor(R.color.black));
-        headeramount.setPadding(8, 8, 8, 8);
-
-        TextView payment_status = new TextView(this);
-        payment_status.setText("Payment Status");
-        payment_status.setTextSize(16);
-        payment_status.setTextColor(getResources().getColor(R.color.black));
-        payment_status.setGravity(Gravity.CENTER);
-        payment_status.setPadding(8, 8, 8, 8);
-
-        headerrow.addView(headerorderId, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
-        headerrow.addView(headerorderDate, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
-        headerrow.addView(headervoucherId, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
-        headerrow.addView(headeramount, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
-        headerrow.addView(payment_status, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
-        table_layout.addView(headerrow);
-
-        for (int i = 0; i < 10; i++) {
-            TableRow row = new TableRow(this);
-            /*if(i%2==0){
-                row.setBackgroundColor(getResources().getColor(R.color.orange));
-                row.setAlpha(.5f);
-            }*/
-            TextView sl_no = new TextView(this);
-            sl_no.setGravity(Gravity.CENTER);
-            sl_no.setTextSize(16);
-            sl_no.setTextColor(getResources().getColor(R.color.black));
-            sl_no.setPadding(8, 8, 8, 8);
-
-            TextView vendor_name = new TextView(this);
-            vendor_name.setGravity(Gravity.CENTER);
-            vendor_name.setTextSize(16);
-            vendor_name.setTextColor(getResources().getColor(R.color.black));
-            vendor_name.setPadding(8, 8, 8, 8);
-
-            TextView vendor_number = new TextView(this);
-            vendor_number.setGravity(Gravity.CENTER);
-            vendor_number.setTextSize(16);
-            vendor_number.setTextColor(getResources().getColor(R.color.black));
-            vendor_number.setPadding(8, 8, 8, 8);
-
-            TextView vehicle_no = new TextView(this);
-            vehicle_no.setGravity(Gravity.CENTER);
-            vehicle_no.setTextSize(16);
-            vehicle_no.setTextColor(getResources().getColor(R.color.black));
-            vehicle_no.setPadding(8, 8, 8, 8);
-
-            TextView status = new TextView(this);
-            status.setGravity(Gravity.CENTER);
-            status.setTextSize(16);
-            status.setTextColor(getResources().getColor(R.color.black));
-            status.setPadding(8, 8, 8, 8);
-
-            sl_no.setText("" + i);
-            vendor_name.setText("Tejaswini");
-            vendor_number.setText("" + i);
-            vehicle_no.setText("KA100" + i);
-            status.setText("Successful");
-
-            row.addView(sl_no,new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
-            row.addView(vendor_name,new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
-            row.addView(vendor_number,new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
-            row.addView(vehicle_no,new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
-            row.addView(status,new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
-
-            table_layout.addView(row);
+    public void getPaymentList(String action){
+        if (IsNetworkConnection.checkNetworkConnection(PaymentHistory.this)) {
+            if(action.equals("PaymentHistoryRefresh")) {
+                swipeRefreshLayout.setRefreshing(true);
+            }
+            String url = Constants.SERVER_URL + "booking/list";
+            JSONObject params = new JSONObject();
+            try {
+                params.put("user_id",prefrence.getString("user_id", "") );
+                params.put("access_token",prefrence.getString("access_token", ""));
+                params.put("offset",String.valueOf(offset));
+                params.put("limit",String.valueOf(limit));
+            } catch (JSONException e) {
+                e.printStackTrace();
+                PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
+            }
+            PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
+            new post_async(PaymentHistory.this,action).execute(url, params.toString());
+        } else {
+            new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                    "No Internet Connection");
         }
     }
+    int id;
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        if (id == R.id.home) {
-            Intent i = new Intent(this, MainActivity.class);
-            startActivity(i);
-            // Handle the camera action
-        } else if (id == R.id.profile) {
-            if (IsNetworkConnection.checkNetworkConnection(PaymentHistory.this)) {
-                Intent i = new Intent(this, UserRegister.class);
-                i.putExtra("type", "edit");
+        if(id != item.getItemId()) {
+            id = item.getItemId();
+            if (id == R.id.home) {
+                Intent i = new Intent(this, MainActivity.class);
                 startActivity(i);
-            } else {
-                Intent i=new Intent(this,ServerError.class);
-                startActivity(i);
-            }
-            // Handle the camera action
-        } else if (id == R.id.booking_history) {
-            Intent i=new Intent(this,BookingHistory.class);
-            startActivity(i);
-        } else if (id == R.id.setting) {
-            Intent i=new Intent(this,Setting.class);
-            startActivity(i);
-        } else if (id == R.id.logout) {
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-            alertDialog.setTitle("Confirm Logout");
-            alertDialog.setMessage("Are you sure you want to Logout ?");
-            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog,int which) {
-                    editor.putString("isLoggedIn","false");
-                    editor.commit();
-                    Intent i=new Intent(PaymentHistory.this,Login.class);
+                // Handle the camera action
+            } else if (id == R.id.profile) {
+                if (IsNetworkConnection.checkNetworkConnection(PaymentHistory.this)) {
+                    Intent i = new Intent(this, UserRegister.class);
+                    i.putExtra("type", "edit");
+                    startActivity(i);
+                } else {
+                    Intent i=new Intent(this,ServerError.class);
                     startActivity(i);
                 }
-            });
-            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
+                // Handle the camera action
+            } else if (id == R.id.booking_details) {
+                Intent i = new Intent(this, BookingDetails.class);
+                startActivity(i);
+            } else if (id == R.id.setting) {
+                Intent i = new Intent(this, Setting.class);
+                startActivity(i);
+            } else if (id == R.id.logout) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+                alertDialog.setTitle("Confirm Logout");
+                alertDialog.setMessage("Are you sure you want to Logout ?");
+                alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        editor.putString("isLoggedIn","false");
+                        editor.commit();
+                        Intent i = new Intent(PaymentHistory.this, Login.class);
+                        startActivity(i);
+                    }
+                });
+                alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
 
-            alertDialog.show();
+                alertDialog.show();
 
+            }
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-}
 
+    public void ResponseOfPaymentList(String resultString) {
+        JSONObject jsonObject = null;
+        try {
+            swipeRefreshLayout.setRefreshing(false);
+
+            jsonObject = new JSONObject(resultString);
+            PrintClass.printValue("ResponseOfPaymentList resultString "," has data "+jsonObject.toString());
+            if(jsonObject.getString("status").equalsIgnoreCase("success")) {
+                /*JSONArray jsonarr_Paymentlist=jsonObject.getJSONArray("bookinglist");
+                PrintClass.printValue("ResponseOfPaymentList PaymentList ",jsonarr_Paymentlist.toString());
+                for (int i=0;i<jsonarr_Paymentlist.length();i++){
+                    JSONObject Payment_jObj=jsonarr_Paymentlist.getJSONObject(i);
+                    BookingList PaymentList =new BookingList();
+                    PaymentList.setBooking_no(Payment_jObj.getString("booking_no"));
+                    PaymentList.setEmail_id(Payment_jObj.getString("email_id"));
+                    PaymentList.setVehicle_no(Payment_jObj.getString("vehicle_no"));
+                    PaymentList.setStatus(Payment_jObj.getString("status"));
+                    PaymentList.setBooked_on(Payment_jObj.getString("booked_on"));
+                    PaymentList.setAddress(Payment_jObj.getString("address"));
+                    PaymentList_l.add(PaymentList);
+                }
+                if(jsonObject.has("totalCount")) {
+                    total_count = Integer.parseInt(jsonObject.getString("totalCount"));
+                }
+                if(PaymentList_l.size() !=0) {*/
+                    mAdapter = new PaymentHistory.PaymentHistoryRecyclerView();
+                    recyclerView.setAdapter(mAdapter);
+                    /*if (jsonObject.has("Paymentlist")) {
+                        final JSONObject finalJsonObject = jsonObject;
+                        mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+                            @Override
+                            public void onLoadMore() {
+                                Log.e("haint", "Load More");
+                                PaymentList_l.add(null);
+                                mAdapter.notifyItemInserted(PaymentList_l.size() - 1);
+                                //Load more data for reyclerview
+                                new Handler().postDelayed(new Runnable() {
+                                                              @Override
+                                                              public void run() {
+                                                                  Log.e("haint", "Load More 2");
+                                                                  if (finalJsonObject.has("Paymentlist")) {
+                                                                      PrintClass.printValue("ResponseOfPaymentList onLoadMore "
+                                                                              , "LOOPED");
+                                                                      //Remove loading item
+                                                                      PaymentList_l.remove(PaymentList_l.size() - 1);
+                                                                      mAdapter.notifyItemRemoved(PaymentList_l.size());
+                                                                      //Load data
+                                                                      offset = offset + limit;
+                                                                      getPaymentList("PaymentHistoryReload");
+                                                                  }
+                                                              }
+                                                          },
+                                        1000);
+                            }
+                        });
+
+                    }
+                } else {
+                    recyclerView.setVisibility(View.GONE);
+                    no_records.setVisibility(View.VISIBLE);
+                    no_records.setText(jsonObject.getString("message"));
+                }*/
+            } else {
+                recyclerView.setVisibility(View.GONE);
+                no_records.setVisibility(View.VISIBLE);
+                no_records.setText(jsonObject.getString("message"));
+            }
+        }catch (Exception e){
+            PrintClass.printValue("ResponseOfPaymentList Exception ",e.toString());
+            no_records.setVisibility(View.VISIBLE);
+            try {
+                no_records.setText(jsonObject.getString("message"));
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
+
+        }
+    }
+
+    public void ResponseOfPaymentListReload(String resultString) {
+        try {
+            JSONObject jsonObject = new JSONObject(resultString);
+            PrintClass.printValue("ResponseOfPaymentListReload resultString "," has data "+jsonObject.toString());
+            if(jsonObject.getString("status").equalsIgnoreCase("success")) {
+                JSONArray jsonarr_Paymentlist=jsonObject.getJSONArray("bookinglist");
+                PrintClass.printValue("ResponseOfPaymentListReload PaymentList ",jsonarr_Paymentlist.toString());
+                for (int i=0;i<jsonarr_Paymentlist.length();i++){
+                    JSONObject Payment_jObj=jsonarr_Paymentlist.getJSONObject(i);
+                    BookingList PaymentList =new BookingList();
+                    PaymentList.setBooking_no(Payment_jObj.getString("booking_no"));
+                    PaymentList.setEmail_id(Payment_jObj.getString("email_id"));
+                    PaymentList.setVehicle_no(Payment_jObj.getString("vehicle_no"));
+                    PaymentList.setStatus(Payment_jObj.getString("status"));
+                    PaymentList.setBooked_on(Payment_jObj.getString("booked_on"));
+                    PaymentList.setAddress(Payment_jObj.getString("address"));
+                    PaymentList_l.add(PaymentList);
+                }
+                mAdapter.notifyDataSetChanged();
+                mAdapter.setLoaded();
+            }
+        }catch (Exception e){
+            PrintClass.printValue("ResponseOfPaymentListReload Exception ",e.toString());
+
+        }
+    }
+
+    private String getformatteddate(String dateget) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Date expiry = null;
+        String yourDate = "";
+        try {
+
+            expiry = formatter.parse(dateget);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        SimpleDateFormat format = new SimpleDateFormat("d");
+        if (expiry != null) {
+            String date = format.format(expiry);
+            if (date.endsWith("1") && !date.endsWith("11"))
+                format = new SimpleDateFormat("d'st' MMM, yyyy hh:mm a");
+            else if (date.endsWith("2") && !date.endsWith("12"))
+                format = new SimpleDateFormat("d'nd' MMM, yyyy  hh:mm a");
+            else if (date.endsWith("3") && !date.endsWith("13"))
+                format = new SimpleDateFormat("d'rd' MMM, yyyy  hh:mm a");
+            else
+                format = new SimpleDateFormat("d'th' MMM, yyyy  hh:mm a");
+            yourDate = format.format(expiry);
+        }
+        return yourDate;
+    }
+
+    @Override
+    public void onRefresh() {
+        offset=0;
+        PaymentList_l.clear();
+        getPaymentList("PaymentHistoryRefresh");
+    }
+
+    static  class PaymentHistoryRecyclerViewHolder extends RecyclerView.ViewHolder {
+        TextView Payment_id, vendor_email, Payment_date, vehicle_no, status;
+
+        public PaymentHistoryRecyclerViewHolder(View itemView) {
+            super(itemView);
+            /*Payment_id = (TextView) itemView.findViewById(R.id.Payment_id);
+            vendor_email = (TextView) itemView.findViewById(R.id.vendor_email);
+            Payment_date = (TextView) itemView.findViewById(R.id.Payment_date);
+            vehicle_no = (TextView) itemView.findViewById(R.id.vehicle_no);
+            status = (TextView) itemView.findViewById(R.id.status);*/
+        }
+    }
+
+    static class LoadingViewHolder extends RecyclerView.ViewHolder {
+        public ProgressBar progressBar;
+        public LoadingViewHolder(View itemView) {
+            super(itemView);
+            progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar1);
+
+        }
+    }
+
+    class PaymentHistoryRecyclerView extends RecyclerView.Adapter < RecyclerView.ViewHolder > {
+        private final int VIEW_TYPE_ITEM = 0;
+        private final int VIEW_TYPE_LOADING = 1;
+        private OnLoadMoreListener mOnLoadMoreListener;
+        private boolean isLoading=false;
+        private int visibleThreshold = 4;
+        private int lastVisibleItem,
+                totalItemCount;
+
+        public PaymentHistoryRecyclerView() {
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                }
+
+
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+                {
+                    PrintClass.printValue("PaymentHistoryRecyclerView dy "," : "+dy);
+
+                    final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    if (dy > 0 && PaymentList_l.size() <total_count) //check for scroll down
+                    {
+                        totalItemCount = linearLayoutManager.getItemCount();
+                        lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                        PrintClass.printValue("PaymentHistoryRecyclerView ","lastVisibleItem : "
+                                +lastVisibleItem+ " totalItemCount : "
+                                +totalItemCount+" visibleThreshold : "+visibleThreshold+" isLoading : "+isLoading);
+
+                        if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                            if (mOnLoadMoreListener != null) {
+                                mOnLoadMoreListener.onLoadMore();
+                            }
+                            isLoading = true;
+                        }
+                    }
+                }
+            });
+        }
+
+        public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
+            isLoading = false;
+            this.mOnLoadMoreListener = mOnLoadMoreListener;
+        }
+
+       /* @Override
+        public int getItemViewType(int position) {
+            return PaymentList_l.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        }*/
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            if (viewType == VIEW_TYPE_ITEM) {
+                View view = LayoutInflater.from(
+                        PaymentHistory.this).inflate(R.layout.payment_history_content, parent, false);
+                return new PaymentHistory.PaymentHistoryRecyclerViewHolder(view);
+            } else if (viewType == VIEW_TYPE_LOADING) {
+                View view = LayoutInflater.from(PaymentHistory.this).inflate(R.layout.spinner, parent, false);
+                return new PaymentHistory.LoadingViewHolder(view);
+            }
+            return null;
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            if (holder instanceof PaymentHistory.PaymentHistoryRecyclerViewHolder) {
+               /// BookingList Payments = PaymentList_l.get(position);
+                PaymentHistory.PaymentHistoryRecyclerViewHolder userViewHolder =
+                        (PaymentHistory.PaymentHistoryRecyclerViewHolder) holder;
+               /* userViewHolder.Payment_id.setText(Payments.getBooking_no());
+                userViewHolder.vendor_email.setText(Payments.getEmail_id());
+                userViewHolder.vehicle_no.setText(Payments.getVehicle_no());
+                userViewHolder.Payment_date.setText(getformatteddate(Payments.getBooked_on()));
+                userViewHolder.status.setText(Payments.getStatus());*/
+            } else if (holder instanceof PaymentHistory.LoadingViewHolder) {
+                PaymentHistory.LoadingViewHolder loadingViewHolder = (PaymentHistory.LoadingViewHolder) holder;
+                loadingViewHolder.progressBar.setIndeterminate(true);
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            //return PaymentList_l == null ?
+            return 6;
+
+        }
+
+        public void setLoaded() {
+            isLoading = false;
+        }
+    }
+}

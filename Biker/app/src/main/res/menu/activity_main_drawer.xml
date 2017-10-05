@@ -15,11 +15,6 @@
             android:id="@+id/booking_details"
             android:icon="@drawable/message_bulleted"
             android:title="Booking Details" />
-
-        <item
-            android:id="@+id/booking_history"
-            android:icon="@drawable/message_bulleted"
-            android:title="Booking History" />
         <item
             android:id="@+id/payment_history"
             android:icon="@drawable/coin"

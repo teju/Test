@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:layout_marginTop="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Booking No  :         "
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingBottom="4dp"
+        android:textSize="@dimen/normal"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:id="@+id/Payment_id_text"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10"
+        android:textSize="@dimen/normal"
+        android:paddingBottom="4dp"
+        android:textColor="@color/black"
+        android:layout_toRightOf="@+id/Payment_id_text"
+        android:id="@+id/Payment_id"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vendor Name  :     "
+        android:paddingBottom="4dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textStyle="bold"
+        android:textSize="@dimen/normal"
+        android:textColor="@color/black"
+        android:id="@+id/vendor_name_text"
+        android:layout_below="@+id/Payment_id_text"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tejaswini"
+        android:paddingBottom="4dp"
+        android:textSize="@dimen/normal"
+        android:textColor="@color/black"
+        android:layout_toRightOf="@+id/vendor_name_text"
+        android:layout_below="@+id/Payment_id_text"
+        android:id="@+id/vendor_name"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:paddingBottom="4dp"
+        android:layout_height="wrap_content"
+        android:text="Vendor Number  :  "
+        android:textStyle="bold"
+        android:layout_below="@+id/vendor_name_text"
+        android:textSize="@dimen/normal"
+        android:textColor="@color/black"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:id="@+id/vendor_number_text"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12"
+        android:paddingBottom="4dp"
+        android:layout_below="@+id/vendor_name_text"
+        android:layout_toRightOf="@+id/vendor_number_text"
+        android:textSize="@dimen/normal"
+        android:textColor="@color/black"
+        android:id="@+id/vendor_number"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Amount :                  "
+        android:paddingBottom="4dp"
+        android:textStyle="bold"
+        android:textSize="@dimen/normal"
+        android:layout_below="@+id/vendor_number_text"
+        android:textColor="@color/black"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:id="@+id/amount_text"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="4dp"
+        android:layout_below="@+id/vendor_number_text"
+        android:layout_toRightOf="@+id/amount_text"
+        android:text="750 Rs"
+        android:textSize="@dimen/normal"
+        android:textColor="@color/orange"
+        android:id="@+id/amount"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:id="@+id/payNow"
+        android:text="Pay Now"
+        android:textColor="@color/white"
+        android:background="@color/green"
+        android:layout_below="@+id/vendor_number_text"
+        android:layout_alignParentRight="true" />
+   
+</RelativeLayout>

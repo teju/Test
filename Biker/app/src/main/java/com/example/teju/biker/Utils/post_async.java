@@ -110,8 +110,10 @@ public class post_async extends AsyncTask<String, Integer, String> {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         dialog.cancel();
-                        Intent i=new Intent(context, ServerError.class);
-                        context.startActivity(i);
+                        if(!action.equals("notificationService")) {
+                            Intent i = new Intent(context, ServerError.class);
+                            context.startActivity(i);
+                        }
                         System.out.println("SYSTEMPRINT error " + " action " + action +
                                 " error " + error.toString());
                     }
@@ -180,7 +182,6 @@ public class post_async extends AsyncTask<String, Integer, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-
         dialog = new Dialog(context);
         dialog.setCancelable(false);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -189,7 +190,6 @@ public class post_async extends AsyncTask<String, Integer, String> {
         if(!action.equals("BookingDetailsReload") && !action.equals("BookingDetailsRefresh")) {
             dialog.show();
         }
-
     }
 
 }

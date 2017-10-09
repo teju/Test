@@ -186,7 +186,6 @@ public class BookingDetails extends AppCompatActivity
     public void ResponseOfBookingList(String resultString) {
         JSONObject jsonObject = null;
         try {
-            swipeRefreshLayout.setRefreshing(false);
 
             jsonObject = new JSONObject(resultString);
             PrintClass.printValue("ResponseOfBookingList resultString "," has data "+jsonObject.toString());
@@ -250,7 +249,10 @@ public class BookingDetails extends AppCompatActivity
                 no_records.setVisibility(View.VISIBLE);
                 no_records.setText(jsonObject.getString("message"));
             }
+            swipeRefreshLayout.setRefreshing(false);
+
         }catch (Exception e){
+            swipeRefreshLayout.setRefreshing(false);
             PrintClass.printValue("ResponseOfBookingList Exception ",e.toString());
             no_records.setVisibility(View.VISIBLE);
             try {

@@ -3,15 +3,15 @@ package com.vendor.biker.biker_vendor.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.teju.biker.R;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.vendor.biker.biker_vendor.R;
 
 /**
  * Created by nz160 on 08-06-2017.
  */
 
-public class    FCMInstancdIdService  extends FirebaseInstanceIdService{
+public class    FCMInstancdIdService  extends FirebaseInstanceIdService {
     @Override
     public void onTokenRefresh() {
         super.onTokenRefresh();

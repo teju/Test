@@ -9,22 +9,17 @@ import android.view.Window;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.teju.biker.BookingDetails;
-import com.example.teju.biker.BookingHistory;
-import com.example.teju.biker.Login;
-import com.example.teju.biker.MainActivity;
-import com.example.teju.biker.R;
-import com.example.teju.biker.ServerError;
-import com.example.teju.biker.UserRegister;
+import com.vendor.biker.biker_vendor.Login;
+import com.vendor.biker.biker_vendor.MainActivity;
+import com.vendor.biker.biker_vendor.R;
+
 
 import java.io.UnsupportedEncodingException;
 
@@ -33,10 +28,9 @@ import java.io.UnsupportedEncodingException;
  */
 public class post_async extends AsyncTask<String, Integer, String> {
     static String action = "", resultString = "";
-    private BookingDetails bookingDetails;
-    private BookingHistory bookingHistory;
-    private  MainActivity mainActivity;
-    private  UserRegister userRegister;
+    private MainActivity mainActivity;
+    private UserRegister userRegister;
+
     private  Login login;
     private Dialog dialog;
     Context context;
@@ -46,27 +40,17 @@ public class post_async extends AsyncTask<String, Integer, String> {
         this.context=userRegister;
         this.userRegister = userRegister;
     }
-
-    public post_async(BookingHistory bookingHistory, String action) {
+    public post_async(MainActivity mainActivity, String action) {
         this.action = action;
-        this.context=bookingHistory;
-        this.bookingHistory = bookingHistory;
-    }
-    public post_async(BookingDetails bookingDetails, String action) {
-        this.action = action;
-        this.context=bookingDetails;
-        this.bookingDetails = bookingDetails;
+        this.context=mainActivity;
+        this.mainActivity = mainActivity;
     }
     public post_async(Login login, String action) {
         this.action = action;
         this.context=login;
         this.login = login;
     }
-    public post_async(MainActivity mainActivity, String action) {
-        this.action = action;
-        this.context=mainActivity;
-        this.mainActivity = mainActivity;
-    }
+
     @Override
     protected String doInBackground(String... params) {
         PrintClass.printValue("SYSTEMPRINT POST SYNC  ", "LENGTH " + params.length);
@@ -104,10 +88,10 @@ public class post_async extends AsyncTask<String, Integer, String> {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         dialog.cancel();
-                        if(!action.equals("notificationService")) {
+                       /* if(!action.equals("notificationService")) {
                             Intent i = new Intent(context, ServerError.class);
                             context.startActivity(i);
-                        }
+                        }*/
                         System.out.println("SYSTEMPRINT error " + " action " + action +
                                 " error " + error.toString());
                     }
@@ -148,26 +132,24 @@ public class post_async extends AsyncTask<String, Integer, String> {
         PrintClass.printValue("SYSTEMPRINT postsync  if  ", "action " + action +
                 " resultString " + resultString);
         try {
+             if (this.login != null && action.equalsIgnoreCase("Login")) {
+            this.login.ResponseOfLogin(resultString);
+            } else if (this.login != null && action.equalsIgnoreCase("LoginOtp")) {
+                this.login.ResponseOfLoginOtp(resultString);
+            }
             if (this.userRegister != null && action.equalsIgnoreCase("UserRegister")) {
                 this.userRegister.ResponseOfRegister(resultString);
             } else  if (this.userRegister != null && action.equalsIgnoreCase("UserGetProfileInfo")) {
                 this.userRegister.ResponseOfUserInfo(resultString);
             } else  if (this.userRegister != null && action.equalsIgnoreCase("UserUpdate")) {
                 this.userRegister.ResponseOfRegister(resultString);
-            } else  if (this.login != null && action.equalsIgnoreCase("Login")) {
-                this.login.ResponseOfLogin(resultString);
-            } else  if (this.login != null && action.equalsIgnoreCase("LoginOtp")) {
-                this.login.ResponseOfLoginOtp(resultString);
-            } else  if (this.mainActivity != null && action.equalsIgnoreCase("BookingRequest")) {
-                this.mainActivity.ResponseOfBooking(resultString);
-            } else  if (this.bookingDetails != null &&
+            }else  if (this.mainActivity != null &&
                     (action.equalsIgnoreCase("BookingDetails")
                             || action.equals("BookingDetailsRefresh"))) {
-                this.bookingDetails.ResponseOfBookingList(resultString);
-            } else  if (this.bookingDetails != null && action.equalsIgnoreCase("BookingDetailsReload")) {
-                this.bookingDetails.ResponseOfBookingListReload(resultString);
+                this.mainActivity.ResponseOfBookingList(resultString);
+            } else  if (this.mainActivity != null && action.equalsIgnoreCase("BookingDetailsReload")) {
+                this.mainActivity.ResponseOfBookingListReload(resultString);
             }
-
         } catch (Exception e) {
             dialog.cancel();
         }
@@ -181,7 +163,9 @@ public class post_async extends AsyncTask<String, Integer, String> {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.spinner);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        if(!action.equals("BookingDetailsReload") && !action.equals("BookingDetailsRefresh")) {
+        if(!action.equals("BookingDetailsReload") &&
+                !action.equals("BookingDetailsRefresh") && !action.equals("PaymentHistoryReload") &&
+                !action.equals("PaymentHistoryRefresh") ) {
             dialog.show();
         }
     }

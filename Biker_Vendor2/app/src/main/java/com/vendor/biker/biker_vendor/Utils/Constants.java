@@ -1,6 +1,5 @@
 package com.vendor.biker.biker_vendor.Utils;
 
-
 /**
  * Created by nz160 on 20-09-2017.
  */

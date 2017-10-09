@@ -3,10 +3,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:layout_marginTop="8dp"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp">
+    android:background="@android:drawable/editbox_background_normal"
+    android:layout_marginTop="1dp"
+    android:layout_marginLeft="1.5dp"
+    android:layout_marginRight="1.5dp">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
         android:paddingBottom="4dp"
         android:layout_below="@+id/vendor_number_text"
         android:layout_toRightOf="@+id/amount_text"
-        android:text="750 Rs"
+        android:text="Rs. 750"
         android:textSize="@dimen/normal"
         android:textColor="@color/orange"
         android:id="@+id/amount"/>
@@ -99,7 +99,7 @@
         android:id="@+id/payNow"
         android:text="Pay Now"
         android:textColor="@color/white"
-        android:background="@color/green"
+        android:background="@drawable/bg_green"
         android:layout_below="@+id/vendor_number_text"
         android:layout_alignParentRight="true" />
    

@@ -21,7 +21,7 @@
         android:layout_marginRight="30dp"
         android:background="@android:drawable/editbox_background_normal"
         android:layout_marginBottom="8dp"
-        android:padding="8dp"
+        android:padding="12dp"
         android:hint="Vehicle Number"/>
     <EditText
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:background="@android:drawable/editbox_background_normal"
-        android:padding="8dp"
+        android:padding="12dp"
         android:hint="Email Id"/>
 
     <Button
@@ -39,7 +39,7 @@
         android:layout_height="40dp"
         android:id="@+id/submit"
         android:layout_marginTop="10dp"
-        android:background="@color/orange"
+        android:background="@drawable/bg"
         android:textColor="@color/white"
         android:textSize="@dimen/normal"
         android:textStyle="bold"

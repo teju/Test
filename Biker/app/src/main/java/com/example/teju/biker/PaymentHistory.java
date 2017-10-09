@@ -255,7 +255,10 @@ public class PaymentHistory extends AppCompatActivity
                 no_records.setVisibility(View.VISIBLE);
                 no_records.setText(jsonObject.getString("message"));
             }
+            swipeRefreshLayout.setRefreshing(false);
+
         }catch (Exception e){
+            swipeRefreshLayout.setRefreshing(false);
             PrintClass.printValue("ResponseOfPaymentList Exception ",e.toString());
             no_records.setVisibility(View.VISIBLE);
             try {

@@ -5,11 +5,11 @@
     android:layout_height="wrap_content"
     android:background="@android:drawable/editbox_background_normal"
     android:layout_marginTop="1dp"
-    android:layout_marginBottom="1dp"
+    android:layout_marginBottom="-5dp"
     android:layout_marginLeft="1.5dp"
     android:layout_marginRight="1.5dp">
     <TextView
-        android:layout_width="120dp"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:text="Booking No :"
         android:paddingLeft="4dp"
@@ -22,16 +22,15 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
         android:textSize="@dimen/normal"
         android:paddingBottom="4dp"
         android:textColor="@color/black"
         android:layout_toRightOf="@+id/booking_id_text"
         android:id="@+id/booking_id"/>
     <TextView
-        android:layout_width="120dp"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:text="Vendor Email  :"
+        android:text="Vendor Name  :"
         android:paddingBottom="4dp"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
@@ -43,7 +42,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
         android:paddingBottom="4dp"
         android:textSize="@dimen/normal"
         android:textColor="@color/black"
@@ -51,9 +49,9 @@
         android:layout_below="@+id/booking_id_text"
         android:id="@+id/vendor_name"/>
     <TextView
-        android:layout_width="120dp"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:text="Vendor Name  :"
+        android:text="Vendor No.  :"
         android:paddingBottom="4dp"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
@@ -65,7 +63,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
         android:paddingBottom="4dp"
         android:textSize="@dimen/normal"
         android:textColor="@color/black"
@@ -74,7 +71,7 @@
         android:id="@+id/vendor_number"/>
 
     <TextView
-        android:layout_width="120dp"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:text="Vehicle No : "
         android:paddingBottom="4dp"
@@ -91,12 +88,11 @@
         android:paddingBottom="4dp"
         android:layout_below="@+id/vendor_number_text"
         android:layout_toRightOf="@+id/vehicle_no_text"
-        android:text=""
         android:textSize="@dimen/normal"
         android:textColor="@color/green"
         android:id="@+id/vehicle_no"/>
     <TextView
-        android:layout_width="120dp"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/vehicle_no_text"
         android:text="Status : "
@@ -118,5 +114,15 @@
         android:textAllCaps="true"
         android:textColor="@color/orange"
         android:id="@+id/status"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:id="@+id/payNow"
+        android:text="Pay Now"
+        android:visibility="gone"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_green"
+        android:layout_below="@+id/vehicle_no_text"
+        android:layout_alignParentRight="true" />
 
 </RelativeLayout>

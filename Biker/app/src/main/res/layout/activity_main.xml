@@ -18,7 +18,7 @@
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="14dp"
         android:layout_marginTop="5dp"
         android:textSize="@dimen/normal"
         android:layout_marginBottom="5dp"
@@ -40,6 +40,6 @@
         android:textStyle="bold"
         android:textColor="@color/white"
         android:layout_alignParentBottom="true"
-        android:background="@color/orange" />
+        android:background="@drawable/bg" />
 
 </RelativeLayout>

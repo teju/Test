@@ -47,7 +47,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
     private BroadcastReceiver receiver;
     private SharedPreferences notiprefrence;
-
+    String getPhoneNo="";
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +102,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
             JSONObject jsonobject = new JSONObject();
             try {
                 params.put("google_fcm_id",notiprefrence.getString(getString(R.string.fcm_token), "") );
-                params.put("mobile_no",phone.getText().toString());
+                params.put("mobile_no",getPhoneNo);
+                params.put("access_token", prefrence.getString("access_token", ""));
                 jsonobject.put("PushNotification",params);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -179,6 +180,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 String url = Constants.SERVER_URL + "user/login";
                 JSONObject jsonBody = new JSONObject();
                 JSONObject params = new JSONObject();
+                getPhoneNo=phone.getText().toString();
             try {
                 params.put("username",phone.getText().toString() );
                 params.put("user_type", "customer");
@@ -227,7 +229,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                                 JSONObject userparams = new JSONObject();
                                 JSONObject otpparams = new JSONObject();
                                 try {
-                                    userparams.put("username",phone.getText().toString() );
+                                    userparams.put("username",getPhoneNo);
                                     userparams.put("user_type", "customer");
                                     otpparams.put("otp_code", otp.getText().toString());
                                     jsonBody.put("LoginForm", userparams);

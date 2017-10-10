@@ -2,7 +2,6 @@ package com.vendor.biker.biker_vendor.Utils;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.view.Window;
@@ -16,9 +15,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.vendor.biker.biker_vendor.JobHistory;
+import com.vendor.biker.biker_vendor.JobList;
 import com.vendor.biker.biker_vendor.Login;
 import com.vendor.biker.biker_vendor.MainActivity;
 import com.vendor.biker.biker_vendor.R;
+import com.vendor.biker.biker_vendor.UserRegister;
 
 
 import java.io.UnsupportedEncodingException;
@@ -28,6 +30,8 @@ import java.io.UnsupportedEncodingException;
  */
 public class post_async extends AsyncTask<String, Integer, String> {
     static String action = "", resultString = "";
+    private JobHistory jobHistory;
+    private JobList jobList;
     private MainActivity mainActivity;
     private UserRegister userRegister;
 
@@ -40,6 +44,11 @@ public class post_async extends AsyncTask<String, Integer, String> {
         this.context=userRegister;
         this.userRegister = userRegister;
     }
+    public post_async(JobHistory jobHistory, String action) {
+        this.action = action;
+        this.context=jobHistory;
+        this.jobHistory = jobHistory;
+    }
     public post_async(MainActivity mainActivity, String action) {
         this.action = action;
         this.context=mainActivity;
@@ -50,7 +59,11 @@ public class post_async extends AsyncTask<String, Integer, String> {
         this.context=login;
         this.login = login;
     }
-
+    public post_async(JobList jobList, String action) {
+        this.action = action;
+        this.context=jobList;
+        this.jobList = jobList;
+    }
     @Override
     protected String doInBackground(String... params) {
         PrintClass.printValue("SYSTEMPRINT POST SYNC  ", "LENGTH " + params.length);
@@ -149,6 +162,20 @@ public class post_async extends AsyncTask<String, Integer, String> {
                 this.mainActivity.ResponseOfBookingList(resultString);
             } else  if (this.mainActivity != null && action.equalsIgnoreCase("BookingDetailsReload")) {
                 this.mainActivity.ResponseOfBookingListReload(resultString);
+            }else  if (this.mainActivity != null && action.equalsIgnoreCase("RequestAccept")) {
+                this.mainActivity.ResponseOfBookingAccept(resultString);
+            }else  if (this.jobList != null &&
+                    (action.equalsIgnoreCase("jobListDetails")
+                            || action.equals("jobDetailsRefresh"))) {
+                this.jobList.ResponseOfJobList(resultString);
+            } else  if (this.jobList != null && action.equalsIgnoreCase("jobDetailsReload")) {
+                this.jobList.ResponseOfjobListReload(resultString);
+            }else  if (this.jobHistory != null &&
+                    (action.equalsIgnoreCase("jobHistoryDetails")
+                            || action.equals("jobHistoryDetailsRefresh"))) {
+                this.jobHistory.ResponseOfJobList(resultString);
+            } else  if (this.jobHistory != null && action.equalsIgnoreCase("jobHistoryDetailsReload")) {
+                this.jobHistory.ResponseOfjobListReload(resultString);
             }
         } catch (Exception e) {
             dialog.cancel();
@@ -163,9 +190,16 @@ public class post_async extends AsyncTask<String, Integer, String> {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.spinner);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        if(!action.equals("BookingDetailsReload") &&
-                !action.equals("BookingDetailsRefresh") && !action.equals("PaymentHistoryReload") &&
-                !action.equals("PaymentHistoryRefresh") ) {
+        if(action.equals("BookingDetailsReload") ||
+                action.equals("BookingDetailsRefresh")  ) {
+
+        } else   if(action.equals("jobDetailsReload") ||
+                action.equals("jobDetailsRefresh")  ) {
+
+        }  else   if(action.equals("jobHistoryDetailsReload") ||
+                action.equals("jobHistoryDetailsRefresh")  ) {
+
+        }  else {
             dialog.show();
         }
     }

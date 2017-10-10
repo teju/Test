@@ -8,7 +8,7 @@
     android:layout_marginLeft="1.5dp"
     android:layout_marginRight="1.5dp">
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:text="Booking No  :         "
         android:paddingLeft="4dp"
@@ -28,7 +28,7 @@
         android:layout_toRightOf="@+id/Payment_id_text"
         android:id="@+id/Payment_id"/>
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:text="Vendor Name  :     "
         android:paddingBottom="4dp"
@@ -50,10 +50,10 @@
         android:layout_below="@+id/Payment_id_text"
         android:id="@+id/vendor_name"/>
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="140dp"
         android:paddingBottom="4dp"
         android:layout_height="wrap_content"
-        android:text="Vendor Number  :  "
+        android:text="Vendor No. :  "
         android:textStyle="bold"
         android:layout_below="@+id/vendor_name_text"
         android:textSize="@dimen/normal"
@@ -72,7 +72,7 @@
         android:textColor="@color/black"
         android:id="@+id/vendor_number"/>
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:text="Amount :                  "
         android:paddingBottom="4dp"
@@ -102,5 +102,5 @@
         android:background="@drawable/bg_green"
         android:layout_below="@+id/vendor_number_text"
         android:layout_alignParentRight="true" />
-   
+
 </RelativeLayout>

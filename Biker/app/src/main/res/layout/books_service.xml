@@ -7,9 +7,10 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Enter your Details"
+        android:text="Provide Details"
         android:layout_marginBottom="10dp"
         android:textSize="@dimen/heading"
+        android:textColor="@color/black"
         android:textStyle="bold"
         android:gravity="center_horizontal"
         android:layout_marginTop="10dp"/>

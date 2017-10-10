@@ -22,7 +22,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -32,7 +31,6 @@ import com.vendor.biker.biker_vendor.Utils.Constants;
 import com.vendor.biker.biker_vendor.Utils.CustomToast;
 import com.vendor.biker.biker_vendor.Utils.IsNetworkConnection;
 import com.vendor.biker.biker_vendor.Utils.PrintClass;
-import com.vendor.biker.biker_vendor.Utils.UserRegister;
 import com.vendor.biker.biker_vendor.Utils.post_async;
 import com.vendor.biker.biker_vendor.model.BookingList;
 
@@ -103,6 +101,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 "fonts/name_font.ttf");
         profile_name.setTypeface(typeface);
 
+        no_records =(TextView) findViewById(R.id.no_records);
+
         recyclerView =(RecyclerView)findViewById(R.id.booking_history);
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
@@ -137,28 +137,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void ResponseOfBookingList(String resultString) {
         JSONObject jsonObject = null;
         try {
-            mAdapter = new MainActivity.BookingDetailsRecyclerView();
-            recyclerView.setAdapter(mAdapter);
             jsonObject = new JSONObject(resultString);
             PrintClass.printValue("ResponseOfBookingList resultString "," has data "+jsonObject.toString());
             if(jsonObject.getString("status").equalsIgnoreCase("success")) {
-                JSONArray jsonarr_bookinglist=jsonObject.getJSONArray("bookinglist");
-                PrintClass.printValue("ResponseOfBookingList bookingList ",jsonarr_bookinglist.toString());
-                for (int i=0;i<jsonarr_bookinglist.length();i++){
-                    JSONObject booking_jObj=jsonarr_bookinglist.getJSONObject(i);
-                    BookingList bookingList =new BookingList();
-                    bookingList.setBooking_no(booking_jObj.getString("booking_no"));
-                    bookingList.setEmail_id(booking_jObj.getString("email_id"));
-                    bookingList.setVehicle_no(booking_jObj.getString("vehicle_no"));
-                    bookingList.setStatus(booking_jObj.getString("status"));
-                    bookingList.setBooked_on(booking_jObj.getString("booked_on"));
-                    bookingList.setAddress(booking_jObj.getString("address"));
-                    bookingList_l.add(bookingList);
-                }
-                if(jsonObject.has("totalCount")) {
-                    total_count = Integer.parseInt(jsonObject.getString("totalCount"));
-                }
-                if(bookingList_l.size() !=0) {
+                if(jsonObject.has("bookinglist")) {
+                    JSONArray jsonarr_bookinglist = jsonObject.getJSONArray("bookinglist");
+                    PrintClass.printValue("ResponseOfBookingList bookingList ", jsonarr_bookinglist.toString());
+                    for (int i = 0; i < jsonarr_bookinglist.length(); i++) {
+                        JSONObject booking_jObj = jsonarr_bookinglist.getJSONObject(i);
+                        BookingList bookingList = new BookingList();
+                        bookingList.setBooking_no(booking_jObj.getString("booking_no"));
+                        bookingList.setBooking_id(booking_jObj.getString("booking_id"));
+                        bookingList.setEmail_id(booking_jObj.getString("email_id"));
+                        bookingList.setVehicle_no(booking_jObj.getString("vehicle_no"));
+                        bookingList.setStatus(booking_jObj.getString("status"));
+                        bookingList.setBooked_on(booking_jObj.getString("booked_on"));
+                        bookingList.setAddress(booking_jObj.getString("address"));
+                        bookingList.setCustomer_name(booking_jObj.getString("customer_name"));
+                        bookingList_l.add(bookingList);
+                    }
+                    if (jsonObject.has("totalCount")) {
+                        total_count = Integer.parseInt(jsonObject.getString("totalCount"));
+                    }
                     mAdapter = new MainActivity.BookingDetailsRecyclerView();
                     recyclerView.setAdapter(mAdapter);
                     if (jsonObject.has("bookinglist")) {
@@ -171,24 +171,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 mAdapter.notifyItemInserted(bookingList_l.size() - 1);
                                 //Load more data for reyclerview
                                 new Handler().postDelayed(new Runnable() {
-                                      @Override
-                                      public void run() {
-                                          Log.e("haint", "Load More 2");
-                                          if (finalJsonObject.has("bookinglist")) {
-                                              PrintClass.printValue("ResponseOfBookingList onLoadMore "
-                                                      , "LOOPED");
-                                              //Remove loading item
-                                              bookingList_l.remove(bookingList_l.size() - 1);
-                                              mAdapter.notifyItemRemoved(bookingList_l.size());
-                                              //Load data
-                                              offset = offset + limit;
-                                              getBookingList("BookingDetailsReload");
-                                          }
-                                      }
-                                  },1000);
+                                    @Override
+                                    public void run() {
+                                        Log.e("haint", "Load More 2");
+                                        if (finalJsonObject.has("bookinglist")) {
+                                            PrintClass.printValue("ResponseOfBookingList onLoadMore "
+                                                    , "LOOPED");
+                                            //Remove loading item
+                                            bookingList_l.remove(bookingList_l.size() - 1);
+                                            mAdapter.notifyItemRemoved(bookingList_l.size());
+                                            //Load data
+                                            offset = offset + limit;
+                                            getBookingList("BookingDetailsReload");
+                                        }
+                                    }
+                                }, 1000);
                             }
                         });
-
                     }
                 } else {
                     recyclerView.setVisibility(View.GONE);
@@ -226,11 +225,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     JSONObject booking_jObj=jsonarr_bookinglist.getJSONObject(i);
                     BookingList bookingList =new BookingList();
                     bookingList.setBooking_no(booking_jObj.getString("booking_no"));
+                    bookingList.setBooking_id(booking_jObj.getString("booking_id"));
                     bookingList.setEmail_id(booking_jObj.getString("email_id"));
                     bookingList.setVehicle_no(booking_jObj.getString("vehicle_no"));
                     bookingList.setStatus(booking_jObj.getString("status"));
                     bookingList.setBooked_on(booking_jObj.getString("booked_on"));
-                    bookingList.setAddress(booking_jObj.getString("address"));
                     bookingList_l.add(bookingList);
                 }
                 mAdapter.notifyDataSetChanged();
@@ -242,8 +241,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    public void ResponseOfBookingAccept(String resultString) {
+        try {
+            JSONObject jsonObject = new JSONObject(resultString);
+            PrintClass.printValue("ResponseOfBookingAccept resultString ", " has data " + jsonObject.toString());
+            if(jsonObject.getString("status").equalsIgnoreCase("success")) {
+                new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                        "Successfully Accepted the booking request");
+                getBookingList("BookingDetails");
+            } else {
+                new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                        jsonObject.getString("status"));
+            }
+        }catch (Exception e){
+            PrintClass.printValue("ResponseOfBookingAccept Exception ", e.toString());
+        }
+    }
+
+
     static  class BookingDetailsRecyclerViewHolder extends RecyclerView.ViewHolder {
-        private final RelativeLayout main,action;
+        RelativeLayout action;
         TextView booking_id, customer_name, customer_number, vehicle_no;
         Button action_accept;
 
@@ -254,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             customer_number = (TextView) itemView.findViewById(R.id.customer_number);
             vehicle_no = (TextView) itemView.findViewById(R.id.vehicle_no);
             action_accept = (Button) itemView.findViewById(R.id.action_accept);
-            main = (RelativeLayout)itemView.findViewById(R.id.main);
+            //action_reject = (Button) itemView.findViewById(R.id.action_decline);
             action = (RelativeLayout)itemView.findViewById(R.id.action);
         }
     }
@@ -314,13 +331,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             this.mOnLoadMoreListener = mOnLoadMoreListener;
         }
 
-        /*@Override
+        @Override
         public int getItemViewType(int position) {
             return bookingList_l.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
-           // return VIEW_TYPE_ITEM;
 
         }
-*/
+
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if (viewType == VIEW_TYPE_ITEM) {
@@ -338,26 +354,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof MainActivity.BookingDetailsRecyclerViewHolder) {
                 PrintClass.printValue("onBindViewHolder12345 ","pos "+position);
-              //  BookingList bookings = bookingList_l.get(position);
+                final BookingList bookings = bookingList_l.get(position);
                 MainActivity.BookingDetailsRecyclerViewHolder userViewHolder =
                         (MainActivity.BookingDetailsRecyclerViewHolder)holder;
-               if(position %2 ==0) {
-                    userViewHolder.booking_id.setBackgroundColor(getColor(R.color.white));
-                    userViewHolder.booking_id.setTextColor(getColor(R.color.black));
-                    userViewHolder.customer_name.setTextColor(getColor(R.color.black));
-                    userViewHolder.customer_number.setTextColor(getColor(R.color.black));
-                    userViewHolder.vehicle_no.setTextColor(getColor(R.color.black));
+               if(position %2 !=0) {
+                    userViewHolder.booking_id.setBackgroundColor(getResources().getColor(R.color.white));
+                    userViewHolder.booking_id.setTextColor(getResources().getColor(R.color.black));
+                    userViewHolder.customer_name.setTextColor(getResources().getColor(R.color.black));
+                    userViewHolder.customer_number.setTextColor(getResources().getColor(R.color.black));
+                    userViewHolder.vehicle_no.setTextColor(getResources().getColor(R.color.black));
 
-                    userViewHolder.customer_name.setBackgroundColor(getColor(R.color.white));
-                    userViewHolder.customer_number.setBackgroundColor(getColor(R.color.white));
-                    userViewHolder.vehicle_no.setBackgroundColor(getColor(R.color.white));
-                    userViewHolder.action.setBackgroundColor(getColor(R.color.white));
+                    userViewHolder.customer_name.setBackgroundColor(getResources().getColor(R.color.white));
+                    userViewHolder.customer_number.setBackgroundColor(getResources().getColor(R.color.white));
+                    userViewHolder.vehicle_no.setBackgroundColor(getResources().getColor(R.color.white));
+                    userViewHolder.action.setBackgroundColor(getResources().getColor(R.color.white));
+               } else {
+                   userViewHolder.booking_id.setTextColor(getResources().getColor(R.color.white));
+                   userViewHolder.customer_name.setTextColor(getResources().getColor(R.color.white));
+                   userViewHolder.customer_number.setTextColor(getResources().getColor(R.color.white));
+                   userViewHolder.vehicle_no.setTextColor(getResources().getColor(R.color.white));
+
+                   userViewHolder.booking_id.setBackgroundColor(getResources().getColor(R.color.light_red));
+                   userViewHolder.customer_name.setBackgroundColor(getResources().getColor(R.color.light_red2));
+                   userViewHolder.customer_number.setBackgroundColor(getResources().getColor(R.color.light_red));
+                   userViewHolder.vehicle_no.setBackgroundColor(getResources().getColor(R.color.light_red2));
+                   userViewHolder.action.setBackgroundColor(getResources().getColor(R.color.light_red));
+               }
+                userViewHolder.booking_id.setText(bookings.getBooking_no());
+                userViewHolder.customer_name.setText(bookings.getCustomer_name());
+                userViewHolder.vehicle_no.setText(bookings.getVehicle_no());
+                userViewHolder.action_accept.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                        acceptRejectAction(bookings.getBooking_id());
+                    PrintClass.printValue("SYSTEMPRINT UserRegister  ", "getBooking_id " + bookings.getBooking_id());
+
                 }
-                userViewHolder.booking_id.setText(""+position);
-                // userViewHolder.vendor_name.setText(bookings.getEmail_id());
-               // userViewHolder.vehicle_no.setText(bookings.getVehicle_no());
-                // userViewHolder.vendor_number.setText(getformatteddate(bookings.getBooked_on()));
-               // userViewHolder.status.setText(bookings.getStatus());*/
+                });
             } else if (holder instanceof MainActivity.LoadingViewHolder) {
                 MainActivity.LoadingViewHolder loadingViewHolder = (MainActivity.LoadingViewHolder) holder;
                 loadingViewHolder.progressBar.setIndeterminate(true);
@@ -366,8 +399,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public int getItemCount() {
-           // return bookingList_l == null ? 0 : bookingList_l.size();
-            return 10;
+            return bookingList_l == null ? 0 : bookingList_l.size();
         }
 
         public void setLoaded() {
@@ -375,32 +407,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public void ResponseOfPaymentListReload(String resultString) {
-        try {
-            JSONObject jsonObject = new JSONObject(resultString);
-            PrintClass.printValue("ResponseOfPaymentListReload resultString "," has data "+jsonObject.toString());
-            if(jsonObject.getString("status").equalsIgnoreCase("success")) {
-                JSONArray jsonarr_Paymentlist=jsonObject.getJSONArray("bookinglist");
-                PrintClass.printValue("ResponseOfPaymentListReload PaymentList ",jsonarr_Paymentlist.toString());
-                for (int i=0;i<jsonarr_Paymentlist.length();i++){
-                    JSONObject Payment_jObj=jsonarr_Paymentlist.getJSONObject(i);
-                    BookingList PaymentList =new BookingList();
-                    PaymentList.setBooking_no(Payment_jObj.getString("booking_no"));
-                    PaymentList.setEmail_id(Payment_jObj.getString("email_id"));
-                    PaymentList.setVehicle_no(Payment_jObj.getString("vehicle_no"));
-                    PaymentList.setStatus(Payment_jObj.getString("status"));
-                    PaymentList.setBooked_on(Payment_jObj.getString("booked_on"));
-                    PaymentList.setAddress(Payment_jObj.getString("address"));
-                    bookingList_l.add(PaymentList);
-                }
-                mAdapter.notifyDataSetChanged();
-                mAdapter.setLoaded();
-            }
-        }catch (Exception e){
-            PrintClass.printValue("ResponseOfPaymentListReload Exception ",e.toString());
+    public void acceptRejectAction(String booking_id){
+        if (IsNetworkConnection.checkNetworkConnection(MainActivity.this)) {
 
+            String url = Constants.SERVER_URL + "vendor/request-accept";
+            JSONObject params = new JSONObject();
+            try {
+                params.put("user_id",prefrence.getString("user_id", "") );
+                params.put("access_token",prefrence.getString("access_token", ""));
+                params.put("booking_id",booking_id);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
+            }
+            PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
+            new post_async(MainActivity.this,"RequestAccept").execute(url, params.toString());
+        } else {
+            new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                    "No Internet Connection");
         }
     }
+
 
     @Override
     public void onBackPressed() {

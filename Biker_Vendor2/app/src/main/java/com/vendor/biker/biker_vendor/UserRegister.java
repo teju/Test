@@ -1,4 +1,4 @@
-package com.vendor.biker.biker_vendor.Utils;
+package com.vendor.biker.biker_vendor;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,9 +8,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.vendor.biker.biker_vendor.Login;
-import com.vendor.biker.biker_vendor.MainActivity;
-import com.vendor.biker.biker_vendor.R;
+import com.vendor.biker.biker_vendor.Utils.Constants;
+import com.vendor.biker.biker_vendor.Utils.CustomToast;
+import com.vendor.biker.biker_vendor.Utils.IsNetworkConnection;
+import com.vendor.biker.biker_vendor.Utils.PrintClass;
+import com.vendor.biker.biker_vendor.Utils.post_async;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -59,4 +59,14 @@ public class BookingList {
     String email_id;
     String booked_on;
     String address;
+
+    public String getVendor_name() {
+        return vendor_name;
+    }
+
+    public void setVendor_name(String vendor_name) {
+        this.vendor_name = vendor_name;
+    }
+
+    String vendor_name;
 }

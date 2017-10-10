@@ -29,7 +29,6 @@ import com.vendor.biker.biker_vendor.Utils.Constants;
 import com.vendor.biker.biker_vendor.Utils.CustomToast;
 import com.vendor.biker.biker_vendor.Utils.IsNetworkConnection;
 import com.vendor.biker.biker_vendor.Utils.PrintClass;
-import com.vendor.biker.biker_vendor.Utils.UserRegister;
 import com.vendor.biker.biker_vendor.Utils.post_async;
 
 import org.json.JSONArray;
@@ -100,7 +99,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
             JSONObject params = new JSONObject();
             JSONObject jsonobject = new JSONObject();
             try {
-                params.put("google_fcm_id",notiprefrence.getString(getString(R.string.fcm_token), "") );
+                params.put("google_fcm_id",notiprefrence.getString(getString(R.string.fcm_token), ""));
                 params.put("mobile_no",phone.getText().toString());
                 jsonobject.put("PushNotification",params);
             } catch (JSONException e) {
@@ -118,6 +117,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        onTrimMemory(ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN);
+
     }
 
     private void requestContactPermission() {
@@ -145,6 +146,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 break;
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -312,7 +314,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         Intent i = new Intent(this, UserRegister.class);
         i.putExtra("type", "signup");
         startActivity(i);
+        finish();
     }
-
-
 }

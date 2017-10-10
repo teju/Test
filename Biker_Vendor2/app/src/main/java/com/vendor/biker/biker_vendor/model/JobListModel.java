@@ -4,7 +4,7 @@ package com.vendor.biker.biker_vendor.model;
  * Created by nz160 on 04-10-2017.
  */
 
-public class BookingList {
+public class JobListModel {
     public String getBooking_no() {
         return booking_no;
     }
@@ -21,30 +21,6 @@ public class BookingList {
         this.vehicle_no = vehicle_no;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getEmail_id() {
-        return email_id;
-    }
-
-    public void setEmail_id(String email_id) {
-        this.email_id = email_id;
-    }
-
-    public String getBooked_on() {
-        return booked_on;
-    }
-
-    public void setBooked_on(String booked_on) {
-        this.booked_on = booked_on;
-    }
-
     public String getAddress() {
         return address;
     }
@@ -55,10 +31,18 @@ public class BookingList {
 
     String booking_no;
     String vehicle_no;
-    String status;
-    String email_id;
-    String booked_on;
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
+
+    String otp;
     String address;
+    String booking_id;
 
     public String getBooking_id() {
         return booking_id;
@@ -68,7 +52,6 @@ public class BookingList {
         this.booking_id = booking_id;
     }
 
-    String booking_id;
 
     public String getCustomer_name() {
         return customer_name;
@@ -79,4 +62,33 @@ public class BookingList {
     }
 
     String customer_name;
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    String latitude;
+    String longitude;
+
+    public String getCustomer_number() {
+        return customer_number;
+    }
+
+    public void setCustomer_number(String customer_number) {
+        this.customer_number = customer_number;
+    }
+
+    String customer_number;
 }

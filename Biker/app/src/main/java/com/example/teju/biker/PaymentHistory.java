@@ -115,7 +115,7 @@ public class PaymentHistory extends AppCompatActivity
             if(action.equals("PaymentHistoryRefresh")) {
                 swipeRefreshLayout.setRefreshing(true);
             }
-            String url = Constants.SERVER_URL + "booking/list";
+            String url = Constants.SERVER_URL + "booking/paymenthistory";
             JSONObject params = new JSONObject();
             try {
                 params.put("user_id",prefrence.getString("user_id", "") );
@@ -196,60 +196,66 @@ public class PaymentHistory extends AppCompatActivity
             jsonObject = new JSONObject(resultString);
             PrintClass.printValue("ResponseOfPaymentList resultString "," has data "+jsonObject.toString());
             if(jsonObject.getString("status").equalsIgnoreCase("success")) {
-                /*JSONArray jsonarr_Paymentlist=jsonObject.getJSONArray("bookinglist");
-                PrintClass.printValue("ResponseOfPaymentList PaymentList ",jsonarr_Paymentlist.toString());
-                for (int i=0;i<jsonarr_Paymentlist.length();i++){
-                    JSONObject Payment_jObj=jsonarr_Paymentlist.getJSONObject(i);
-                    BookingList PaymentList =new BookingList();
-                    PaymentList.setBooking_no(Payment_jObj.getString("booking_no"));
-                    PaymentList.setEmail_id(Payment_jObj.getString("email_id"));
-                    PaymentList.setVehicle_no(Payment_jObj.getString("vehicle_no"));
-                    PaymentList.setStatus(Payment_jObj.getString("status"));
-                    PaymentList.setBooked_on(Payment_jObj.getString("booked_on"));
-                    PaymentList.setAddress(Payment_jObj.getString("address"));
-                    PaymentList_l.add(PaymentList);
-                }
-                if(jsonObject.has("totalCount")) {
-                    total_count = Integer.parseInt(jsonObject.getString("totalCount"));
-                }
-                if(PaymentList_l.size() !=0) {*/
-                    mAdapter = new PaymentHistory.PaymentHistoryRecyclerView();
-                    recyclerView.setAdapter(mAdapter);
-                    /*if (jsonObject.has("Paymentlist")) {
-                        final JSONObject finalJsonObject = jsonObject;
-                        mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
-                            @Override
-                            public void onLoadMore() {
-                                Log.e("haint", "Load More");
-                                PaymentList_l.add(null);
-                                mAdapter.notifyItemInserted(PaymentList_l.size() - 1);
-                                //Load more data for reyclerview
-                                new Handler().postDelayed(new Runnable() {
-                                                              @Override
-                                                              public void run() {
-                                                                  Log.e("haint", "Load More 2");
-                                                                  if (finalJsonObject.has("Paymentlist")) {
-                                                                      PrintClass.printValue("ResponseOfPaymentList onLoadMore "
-                                                                              , "LOOPED");
-                                                                      //Remove loading item
-                                                                      PaymentList_l.remove(PaymentList_l.size() - 1);
-                                                                      mAdapter.notifyItemRemoved(PaymentList_l.size());
-                                                                      //Load data
-                                                                      offset = offset + limit;
-                                                                      getPaymentList("PaymentHistoryReload");
+                if(jsonObject.has("bookinglist")) {
+                    JSONArray jsonarr_Paymentlist = jsonObject.getJSONArray("bookinglist");
+                    PrintClass.printValue("ResponseOfPaymentList PaymentList ", jsonarr_Paymentlist.toString());
+                    for (int i = 0; i < jsonarr_Paymentlist.length(); i++) {
+                        JSONObject Payment_jObj = jsonarr_Paymentlist.getJSONObject(i);
+                        BookingList PaymentList = new BookingList();
+                        PaymentList.setBooking_no(Payment_jObj.getString("booking_no"));
+                        PaymentList.setEmail_id(Payment_jObj.getString("email_id"));
+                        PaymentList.setVehicle_no(Payment_jObj.getString("vehicle_no"));
+                        PaymentList.setStatus(Payment_jObj.getString("status"));
+                        PaymentList.setBooked_on(Payment_jObj.getString("booked_on"));
+                        PaymentList.setAddress(Payment_jObj.getString("address"));
+                        PaymentList_l.add(PaymentList);
+                    }
+                    if (jsonObject.has("totalCount")) {
+                        total_count = Integer.parseInt(jsonObject.getString("totalCount"));
+                    }
+                    if (PaymentList_l.size() != 0) {
+                        mAdapter = new PaymentHistory.PaymentHistoryRecyclerView();
+                        recyclerView.setAdapter(mAdapter);
+                        if (jsonObject.has("Paymentlist")) {
+                            final JSONObject finalJsonObject = jsonObject;
+                            mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+                                @Override
+                                public void onLoadMore() {
+                                    Log.e("haint", "Load More");
+                                    PaymentList_l.add(null);
+                                    mAdapter.notifyItemInserted(PaymentList_l.size() - 1);
+                                    //Load more data for reyclerview
+                                    new Handler().postDelayed(new Runnable() {
+                                                                  @Override
+                                                                  public void run() {
+                                                                      Log.e("haint", "Load More 2");
+                                                                      if (finalJsonObject.has("Paymentlist")) {
+                                                                          PrintClass.printValue("ResponseOfPaymentList onLoadMore "
+                                                                                  , "LOOPED");
+                                                                          //Remove loading item
+                                                                          PaymentList_l.remove(PaymentList_l.size() - 1);
+                                                                          mAdapter.notifyItemRemoved(PaymentList_l.size());
+                                                                          //Load data
+                                                                          offset = offset + limit;
+                                                                          getPaymentList("PaymentHistoryReload");
+                                                                      }
                                                                   }
-                                                              }
-                                                          },
-                                        1000);
-                            }
-                        });
+                                                              },
+                                            1000);
+                                }
+                            });
 
+                        }
+                    } else {
+                        recyclerView.setVisibility(View.GONE);
+                        no_records.setVisibility(View.VISIBLE);
+                        no_records.setText(jsonObject.getString("message"));
                     }
                 } else {
                     recyclerView.setVisibility(View.GONE);
                     no_records.setVisibility(View.VISIBLE);
                     no_records.setText(jsonObject.getString("message"));
-                }*/
+                }
             } else {
                 recyclerView.setVisibility(View.GONE);
                 no_records.setVisibility(View.VISIBLE);
@@ -331,15 +337,15 @@ public class PaymentHistory extends AppCompatActivity
     }
 
     static  class PaymentHistoryRecyclerViewHolder extends RecyclerView.ViewHolder {
-        TextView Payment_id, vendor_email, Payment_date, vehicle_no, status;
+        TextView Payment_id, vendor_name, vendor_number, amount, status;
 
         public PaymentHistoryRecyclerViewHolder(View itemView) {
             super(itemView);
-            /*Payment_id = (TextView) itemView.findViewById(R.id.Payment_id);
-            vendor_email = (TextView) itemView.findViewById(R.id.vendor_email);
-            Payment_date = (TextView) itemView.findViewById(R.id.Payment_date);
-            vehicle_no = (TextView) itemView.findViewById(R.id.vehicle_no);
-            status = (TextView) itemView.findViewById(R.id.status);*/
+            Payment_id = (TextView) itemView.findViewById(R.id.Payment_id);
+            vendor_name = (TextView) itemView.findViewById(R.id.vendor_name);
+            vendor_number = (TextView) itemView.findViewById(R.id.vendor_number);
+            amount = (TextView) itemView.findViewById(R.id.amount);
+            status = (TextView) itemView.findViewById(R.id.status);
         }
     }
 
@@ -399,10 +405,10 @@ public class PaymentHistory extends AppCompatActivity
             this.mOnLoadMoreListener = mOnLoadMoreListener;
         }
 
-       /* @Override
+        @Override
         public int getItemViewType(int position) {
             return PaymentList_l.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
-        }*/
+        }
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -420,13 +426,13 @@ public class PaymentHistory extends AppCompatActivity
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof PaymentHistory.PaymentHistoryRecyclerViewHolder) {
-               /// BookingList Payments = PaymentList_l.get(position);
-                PaymentHistory.PaymentHistoryRecyclerViewHolder userViewHolder =
+                BookingList Payments = PaymentList_l.get(position);
+               /* PaymentHistory.PaymentHistoryRecyclerViewHolder userViewHolder =
                         (PaymentHistory.PaymentHistoryRecyclerViewHolder) holder;
-               /* userViewHolder.Payment_id.setText(Payments.getBooking_no());
-                userViewHolder.vendor_email.setText(Payments.getEmail_id());
-                userViewHolder.vehicle_no.setText(Payments.getVehicle_no());
-                userViewHolder.Payment_date.setText(getformatteddate(Payments.getBooked_on()));
+                userViewHolder.Payment_id.setText(Payments.getBooking_no());
+                userViewHolder.vendor_name.setText(Payments.getEmail_id());
+                userViewHolder.vendor_number.setText(Payments.getVehicle_no());
+                userViewHolder.status.setText(getformatteddate(Payments.getBooked_on()));
                 userViewHolder.status.setText(Payments.getStatus());*/
             } else if (holder instanceof PaymentHistory.LoadingViewHolder) {
                 PaymentHistory.LoadingViewHolder loadingViewHolder = (PaymentHistory.LoadingViewHolder) holder;
@@ -436,9 +442,7 @@ public class PaymentHistory extends AppCompatActivity
 
         @Override
         public int getItemCount() {
-            //return PaymentList_l == null ?
-            return 6;
-
+            return PaymentList_l == null ? 0 : PaymentList_l.size();
         }
 
         public void setLoaded() {

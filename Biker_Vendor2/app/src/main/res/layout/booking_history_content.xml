@@ -15,13 +15,11 @@
             android:layout_height="50dp"
             android:id="@+id/booking_id"
             android:background="@color/light_red"
-            android:text="1234"
             android:textColor="@color/white"
             android:gravity="center"
             android:layout_width="0dp"/>
         <TextView android:layout_weight="1"
             android:layout_height="50dp"
-            android:text="Customer Name"
             android:id="@+id/customer_name"
             android:textColor="@color/white"
             android:gravity="center"
@@ -29,7 +27,6 @@
             android:layout_width="0dp"/>
         <TextView android:layout_weight="1"
             android:layout_height="50dp"
-            android:text="Customer No."
             android:id="@+id/customer_number"
             android:textColor="@color/white"
             android:gravity="center"
@@ -40,7 +37,6 @@
             android:id="@+id/vehicle_no"
             android:textColor="@color/white"
             android:background="@color/light_red2"
-            android:text="Vehicle No."
             android:gravity="center"
             android:layout_width="0dp"/>
         <RelativeLayout
@@ -50,19 +46,15 @@
             android:background="@color/light_red2"
             android:layout_height="match_parent">
             <Button
-                android:layout_height="50dp"
-                android:layout_marginLeft="10dp"
+                android:layout_height="30dp"
                 android:id="@+id/action_accept"
-                android:background="@color/black"
+                android:background="@drawable/accept_bg"
+                android:text="Accept"
+                android:textSize="12dp"
                 android:textColor="@color/white"
-                android:layout_width="50dp"/>
-            <Button
-                android:layout_height="50dp"
-                android:layout_toRightOf="@+id/action_accept"
-                android:id="@+id/action_decline"
-                android:background="@color/blue"
-                android:textColor="@color/white"
-                android:layout_width="50dp"/>
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_width="70dp"/>
         </RelativeLayout>
 
 

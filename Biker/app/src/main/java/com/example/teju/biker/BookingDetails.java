@@ -201,6 +201,11 @@ public class BookingDetails extends AppCompatActivity
                     bookingList.setStatus(booking_jObj.getString("status"));
                     bookingList.setBooked_on(booking_jObj.getString("booked_on"));
                     bookingList.setAddress(booking_jObj.getString("address"));
+                    if(booking_jObj.has("vendor_name")) {
+                        bookingList.setVendor_name(booking_jObj.getString("vendor_name"));
+                    } else {
+                        bookingList.setVendor_name("");
+                    }
                     bookingList_l.add(bookingList);
                 }
                 if(jsonObject.has("totalCount")) {
@@ -280,6 +285,7 @@ public class BookingDetails extends AppCompatActivity
                     bookingList.setStatus(booking_jObj.getString("status"));
                     bookingList.setBooked_on(booking_jObj.getString("booked_on"));
                     bookingList.setAddress(booking_jObj.getString("address"));
+                    bookingList.setVendor_name(booking_jObj.getString("vendor_name"));
                     bookingList_l.add(bookingList);
                 }
                 mAdapter.notifyDataSetChanged();
@@ -418,7 +424,7 @@ public class BookingDetails extends AppCompatActivity
                 BookingDetails.BookingDetailsRecyclerViewHolder userViewHolder =
                         (BookingDetails.BookingDetailsRecyclerViewHolder) holder;
                 userViewHolder.booking_id.setText(bookings.getBooking_no());
-               // userViewHolder.vendor_name.setText(bookings.getEmail_id());
+                userViewHolder.vendor_name.setText(bookings.getVendor_name());
                 userViewHolder.vehicle_no.setText(bookings.getVehicle_no());
                // userViewHolder.vendor_number.setText(getformatteddate(bookings.getBooked_on()));
                 userViewHolder.status.setText(bookings.getStatus());

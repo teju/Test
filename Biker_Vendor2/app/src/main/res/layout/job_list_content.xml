@@ -5,11 +5,11 @@
     android:layout_height="wrap_content"
     android:background="@android:drawable/editbox_background_normal"
     android:layout_marginTop="1dp"
-    android:layout_marginBottom="-2dp"
-    android:layout_marginLeft="1.5dp"
-    android:layout_marginRight="1.5dp">
+    android:layout_marginBottom="-4dp"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp">
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:text="Booking No :"
         android:paddingLeft="4dp"
@@ -29,7 +29,7 @@
         android:layout_toRightOf="@+id/booking_id_text"
         android:id="@+id/booking_id"/>
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:text="Customer Name  :"
         android:paddingBottom="4dp"
@@ -47,11 +47,11 @@
         android:paddingBottom="4dp"
         android:textSize="@dimen/normal"
         android:textColor="@color/black"
-        android:layout_toRightOf="@+id/vendor_name_text"
+        android:layout_toRightOf="@+id/customer_name_text"
         android:layout_below="@+id/booking_id_text"
         android:id="@+id/customer_name"/>
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:text="Customer No.  :"
         android:paddingBottom="4dp"
@@ -71,10 +71,10 @@
         android:textColor="@color/black"
         android:layout_toRightOf="@+id/customer_name_text"
         android:layout_below="@+id/customer_name_text"
-        android:id="@+id/vendor_number"/>
+        android:id="@+id/customer_number"/>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:text="Vehicle No : "
         android:paddingBottom="4dp"
@@ -96,7 +96,7 @@
         android:textColor="@color/green"
         android:id="@+id/vehicle_no"/>
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/vehicle_no_text"
         android:text="OTP : "
@@ -119,10 +119,10 @@
         android:textColor="@color/orange"
         android:id="@+id/otp"/>
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:id="@+id/map"
-        android:text="Pay Now"
+        android:background="@drawable/map_marker"
         android:textColor="@color/white"
         android:layout_below="@+id/vehicle_no"
         android:layout_alignParentRight="true" />

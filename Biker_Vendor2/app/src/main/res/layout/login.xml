@@ -10,56 +10,51 @@
         android:orientation="vertical"
         android:background="@color/white"
         android:layout_height="match_parent">
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:id="@+id/logo"
-        android:src="@drawable/bierlogo"
-        android:layout_marginTop="50dp"
-        android:layout_gravity="center_horizontal"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/phone"
-        android:hint="Phone Number"
-        android:inputType="number"
-        android:background="@android:drawable/editbox_background_normal"
-        android:gravity="center_vertical"
-        android:textSize="@dimen/normal"
-        android:drawableLeft="@drawable/cellphone_basic"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:padding="8dp" />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:layout_height="40dp"
-        android:onClick="login"
-        android:textSize="@dimen/normal"
-        android:textStyle="bold"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:textColor="@color/white"
-        android:background="@color/orange"
-        android:text="LOGIN"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="New here? Sign Up"
-        android:textSize="16dp"
-        android:textStyle="italic"
-        android:id="@+id/sign_up"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/blue"/>
-</LinearLayout>
-        android:text="Sign Up"
-        android:textSize="22dp"
-        android:id="@+id/sign_up"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/black"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:id="@+id/logo"
+            android:src="@drawable/bierlogo"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center_horizontal"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/phone"
+            android:hint="Phone Number"
+            android:inputType="number"
+            android:drawablePadding="10dp"
+            android:background="@android:drawable/editbox_background_normal"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/normal"
+            android:drawableLeft="@drawable/cellphone"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="45dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="10dp"
+            android:padding="15dp" />
+        <Button
+            android:layout_width="150dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="40dp"
+            android:onClick="login"
+            android:textSize="@dimen/normal"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/white"
+            android:background="@drawable/bg"
+            android:text="LOGIN"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="New here? Sign Up"
+            android:textSize="16dp"
+            android:textStyle="italic"
+            android:id="@+id/sign_up"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/blue"/>
+    </LinearLayout>
+
 </LinearLayout>

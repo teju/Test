@@ -9,14 +9,35 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import org.json.JSONObject;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,44 +51,191 @@ import com.vendor.biker.biker_vendor.model.PathJSONParser;
 
 public class PathGoogleMapActivity extends FragmentActivity {
 
-    private static final LatLng LOWER_MANHATTAN = new LatLng(40.722543,
-            -73.998585);
-    private static final LatLng BROOKLYN_BRIDGE = new LatLng(40.7057, -73.9964);
+    private static LatLng origin ;
+    private static LatLng dest ;
 
     GoogleMap googleMap;
+    private LocationManager locationManager;
+    double dest_latitude=0;
+    double dest_longitude=0;
+    String otp="Not Found";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_path_google_map);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        SupportMapFragment fm = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        googleMap = fm.getMap();
+        dest_latitude=Double.parseDouble(getIntent().getStringExtra("latitude"));
+        dest_longitude=Double.parseDouble(getIntent().getStringExtra("longitude"));
+        otp=getIntent().getStringExtra("otp");
+        PrintClass.printValue("PathGoogleMapActivity latitude ",dest_latitude+" longitude "+dest_longitude);
+
         try {
-            SupportMapFragment fm = (SupportMapFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.map);
-            googleMap = fm.getMap();
-
-            MarkerOptions options = new MarkerOptions();
-            options.position(LOWER_MANHATTAN);
-            options.position(BROOKLYN_BRIDGE);
-            googleMap.addMarker(options);
-            String url = getMapsApiDirectionsUrl();
-            ReadTask downloadTask = new ReadTask();
-            downloadTask.execute(url);
-
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(BROOKLYN_BRIDGE,
-                    13));
-            addMarkers();
+            if (checkLocationPermission()) {
+                if (ContextCompat.checkSelfPermission(this,
+                        android.Manifest.permission. ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    getLatLong();
+                }
+            }
         } catch (Exception e){
             PrintClass.printValue("PathGoogleMapActivity Exception ",e.toString());
         }
     }
 
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission. ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission. ACCESS_FINE_LOCATION)) {
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission. ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // location-related task you need to do.
+                    if (ContextCompat.checkSelfPermission(this,
+                            android.Manifest.permission. ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        getLatLong();
+                    }
+
+                } else {
+
+                }
+                return;
+            }
+        }
+    }
+
+    public void getLatLong(){
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setMessage("Yout GPS seems to be disabled, do you want to enable it?");
+            alert.setPositiveButton("Back", new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            alert.setNegativeButton("Go to Settings", new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent I = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(I);
+                }
+            });
+            AlertDialog al_gps = alert.create();
+            al_gps.show();
+        } else {
+            Location location = getLastKnownLocation();
+            if (location != null) {
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+
+                showMap(latitude,longitude);
+            } else {
+                Toast.makeText(getApplicationContext(), "Location Not Found", Toast.LENGTH_LONG).show();
+                PrintClass.printValue("LATLOGVALUE ", "location null");
+            }
+
+        }
+    }
+
+    private void showMap(double latitude, double longitude) {
+        MarkerOptions options = new MarkerOptions();
+        origin=new LatLng(latitude, longitude);
+        dest=new LatLng(dest_latitude,dest_longitude);
+        options.position(origin);
+        options.position(dest);
+        googleMap.addMarker(options);
+        String url = getMapsApiDirectionsUrl();
+        ReadTask downloadTask = new ReadTask();
+        downloadTask.execute(url);
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(origin, 13));
+        addMarkers();
+    }
+
+    public void view_otp(View view) {
+        final Dialog mBottomSheetDialog = new Dialog(this);
+        mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mBottomSheetDialog.setContentView(R.layout.view_otp);
+        mBottomSheetDialog.setCancelable(true);
+        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        mBottomSheetDialog.show();
+        Button submit = (Button) mBottomSheetDialog.findViewById(R.id.submit);
+        TextView textView=(TextView)mBottomSheetDialog.findViewById(R.id.otp);
+        textView.setText(otp);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mBottomSheetDialog.cancel();
+            }
+        });
+    }
+
+    private Location getLastKnownLocation() {
+        List<String> providers = locationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
+
+            }
+            Location l = locationManager.getLastKnownLocation(provider);
+            PrintClass.printValue("LATLOGVALUE ", "last known location, provider: %s, location: %s" + provider +
+                    l);
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null
+                    || l.getAccuracy() < bestLocation.getAccuracy()) {
+                PrintClass.printValue("LATLOGVALUE ", "found best last known location: %s" + l);
+                bestLocation = l;
+            }
+        }
+        if (bestLocation == null) {
+            return null;
+        }
+        return bestLocation;
+    }
+
     private String getMapsApiDirectionsUrl() {
 
         // Origin of route
-        String str_origin = "origin=" + LOWER_MANHATTAN.latitude + "," + LOWER_MANHATTAN.longitude;
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
 
         // Destination of route
-        String str_dest = "destination=" + BROOKLYN_BRIDGE.latitude + "," + BROOKLYN_BRIDGE.longitude;
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
 
         // Sensor enabled
         String sensor = "sensor=false";
@@ -83,15 +251,14 @@ public class PathGoogleMapActivity extends FragmentActivity {
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
         PrintClass.printValue("PathGoogleMapActivity getMapsApiDirectionsUrl ","url "+url);
 
-
         return url;
     }
 
     private void addMarkers() {
         if (googleMap != null) {
-            googleMap.addMarker(new MarkerOptions().position(BROOKLYN_BRIDGE)
+            googleMap.addMarker(new MarkerOptions().position(origin)
                     .title("First Point"));
-            googleMap.addMarker(new MarkerOptions().position(LOWER_MANHATTAN)
+            googleMap.addMarker(new MarkerOptions().position(dest)
                     .title("Second Point"));
 
         }

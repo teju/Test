@@ -10,4 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         class="com.google.android.gms.maps.SupportMapFragment"/>
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg"
+        android:text="VIEW OTP"
+        android:onClick="view_otp"
+        android:textColor="@color/white"/>
 </RelativeLayout>

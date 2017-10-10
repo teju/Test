@@ -46,6 +46,7 @@ import java.util.List;
 public class JobHistory extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener{
 
+    private ArrayAdapter aa;
     private RecyclerView mRecyclerView;
     private jobAdapter mjobAdapter;
     private TextView profile_name;
@@ -278,6 +279,7 @@ public class JobHistory extends AppCompatActivity implements
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
     static class jobViewHolder extends RecyclerView.ViewHolder {
         Spinner status;
         TextView vendor_name,vendor_number,vehicle_no,booking_no;
@@ -290,6 +292,23 @@ public class JobHistory extends AppCompatActivity implements
             vendor_number =(TextView)itemView.findViewById(R.id.vendor_number);
             vehicle_no =(TextView)itemView.findViewById(R.id.vehicle_no);
             status = (Spinner)itemView.findViewById(R.id.status);
+
+            status.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    // On selecting a spinner item
+                    String item = parent.getItemAtPosition(position).toString();
+
+                    // Showing selected spinner item
+                    Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
         }
     }
 
@@ -312,6 +331,9 @@ public class JobHistory extends AppCompatActivity implements
                 totalItemCount;
         String[] country = {"Picked", "InProcess", "Completed", "Delivered" };
         public jobAdapter() {
+            aa = new ArrayAdapter(JobHistory.this,R.layout.spinner_item,country);
+            aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -366,27 +388,9 @@ public class JobHistory extends AppCompatActivity implements
             if (holder instanceof jobViewHolder) {
                 jobViewHolder jobViewHolder = (jobViewHolder) holder;
                 final JobListModel bookings = jobList_l.get(position);
-
-                //Creating the ArrayAdapter instance having the country list
-                ArrayAdapter aa = new ArrayAdapter(JobHistory.this,R.layout.spinner_item,country);
-                aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                jobViewHolder.status.setSelection(0, false);
-                jobViewHolder.status.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        PrintClass.printValue("onItemSelected123456 ","long "+l);
-                        Toast.makeText(getApplicationContext(),
-                                "OnItemSelectedListener : " + adapterView.getItemAtPosition(i).toString(),
-                                Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                    }
-                });
-                //Setting the ArrayAdapter data on the Spinner
                 jobViewHolder.status.setAdapter(aa);
+
+                //Setting the ArrayAdapter data on the Spinner
                 jobViewHolder.vendor_name.setText(bookings.getCustomer_name());
                 jobViewHolder.vendor_name.setText(bookings.getCustomer_name());
                 jobViewHolder.booking_no.setText(bookings.getBooking_no());

@@ -11,13 +11,15 @@
         android:layout_height="match_parent"
         class="com.google.android.gms.maps.SupportMapFragment"/>
     <Button
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:background="@drawable/bg"
-        android:text="VIEW OTP"
+        android:text="REACHED DESTINATION"
         android:onClick="view_otp"
         android:textColor="@color/white"/>
 </RelativeLayout>

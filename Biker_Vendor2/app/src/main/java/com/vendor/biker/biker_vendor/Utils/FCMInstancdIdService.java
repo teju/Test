@@ -12,6 +12,7 @@ import com.vendor.biker.biker_vendor.R;
  */
 
 public class    FCMInstancdIdService  extends FirebaseInstanceIdService {
+
     @Override
     public void onTokenRefresh() {
         super.onTokenRefresh();
@@ -24,5 +25,4 @@ public class    FCMInstancdIdService  extends FirebaseInstanceIdService {
         editor.putString(getString(R.string.fcm_token),resent_token);
         editor.commit();
     }
-
 }

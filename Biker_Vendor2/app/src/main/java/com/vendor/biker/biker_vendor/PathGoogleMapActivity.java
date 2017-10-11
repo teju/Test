@@ -58,7 +58,6 @@ public class PathGoogleMapActivity extends FragmentActivity {
     private LocationManager locationManager;
     double dest_latitude=0;
     double dest_longitude=0;
-    String otp="Not Found";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +69,6 @@ public class PathGoogleMapActivity extends FragmentActivity {
         googleMap = fm.getMap();
         dest_latitude=Double.parseDouble(getIntent().getStringExtra("latitude"));
         dest_longitude=Double.parseDouble(getIntent().getStringExtra("longitude"));
-        otp=getIntent().getStringExtra("otp");
         PrintClass.printValue("PathGoogleMapActivity latitude ",dest_latitude+" longitude "+dest_longitude);
 
         try {
@@ -180,25 +178,6 @@ public class PathGoogleMapActivity extends FragmentActivity {
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(origin, 13));
         addMarkers();
-    }
-
-    public void view_otp(View view) {
-        final Dialog mBottomSheetDialog = new Dialog(this);
-        mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mBottomSheetDialog.setContentView(R.layout.view_otp);
-        mBottomSheetDialog.setCancelable(true);
-        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        mBottomSheetDialog.show();
-        Button submit = (Button) mBottomSheetDialog.findViewById(R.id.submit);
-        TextView textView=(TextView)mBottomSheetDialog.findViewById(R.id.otp);
-        textView.setText(otp);
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mBottomSheetDialog.cancel();
-            }
-        });
     }
 
     private Location getLastKnownLocation() {

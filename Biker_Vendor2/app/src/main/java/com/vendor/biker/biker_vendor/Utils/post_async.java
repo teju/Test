@@ -176,6 +176,8 @@ public class post_async extends AsyncTask<String, Integer, String> {
                 this.jobHistory.ResponseOfJobList(resultString);
             } else  if (this.jobHistory != null && action.equalsIgnoreCase("jobHistoryDetailsReload")) {
                 this.jobHistory.ResponseOfjobListReload(resultString);
+            } else  if (this.jobHistory != null && action.equalsIgnoreCase("changeStatus")) {
+                this.jobHistory.ResponseOfChangeStatus(resultString);
             }
         } catch (Exception e) {
             dialog.cancel();

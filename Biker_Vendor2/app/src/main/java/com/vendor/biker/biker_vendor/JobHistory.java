@@ -3,6 +3,7 @@ package com.vendor.biker.biker_vendor;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.provider.Settings;
@@ -288,16 +289,34 @@ public class JobHistory extends AppCompatActivity implements
         return true;
     }
 
+    public void ResponseOfChangeStatus(String resultString) {
+        try {
+            JSONObject jsonObject = new JSONObject(resultString);
+            PrintClass.printValue("ResponseOfChangeStatus resultString ", " has data "
+                    + jsonObject.toString());
+            if(jsonObject.getString("status").equalsIgnoreCase("success")) {
+                new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                        "Status Changes Successfully");
+                offset =0 ;
+                jobList_l.clear();
+                getJobList("jobHistoryDetails");
+            }
+        }
+        catch (Exception e){
+            PrintClass.printValue("ResponseOfChangeStatus Exception ", e.toString());
+        }
+    }
+
     static class jobViewHolder extends RecyclerView.ViewHolder {
         TextView vendor_name,vendor_number,vehicle_no,booking_no,status;
         Button map;
         public jobViewHolder(View itemView) {
             super(itemView);
-            map =(Button)itemView.findViewById(R.id.map);
-            vendor_name =(TextView)itemView.findViewById(R.id.vendor_name);
-            booking_no =(TextView)itemView.findViewById(R.id.Payment_id);
-            vendor_number =(TextView)itemView.findViewById(R.id.vendor_number);
-            vehicle_no =(TextView)itemView.findViewById(R.id.vehicle_no);
+            map = (Button) itemView.findViewById(R.id.map);
+            vendor_name = (TextView) itemView.findViewById(R.id.vendor_name);
+            booking_no = (TextView) itemView.findViewById(R.id.Payment_id);
+            vendor_number = (TextView) itemView.findViewById(R.id.vendor_number);
+            vehicle_no = (TextView) itemView.findViewById(R.id.vehicle_no);
             status = (TextView) itemView.findViewById(R.id.status);
         }
     }
@@ -316,8 +335,9 @@ public class JobHistory extends AppCompatActivity implements
         private OnLoadMoreListener mOnLoadMoreListener;
         private boolean isLoading;
         private int visibleThreshold = 5;
-        private int lastVisibleItem,
-                totalItemCount;
+        private int lastVisibleItem, totalItemCount;
+
+
         public jobAdapter() {
 
             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -343,7 +363,9 @@ public class JobHistory extends AppCompatActivity implements
                         }
                     }
                 }
+
             });
+
         }
 
 
@@ -387,38 +409,17 @@ public class JobHistory extends AppCompatActivity implements
                     @Override
                     public void onClick(View v) {
                         final int itemPosition = (Integer)v.getTag();
-                        final PopupMenu popupMenu = new PopupMenu(JobHistory.this, v, Gravity.CENTER_HORIZONTAL);
+                        final PopupMenu popupMenu = new PopupMenu(JobHistory.this, v, Gravity.LEFT);
                         final Menu menu = popupMenu.getMenu();
-
                         popupMenu.getMenuInflater().inflate(R.menu.menu_main, menu);
                         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             @Override
                             public boolean onMenuItemClick(MenuItem item) {
-                                switch (item.getItemId()) {
-                                    case R.id.Picked:
-                                        Toast.makeText(getApplicationContext(),"Booking_id "
-                                                +itemPosition+" "+item.getTitle(),Toast.LENGTH_LONG).show();
-                                        break;
-                                    case R.id.InProcess:
-                                        Toast.makeText(getApplicationContext(),"Booking_id "
-                                                +itemPosition+" "+item.getTitle(),Toast.LENGTH_LONG).show();
-                                        break;
-                                    case R.id.Completed:
-                                        Toast.makeText(getApplicationContext(),"Booking_id "
-                                                +itemPosition+" "+item.getTitle(),Toast.LENGTH_LONG).show();
-                                        break;
-                                    case R.id.Delivered:
-                                        Toast.makeText(getApplicationContext(),"Booking_id "
-                                                +itemPosition+" "+item.getTitle(),Toast.LENGTH_LONG).show();
-                                        break;
-                                }
                                  changeStatus(item.getTitle().toString(),jobList_l.get(itemPosition).getBooking_id());
                                      jobViewHolder.status.setText(item.getTitle().toString());
-
                                 return true;
                             }
                         });
-                        popupMenu.show();
                     }
                 });
             } else if (holder instanceof LoadingViewHolder) {
@@ -426,7 +427,25 @@ public class JobHistory extends AppCompatActivity implements
                 loadingViewHolder.progressBar.setIndeterminate(true);
             }
         }
-
+        public Rect locateView(View v)
+        {
+            int[] loc_int = new int[2];
+            if (v == null) return null;
+            try
+            {
+                v.getLocationOnScreen(loc_int);
+            } catch (NullPointerException npe)
+            {
+                //Happens when the view doesn't exist on screen anymore.
+                return null;
+            }
+            Rect location = new Rect();
+            location.left = loc_int[0];
+            location.top = loc_int[1];
+            location.right = location.left + v.getWidth();
+            location.bottom = location.top + v.getHeight();
+            return location;
+        }
         @Override
         public int getItemCount() {
             return jobList_l == null ? 0 : jobList_l.size();

@@ -20,6 +20,5 @@
         android:paddingRight="10dp"
         android:background="@drawable/bg"
         android:text="REACHED DESTINATION"
-        android:onClick="view_otp"
         android:textColor="@color/white"/>
 </RelativeLayout>

@@ -4,92 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/parent_layout"
-    android:background="@color/background">
+    android:background="@color/white">
 
     <include layout="@layout/header"
         android:id="@+id/header"></include>
-    <View
-        android:layout_width="match_parent"
-        android:id="@+id/view_1"
-        android:layout_below="@+id/header"
-        android:background="@color/light_orange"
-        android:layout_height="1dp"></View>
 
-    <LinearLayout android:orientation="horizontal"
-        android:layout_height="50dp"
-        android:layout_below="@+id/view_1"
-        android:id="@+id/heading"
-        android:layout_width="fill_parent">
-        <TextView android:layout_weight="1"
-            android:layout_height="50dp"
-            android:background="@color/orange"
-            android:text="Booking No"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:layout_width="0dp"/>
-        <View
-            android:layout_width="1dp"
-            android:background="@color/light_red"
-            android:layout_height="50dp"></View>
-        <TextView android:layout_weight="1"
-            android:layout_height="50dp"
-            android:text="Customer Name"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:background="@color/orange"
-            android:layout_width="0dp"/>
-        <View
-            android:layout_width="1dp"
-            android:background="@color/light_red"
-            android:layout_height="50dp"></View>
-        <TextView android:layout_weight="1"
-            android:layout_height="50dp"
-            android:text="Customer No."
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:background="@color/orange"
-            android:layout_width="0dp"/>
-        <View
-            android:layout_width="1dp"
-            android:background="@color/light_red"
-            android:layout_height="50dp"></View>
-        <TextView android:layout_weight="1"
-            android:layout_height="50dp"
-            android:textColor="@color/white"
-            android:background="@color/orange"
-            android:text="Vehicle No."
-            android:gravity="center"
-            android:layout_width="0dp"/>
-        <View
-            android:layout_width="1dp"
-            android:background="@color/light_red"
-            android:layout_height="50dp"></View>
-        <TextView android:layout_weight="1"
-            android:layout_height="50dp"
-            android:textColor="@color/white"
-            android:text="Action"
-            android:gravity="center"
-            android:background="@color/orange"
-            android:layout_width="0dp"/>
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_below="@+id/data"
-        android:background="@color/light_orange"
-        android:layout_height="1dp"></View>
     <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="wrap_content"
         android:id="@+id/swipe_refresh_layout"
-        android:layout_below="@+id/heading"
+        android:layout_below="@+id/header"
+        android:background="@color/light_color"
         android:layout_height="wrap_content">
-
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/light_orange"
+            android:background="@color/light_color"
             android:id="@+id/booking_history">
         </android.support.v7.widget.RecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

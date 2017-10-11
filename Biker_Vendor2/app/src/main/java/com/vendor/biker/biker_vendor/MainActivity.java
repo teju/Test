@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     static  class BookingDetailsRecyclerViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout action;
         TextView booking_id, customer_name, customer_number, vehicle_no;
-        Button action_accept;
+      //  Button action_accept;
 
         public BookingDetailsRecyclerViewHolder(View itemView) {
             super(itemView);
@@ -272,9 +272,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             customer_name = (TextView) itemView.findViewById(R.id.customer_name);
             customer_number = (TextView) itemView.findViewById(R.id.customer_number);
             vehicle_no = (TextView) itemView.findViewById(R.id.vehicle_no);
-            action_accept = (Button) itemView.findViewById(R.id.action_accept);
+            //action_accept = (Button) itemView.findViewById(R.id.action_accept);
             //action_reject = (Button) itemView.findViewById(R.id.action_decline);
-            action = (RelativeLayout)itemView.findViewById(R.id.action);
         }
     }
 
@@ -293,8 +292,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         private OnLoadMoreListener mOnLoadMoreListener;
         private boolean isLoading=false;
         private int visibleThreshold = 4;
-        private int lastVisibleItem,
-                totalItemCount;
+        private int lastVisibleItem, totalItemCount;
 
         public BookingDetailsRecyclerView() {
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -359,40 +357,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 final BookingList bookings = bookingList_l.get(position);
                 MainActivity.BookingDetailsRecyclerViewHolder userViewHolder =
                         (MainActivity.BookingDetailsRecyclerViewHolder)holder;
-               if(position %2 !=0) {
-                    userViewHolder.booking_id.setBackgroundColor(getResources().getColor(R.color.white));
-                    userViewHolder.booking_id.setTextColor(getResources().getColor(R.color.black));
-                    userViewHolder.customer_name.setTextColor(getResources().getColor(R.color.black));
-                    userViewHolder.customer_number.setTextColor(getResources().getColor(R.color.black));
-                    userViewHolder.vehicle_no.setTextColor(getResources().getColor(R.color.black));
 
-                    userViewHolder.customer_name.setBackgroundColor(getResources().getColor(R.color.white));
-                    userViewHolder.customer_number.setBackgroundColor(getResources().getColor(R.color.white));
-                    userViewHolder.vehicle_no.setBackgroundColor(getResources().getColor(R.color.white));
-                    userViewHolder.action.setBackgroundColor(getResources().getColor(R.color.white));
-               } else {
-                   userViewHolder.booking_id.setTextColor(getResources().getColor(R.color.white));
-                   userViewHolder.customer_name.setTextColor(getResources().getColor(R.color.white));
-                   userViewHolder.customer_number.setTextColor(getResources().getColor(R.color.white));
-                   userViewHolder.vehicle_no.setTextColor(getResources().getColor(R.color.white));
-
-                   userViewHolder.booking_id.setBackgroundColor(getResources().getColor(R.color.light_red));
-                   userViewHolder.customer_name.setBackgroundColor(getResources().getColor(R.color.light_red2));
-                   userViewHolder.customer_number.setBackgroundColor(getResources().getColor(R.color.light_red));
-                   userViewHolder.vehicle_no.setBackgroundColor(getResources().getColor(R.color.light_red2));
-                   userViewHolder.action.setBackgroundColor(getResources().getColor(R.color.light_red));
-               }
                 userViewHolder.booking_id.setText(bookings.getBooking_no());
                 userViewHolder.customer_name.setText(bookings.getCustomer_name());
                 userViewHolder.vehicle_no.setText(bookings.getVehicle_no());
-                userViewHolder.action_accept.setOnClickListener(new View.OnClickListener() {
+                /*userViewHolder.action_accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                         acceptRejectAction(bookings.getBooking_id());
                     PrintClass.printValue("SYSTEMPRINT UserRegister  ", "getBooking_id " + bookings.getBooking_id());
 
                 }
-                });
+                });*/
             } else if (holder instanceof MainActivity.LoadingViewHolder) {
                 MainActivity.LoadingViewHolder loadingViewHolder = (MainActivity.LoadingViewHolder) holder;
                 loadingViewHolder.progressBar.setIndeterminate(true);

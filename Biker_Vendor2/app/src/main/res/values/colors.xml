@@ -9,11 +9,12 @@
     <color name="green">#16a427</color>
     <color name="orange">#F43C36</color>
 
-    <color name="light_orange">#bdbdbd</color>
+    <color name="light_orange">#d1cfcf</color>
 
     <color name="background">#f2f2f2</color>
     <color name="light_red">#ff7f7f</color>
     <color name="light_red2">#ff9999</color>
     <color name="dark_gray">#c1bfbf</color>
+    <color name="light_color">#eaeaea</color>
 
 </resources>

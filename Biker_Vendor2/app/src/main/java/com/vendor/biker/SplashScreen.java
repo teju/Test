@@ -1,10 +1,11 @@
-package com.vendor.biker.biker_vendor;
+package com.vendor.biker;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+
 
 
 public class SplashScreen extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package com.vendor.biker.biker_vendor.model;
+package com.vendor.biker.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.vendor.biker.biker_vendor.Utils;
+package com.vendor.biker.Utils;
 
 /**
  * Created by Teju on 19/09/2017.

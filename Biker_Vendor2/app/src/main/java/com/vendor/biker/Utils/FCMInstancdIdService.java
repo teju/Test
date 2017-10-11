@@ -1,11 +1,11 @@
-package com.vendor.biker.biker_vendor.Utils;
+package com.vendor.biker.Utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
-import com.vendor.biker.biker_vendor.R;
+import com.vendor.biker.R;
 
 /**
  * Created by nz160 on 08-06-2017.

@@ -1,4 +1,4 @@
-package com.vendor.biker.biker_vendor;
+package com.vendor.biker;
 
 import android.content.ComponentCallbacks2;
 import android.content.DialogInterface;
@@ -22,17 +22,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.vendor.biker.biker_vendor.Utils.Constants;
-import com.vendor.biker.biker_vendor.Utils.CustomToast;
-import com.vendor.biker.biker_vendor.Utils.IsNetworkConnection;
-import com.vendor.biker.biker_vendor.Utils.PrintClass;
-import com.vendor.biker.biker_vendor.Utils.post_async;
-import com.vendor.biker.biker_vendor.model.BookingList;
+import com.vendor.biker.Utils.Constants;
+import com.vendor.biker.Utils.CustomToast;
+import com.vendor.biker.Utils.IsNetworkConnection;
+import com.vendor.biker.Utils.PrintClass;
+import com.vendor.biker.Utils.post_async;
+import com.vendor.biker.model.BookingList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -406,7 +405,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -465,13 +463,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     dialog.cancel();
                 }
             });
-
             alertDialog.show();
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }

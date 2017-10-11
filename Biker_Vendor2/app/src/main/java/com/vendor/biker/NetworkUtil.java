@@ -1,4 +1,4 @@
-package com.vendor.biker.biker_vendor;
+package com.vendor.biker;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

@@ -1,4 +1,4 @@
-package com.vendor.biker.biker_vendor.model;
+package com.vendor.biker.model;
 
 /**
  * Created by nz160 on 04-10-2017.

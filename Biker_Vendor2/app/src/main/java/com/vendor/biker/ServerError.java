@@ -1,10 +1,10 @@
-package com.vendor.biker.biker_vendor;
+package com.vendor.biker;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.vendor.biker.biker_vendor.Utils.CustomToast;
+import com.vendor.biker.Utils.CustomToast;
 
 
 /**

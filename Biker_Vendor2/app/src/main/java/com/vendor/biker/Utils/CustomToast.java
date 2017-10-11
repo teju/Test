@@ -1,4 +1,4 @@
-package com.vendor.biker.biker_vendor.Utils;
+package com.vendor.biker.Utils;
 
 
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vendor.biker.biker_vendor.R;
+import com.vendor.biker.R;
 
 
 public class CustomToast {

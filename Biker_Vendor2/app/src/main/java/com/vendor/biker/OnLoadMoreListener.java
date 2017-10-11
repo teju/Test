@@ -1,4 +1,4 @@
-package com.vendor.biker.biker_vendor;
+package com.vendor.biker;
 
 /**
  * Created by nz160 on 14-09-2017.

@@ -1,4 +1,4 @@
-package com.vendor.biker.biker_vendor.Utils;
+package com.vendor.biker.Utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,8 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import android.util.Log;
 
 public class HttpConnection {
     public String readUrl(String mapsApiDirectionsUrl) throws IOException {

@@ -1,4 +1,4 @@
-package com.vendor.biker.biker_vendor.Utils;
+package com.vendor.biker.Utils;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -15,12 +15,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.vendor.biker.biker_vendor.JobHistory;
-import com.vendor.biker.biker_vendor.JobList;
-import com.vendor.biker.biker_vendor.Login;
-import com.vendor.biker.biker_vendor.MainActivity;
-import com.vendor.biker.biker_vendor.R;
-import com.vendor.biker.biker_vendor.UserRegister;
+import com.vendor.biker.JobHistory;
+import com.vendor.biker.JobList;
+import com.vendor.biker.Login;
+import com.vendor.biker.MainActivity;
+import com.vendor.biker.R;
+import com.vendor.biker.UserRegister;
 
 
 import java.io.UnsupportedEncodingException;

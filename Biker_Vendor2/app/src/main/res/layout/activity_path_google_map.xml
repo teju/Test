@@ -4,7 +4,7 @@
     android:id="@+id/activity_path_google_map"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.vendor.biker.biker_vendor.PathGoogleMapActivity">
+    tools:context=".PathGoogleMapActivity">
     <fragment
         android:id="@+id/map"
         android:layout_width="match_parent"

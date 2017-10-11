@@ -1,4 +1,4 @@
-package com.example.teju.biker.Utils;
+package com.biker.Utils;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -16,13 +16,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.teju.biker.BookingDetails;
-import com.example.teju.biker.Login;
-import com.example.teju.biker.MainActivity;
-import com.example.teju.biker.PaymentHistory;
-import com.example.teju.biker.R;
-import com.example.teju.biker.ServerError;
-import com.example.teju.biker.UserRegister;
+import com.biker.BookingDetails;
+import com.biker.Login;
+import com.biker.MainActivity;
+import com.biker.PaymentHistory;
+import com.biker.R;
+import com.biker.ServerError;
+import com.biker.UserRegister;
+
 
 import java.io.UnsupportedEncodingException;
 
@@ -33,9 +34,9 @@ public class post_async extends AsyncTask<String, Integer, String> {
     static String action = "", resultString = "";
     private PaymentHistory paymentHistory;
     private BookingDetails bookingDetails;
-    private  MainActivity mainActivity;
-    private  UserRegister userRegister;
-    private  Login login;
+    private MainActivity mainActivity;
+    private UserRegister userRegister;
+    private Login login;
     private Dialog dialog;
     Context context;
 

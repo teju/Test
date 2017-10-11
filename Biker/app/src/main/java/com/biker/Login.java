@@ -1,4 +1,4 @@
-package com.example.teju.biker;
+package com.biker;
 
 import android.annotation.TargetApi;
 import android.app.Dialog;
@@ -27,11 +27,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.teju.biker.Utils.Constants;
-import com.example.teju.biker.Utils.CustomToast;
-import com.example.teju.biker.Utils.IsNetworkConnection;
-import com.example.teju.biker.Utils.PrintClass;
-import com.example.teju.biker.Utils.post_async;
+
+import com.biker.Utils.Constants;
+import com.biker.Utils.CustomToast;
+import com.biker.Utils.IsNetworkConnection;
+import com.biker.Utils.PrintClass;
+import com.biker.Utils.post_async;
 
 import org.json.JSONArray;
 import org.json.JSONException;

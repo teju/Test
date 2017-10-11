@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:728890294956:android:318aafe276ce1fbd",
         "android_client_info": {
-          "package_name": "com.example.teju.biker"
+          "package_name": "com.biker"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "728890294956-c29327qkn3dgir89pf18htjb3ojcucg0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.teju.biker",
+            "package_name": "com.biker",
             "certificate_hash": "f1a24efe9831493dc88b6e7145842635f1326d1a"
           }
         },

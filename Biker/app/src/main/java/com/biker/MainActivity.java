@@ -1,4 +1,4 @@
-package com.example.teju.biker;
+package com.biker;
 
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -34,11 +34,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.teju.biker.Utils.Constants;
-import com.example.teju.biker.Utils.CustomToast;
-import com.example.teju.biker.Utils.IsNetworkConnection;
-import com.example.teju.biker.Utils.PrintClass;
-import com.example.teju.biker.Utils.post_async;
+
+import com.biker.Utils.Constants;
+import com.biker.Utils.CustomToast;
+import com.biker.Utils.IsNetworkConnection;
+import com.biker.Utils.PrintClass;
+import com.biker.Utils.post_async;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;

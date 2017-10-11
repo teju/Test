@@ -1,4 +1,4 @@
-package com.example.teju.biker.Utils;
+package com.biker.Utils;
 
 /**
  * Created by Teju on 19/09/2017.

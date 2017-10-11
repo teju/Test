@@ -1,11 +1,11 @@
-package com.example.teju.biker;
+package com.biker;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.example.teju.biker.Utils.CustomToast;
+import com.biker.Utils.CustomToast;
 
 /**
  * Created by nz160 on 03-10-2017.

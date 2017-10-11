@@ -1,4 +1,4 @@
-package com.example.teju.biker;
+package com.biker;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,12 +24,13 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.teju.biker.Utils.Constants;
-import com.example.teju.biker.Utils.CustomToast;
-import com.example.teju.biker.Utils.IsNetworkConnection;
-import com.example.teju.biker.Utils.PrintClass;
-import com.example.teju.biker.Utils.post_async;
-import com.example.teju.biker.model.BookingList;
+
+import com.biker.Utils.Constants;
+import com.biker.Utils.CustomToast;
+import com.biker.Utils.IsNetworkConnection;
+import com.biker.Utils.PrintClass;
+import com.biker.Utils.post_async;
+import com.biker.model.BookingList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,7 +47,7 @@ public class BookingDetails extends AppCompatActivity
     private LinearLayoutManager mLayoutManager;
     private SharedPreferences.Editor editor;
     private SharedPreferences prefrence;
-    List<BookingList> bookingList_l=new ArrayList<>();
+    List<com.biker.model.BookingList> bookingList_l=new ArrayList<>();
     TextView profile_name;
     private View rootView;
     int offset=0;

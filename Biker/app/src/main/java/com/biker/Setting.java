@@ -1,4 +1,4 @@
-package com.example.teju.biker;
+package com.biker;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,7 +17,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.teju.biker.Utils.IsNetworkConnection;
+import com.biker.Utils.IsNetworkConnection;
+
 
 /**
  * Created by Teju on 23/09/2017.

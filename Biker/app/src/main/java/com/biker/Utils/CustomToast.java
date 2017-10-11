@@ -1,4 +1,4 @@
-package com.example.teju.biker.Utils;
+package com.biker.Utils;
 
 
 import android.content.Context;
@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.teju.biker.R;
+import com.biker.R;
+
 
 public class CustomToast {
 

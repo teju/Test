@@ -1,4 +1,4 @@
-package com.example.teju.biker;
+package com.biker;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

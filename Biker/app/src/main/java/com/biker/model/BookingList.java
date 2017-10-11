@@ -1,4 +1,4 @@
-package com.example.teju.biker.model;
+package com.biker.model;
 
 /**
  * Created by nz160 on 04-10-2017.

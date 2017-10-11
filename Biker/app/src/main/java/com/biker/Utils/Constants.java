@@ -1,11 +1,6 @@
-package com.example.teju.biker.Utils;
+package com.biker.Utils;
 
-import android.app.Activity;
-import android.support.v4.content.ContextCompat;
-import android.view.Window;
-import android.view.WindowManager;
 
-import com.example.teju.biker.R;
 
 /**
  * Created by nz160 on 20-09-2017.

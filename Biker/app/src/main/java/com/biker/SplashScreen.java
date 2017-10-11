@@ -1,4 +1,4 @@
-package com.example.teju.biker;
+package com.biker;
 
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -7,11 +7,7 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.example.teju.biker.Utils.Constants;
-import com.example.teju.biker.Utils.CustomToast;
-import com.example.teju.biker.Utils.IsNetworkConnection;
-import com.example.teju.biker.Utils.PrintClass;
-import com.example.teju.biker.Utils.post_async;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;

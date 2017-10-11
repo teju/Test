@@ -1,9 +1,9 @@
-package com.example.teju.biker.Utils;
+package com.biker.Utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.teju.biker.R;
+import com.biker.R;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 

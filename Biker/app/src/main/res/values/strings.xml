@@ -5,7 +5,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="thanksmsg">Booking is successfully submitted</string>
 
-    <string name="fcm_pref">com.example.teju.biker.pref</string>
-    <string name="fcm_token">com.example.teju.biker.token</string>
+    <string name="fcm_pref">com.biker.pref</string>
+    <string name="fcm_token">com.biker.token</string>
 
 </resources>

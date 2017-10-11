@@ -248,6 +248,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(jsonObject.getString("status").equalsIgnoreCase("success")) {
                 new CustomToast().Show_Toast(getApplicationContext(), rootView,
                         "Successfully Accepted the booking request");
+                bookingList_l.clear();
+                offset=0;
                 getBookingList("BookingDetails");
             } else {
                 new CustomToast().Show_Toast(getApplicationContext(), rootView,

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,16 +15,20 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -138,7 +143,8 @@ public class JobHistory extends AppCompatActivity implements
                         jobList.setAddress(booking_jObj.getString("address"));
                         jobList.setCustomer_name(booking_jObj.getString("customer_name"));
                         jobList.setCustomer_number(booking_jObj.getString("customer_name"));
-                        jobList.setBooking_id(booking_jObj.getString("customer_name"));
+                        jobList.setBooking_id(booking_jObj.getString("booking_id"));
+                        jobList.setStatus(booking_jObj.getString("status"));
                         jobList_l.add(jobList);
                     }
                     if(jsonObject.has("totalCount")) {
@@ -206,7 +212,8 @@ public class JobHistory extends AppCompatActivity implements
     public void ResponseOfjobListReload(String resultString) {
         try {
             JSONObject jsonObject = new JSONObject(resultString);
-            PrintClass.printValue("ResponseOfjobListReload resultString ", " has data " + jsonObject.toString());
+            PrintClass.printValue("ResponseOfjobListReload resultString ", " has data "
+                    + jsonObject.toString());
             if(jsonObject.getString("status").equalsIgnoreCase("success")) {
                 JSONArray jsonarr_joblist=jsonObject.getJSONArray("bookinglist");
                 PrintClass.printValue("ResponseOfjobListReload jobList ",jsonarr_joblist.toString());
@@ -219,6 +226,7 @@ public class JobHistory extends AppCompatActivity implements
                     jobList.setCustomer_name(booking_jObj.getString("customer_name"));
                     jobList.setCustomer_number(booking_jObj.getString("customer_name"));
                     jobList.setBooking_id(booking_jObj.getString("booking_id"));
+                    jobList.setStatus(booking_jObj.getString("status"));
                     jobList_l.add(jobList);
                 }
                 mjobAdapter.notifyDataSetChanged();
@@ -281,8 +289,7 @@ public class JobHistory extends AppCompatActivity implements
     }
 
     static class jobViewHolder extends RecyclerView.ViewHolder {
-        Spinner status;
-        TextView vendor_name,vendor_number,vehicle_no,booking_no;
+        TextView vendor_name,vendor_number,vehicle_no,booking_no,status;
         Button map;
         public jobViewHolder(View itemView) {
             super(itemView);
@@ -291,24 +298,7 @@ public class JobHistory extends AppCompatActivity implements
             booking_no =(TextView)itemView.findViewById(R.id.Payment_id);
             vendor_number =(TextView)itemView.findViewById(R.id.vendor_number);
             vehicle_no =(TextView)itemView.findViewById(R.id.vehicle_no);
-            status = (Spinner)itemView.findViewById(R.id.status);
-
-            status.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    // On selecting a spinner item
-                    String item = parent.getItemAtPosition(position).toString();
-
-                    // Showing selected spinner item
-                    Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
-
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
+            status = (TextView) itemView.findViewById(R.id.status);
         }
     }
 
@@ -320,8 +310,7 @@ public class JobHistory extends AppCompatActivity implements
         }
     }
 
-    class jobAdapter extends RecyclerView.Adapter < RecyclerView.ViewHolder >implements
-            AdapterView.OnItemSelectedListener  {
+    class jobAdapter extends RecyclerView.Adapter < RecyclerView.ViewHolder >{
         private final int VIEW_TYPE_ITEM = 0;
         private final int VIEW_TYPE_LOADING = 1;
         private OnLoadMoreListener mOnLoadMoreListener;
@@ -329,17 +318,13 @@ public class JobHistory extends AppCompatActivity implements
         private int visibleThreshold = 5;
         private int lastVisibleItem,
                 totalItemCount;
-        String[] country = {"Picked", "InProcess", "Completed", "Delivered" };
         public jobAdapter() {
-            aa = new ArrayAdapter(JobHistory.this,R.layout.spinner_item,country);
-            aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
                 }
-
 
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy)
@@ -376,6 +361,7 @@ public class JobHistory extends AppCompatActivity implements
             if (viewType == VIEW_TYPE_ITEM) {
                 View view = LayoutInflater.from(JobHistory.this).inflate(R.layout.payment_history_content, parent, false);
                 return new jobViewHolder(view);
+
             } else if (viewType == VIEW_TYPE_LOADING) {
                 View view = LayoutInflater.from(JobHistory.this).inflate(R.layout.spinner, parent, false);
                 return new LoadingViewHolder(view);
@@ -386,9 +372,8 @@ public class JobHistory extends AppCompatActivity implements
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof jobViewHolder) {
-                jobViewHolder jobViewHolder = (jobViewHolder) holder;
+                final jobViewHolder jobViewHolder = (jobViewHolder) holder;
                 final JobListModel bookings = jobList_l.get(position);
-                jobViewHolder.status.setAdapter(aa);
 
                 //Setting the ArrayAdapter data on the Spinner
                 jobViewHolder.vendor_name.setText(bookings.getCustomer_name());
@@ -396,6 +381,46 @@ public class JobHistory extends AppCompatActivity implements
                 jobViewHolder.booking_no.setText(bookings.getBooking_no());
                 //jobViewHolder.vendor_number.setText(bookings.getCustomer_number());
                 jobViewHolder.vehicle_no.setText(bookings.getVehicle_no());
+                jobViewHolder.status.setTag(position);
+                jobViewHolder.status.setText(bookings.getStatus());
+                jobViewHolder.status.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final int itemPosition = (Integer)v.getTag();
+                        final PopupMenu popupMenu = new PopupMenu(JobHistory.this, v, Gravity.CENTER_HORIZONTAL);
+                        final Menu menu = popupMenu.getMenu();
+
+                        popupMenu.getMenuInflater().inflate(R.menu.menu_main, menu);
+                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                switch (item.getItemId()) {
+                                    case R.id.Picked:
+                                        Toast.makeText(getApplicationContext(),"Booking_id "
+                                                +itemPosition+" "+item.getTitle(),Toast.LENGTH_LONG).show();
+                                        break;
+                                    case R.id.InProcess:
+                                        Toast.makeText(getApplicationContext(),"Booking_id "
+                                                +itemPosition+" "+item.getTitle(),Toast.LENGTH_LONG).show();
+                                        break;
+                                    case R.id.Completed:
+                                        Toast.makeText(getApplicationContext(),"Booking_id "
+                                                +itemPosition+" "+item.getTitle(),Toast.LENGTH_LONG).show();
+                                        break;
+                                    case R.id.Delivered:
+                                        Toast.makeText(getApplicationContext(),"Booking_id "
+                                                +itemPosition+" "+item.getTitle(),Toast.LENGTH_LONG).show();
+                                        break;
+                                }
+                                 changeStatus(item.getTitle().toString(),jobList_l.get(itemPosition).getBooking_id());
+                                     jobViewHolder.status.setText(item.getTitle().toString());
+
+                                return true;
+                            }
+                        });
+                        popupMenu.show();
+                    }
+                });
             } else if (holder instanceof LoadingViewHolder) {
                 LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
                 loadingViewHolder.progressBar.setIndeterminate(true);
@@ -409,13 +434,6 @@ public class JobHistory extends AppCompatActivity implements
 
         public void setLoaded() {
             isLoading = false;
-        }
-
-
-        @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-           // changeStatus(adapterView.getItemAtPosition(i).toString(),"15");
-
         }
 
         public void changeStatus(String status,String booking_id){
@@ -438,13 +456,6 @@ public class JobHistory extends AppCompatActivity implements
                 new CustomToast().Show_Toast(getApplicationContext(), rootView,
                         "No Internet Connection");
             }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> adapterView) {
-            Toast.makeText(getApplicationContext(),
-                    "onNothingSelected : " ,
-                    Toast.LENGTH_SHORT).show();
         }
     }
 }

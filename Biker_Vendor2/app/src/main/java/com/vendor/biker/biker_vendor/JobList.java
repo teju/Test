@@ -377,14 +377,17 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
                 //jobViewHolder.customer_number.setText(bookings.getCustomer_number());
                 jobViewHolder.otp.setText(bookings.getOtp());
                 jobViewHolder.vehicle_no.setText(bookings.getVehicle_no());
-
+                jobViewHolder.map.setTag(position);
                 jobViewHolder.map.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        final int index = (Integer) view.getTag();
+                        final JobListModel bookng = jobList_l.get(index);
+
                         Intent i=new Intent(JobList.this,PathGoogleMapActivity.class);
-                        i.putExtra("latitude",bookings.getLatitude());
-                        i.putExtra("longitude",bookings.getLongitude());
-                        i.putExtra("otp",bookings.getOtp());
+                        i.putExtra("latitude",bookng.getLatitude());
+                        i.putExtra("longitude",bookng.getLongitude());
+                        i.putExtra("otp",bookng.getOtp());
                         startActivity(i);
                     }
                 });

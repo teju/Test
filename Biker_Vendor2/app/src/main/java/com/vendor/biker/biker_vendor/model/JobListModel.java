@@ -41,6 +41,16 @@ public class JobListModel {
     }
 
     String otp;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    String status;
     String address;
     String booking_id;
 

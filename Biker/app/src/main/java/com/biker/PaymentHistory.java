@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -61,6 +62,7 @@ public class PaymentHistory extends AppCompatActivity
     private int total_count=0;
     private TextView no_records;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private ImageView no_records_img;
 
     @Override
     protected void onResume() {
@@ -73,6 +75,7 @@ public class PaymentHistory extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.payment_history);
         no_records=(TextView)findViewById(R.id.no_records);
+        no_records_img=(ImageView)findViewById(R.id.no_records_img);
         rootView=findViewById(android.R.id.content);
         PaymentList_l.clear();
         prefrence = getSharedPreferences("My_Pref", 0);
@@ -250,16 +253,19 @@ public class PaymentHistory extends AppCompatActivity
                     } else {
                         recyclerView.setVisibility(View.GONE);
                         no_records.setVisibility(View.VISIBLE);
+                        no_records_img.setVisibility(View.VISIBLE);
                         no_records.setText(jsonObject.getString("message"));
                     }
                 } else {
                     recyclerView.setVisibility(View.GONE);
                     no_records.setVisibility(View.VISIBLE);
+                    no_records_img.setVisibility(View.VISIBLE);
                     no_records.setText(jsonObject.getString("message"));
                 }
             } else {
                 recyclerView.setVisibility(View.GONE);
                 no_records.setVisibility(View.VISIBLE);
+                no_records_img.setVisibility(View.VISIBLE);
                 no_records.setText(jsonObject.getString("message"));
             }
             swipeRefreshLayout.setRefreshing(false);
@@ -267,6 +273,7 @@ public class PaymentHistory extends AppCompatActivity
         }catch (Exception e){
             swipeRefreshLayout.setRefreshing(false);
             PrintClass.printValue("ResponseOfPaymentList Exception ",e.toString());
+            no_records_img.setVisibility(View.VISIBLE);
             no_records.setVisibility(View.VISIBLE);
             try {
                 no_records.setText(jsonObject.getString("message"));

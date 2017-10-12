@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -59,6 +60,8 @@ public class JobHistory extends AppCompatActivity implements
     List<JobListModel> jobList_l=new ArrayList<>();
     private TextView no_records;
     private int total_count=0;
+    private ImageView no_records_img;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +73,7 @@ public class JobHistory extends AppCompatActivity implements
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
         no_records =(TextView) findViewById(R.id.no_records);
+        no_records_img =(ImageView) findViewById(R.id.no_records_img);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -176,11 +180,13 @@ public class JobHistory extends AppCompatActivity implements
                 } else {
                     mRecyclerView.setVisibility(View.GONE);
                     no_records.setVisibility(View.VISIBLE);
+                    no_records_img.setVisibility(View.VISIBLE);
                     no_records.setText(jsonObject.getString("message"));
                 }
             } else {
                 mRecyclerView.setVisibility(View.GONE);
                 no_records.setVisibility(View.VISIBLE);
+                no_records_img.setVisibility(View.VISIBLE);
                 no_records.setText(jsonObject.getString("message"));
             }
             swipeRefreshLayout.setRefreshing(false);
@@ -189,6 +195,7 @@ public class JobHistory extends AppCompatActivity implements
             swipeRefreshLayout.setRefreshing(false);
             PrintClass.printValue("ResponseOfjobList Exception ",e.toString());
             no_records.setVisibility(View.VISIBLE);
+            no_records_img.setVisibility(View.VISIBLE);
             try {
                 no_records.setText(jsonObject.getString("message"));
             } catch (JSONException e1) {
@@ -394,6 +401,15 @@ public class JobHistory extends AppCompatActivity implements
                 jobViewHolder.vehicle_no.setText(bookings.getVehicle_no());
                 jobViewHolder.status.setTag(position);
                 jobViewHolder.status.setText(bookings.getStatus().toUpperCase());
+                if(bookings.getStatus().equalsIgnoreCase("Picked")) {
+                    jobViewHolder.status.setBackgroundColor(getResources().getColor(R.color.orange1));
+                } else if(bookings.getStatus().equalsIgnoreCase("InProcess")) {
+                    jobViewHolder.status.setBackgroundColor(getResources().getColor(R.color.yellow));
+                } else if(bookings.getStatus().equalsIgnoreCase("Completed")) {
+                    jobViewHolder.status.setBackgroundColor(getResources().getColor(R.color.blue));
+                } else if(bookings.getStatus().equalsIgnoreCase("Delivered")) {
+                    jobViewHolder.status.setBackgroundColor(getResources().getColor(R.color.green));
+                }
                 jobViewHolder.status.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -405,7 +421,9 @@ public class JobHistory extends AppCompatActivity implements
                         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             @Override
                             public boolean onMenuItemClick(MenuItem item) {
-                                 changeStatus(item.getTitle().toString(),jobList_l.get(itemPosition).getBooking_id());
+
+
+                                changeStatus(item.getTitle().toString(),jobList_l.get(itemPosition).getBooking_id());
                                      jobViewHolder.status.setText(item.getTitle().toString().toUpperCase());
                                 return true;
                             }

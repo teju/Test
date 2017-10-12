@@ -8,9 +8,10 @@
     <color name="blue">#3698f4</color>
     <color name="green">#16a427</color>
     <color name="orange">#F43C36</color>
-
+    <color name="orange2">#bf201b</color>
+    <color name="orange1">#f29e1e</color>
+    <color name="yellow">#e1a417</color>
     <color name="light_orange">#d1cfcf</color>
-
     <color name="background">#f2f2f2</color>
     <color name="light_red">#ff7f7f</color>
     <color name="light_red2">#ff9999</color>

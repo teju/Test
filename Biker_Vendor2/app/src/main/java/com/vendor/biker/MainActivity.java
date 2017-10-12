@@ -1,10 +1,14 @@
 package com.vendor.biker;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentCallbacks2;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -22,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -56,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView no_records;
     private int total_count=0;
     private BookingDetailsRecyclerView mAdapter;
+    private BroadcastReceiver receiver;
 
     @Override
     protected void onResume() {
@@ -77,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         prefrence = getSharedPreferences("My_Pref", 0);
         editor = prefrence.edit();
         //  Constants.statusColor(this);
-        rootView=findViewById(android.R.id.content);
+        rootView = findViewById(android.R.id.content);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
 
@@ -86,7 +92,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -94,19 +101,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
 
-        profile_name=(TextView)header.findViewById(R.id.profile_name);
+        profile_name = (TextView) header.findViewById(R.id.profile_name);
         profile_name.setText(prefrence.getString("name", ""));
         Typeface typeface = Typeface.createFromAsset(getAssets(),
                 "fonts/name_font.ttf");
         profile_name.setTypeface(typeface);
 
-        no_records =(TextView) findViewById(R.id.no_records);
+        no_records = (TextView) findViewById(R.id.no_records);
 
-        recyclerView =(RecyclerView)findViewById(R.id.booking_history);
+        recyclerView = (RecyclerView) findViewById(R.id.booking_history);
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         getBookingList("BookingDetails");
+        if (prefrence.getString("isLoggedIn", "").equals("true")) {
+            receiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    final ConnectivityManager connMgr = (ConnectivityManager) context
+                            .getSystemService(Context.CONNECTIVITY_SERVICE);
+                    System.out.println("NetworkChangeReceiverieieie " + " called");
+                    final android.net.NetworkInfo wifi = connMgr
+                            .getActiveNetworkInfo();
+                    if (wifi != null) {
+                        if (wifi.getType() == ConnectivityManager.TYPE_WIFI) {
+                            // connected to wifi
+                        } else if (wifi.getType() == ConnectivityManager.TYPE_MOBILE) {
+                            // connected to the mobile provider's data plan
+                        }
+                    } else {
+                        System.out.println("NetworkChangeReceiverieieie " + " isNotAvailable");
+                        Intent i = new Intent(context, ServerError.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(i);
+                    }
+                }
+            };
+            registerReceiver(receiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+        }
     }
 
     public void getBookingList(String action){
@@ -131,6 +163,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             new CustomToast().Show_Toast(getApplicationContext(), rootView,
                     "No Internet Connection");
         }
+    }
+
+    public void onTrimMemory(final int level) {
+        System.out.println("registerForActivityCallbacks "+" level "+level);
+
+        if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
+            if(receiver !=null) {
+                unregisterReceiver(receiver);
+                receiver = null;
+            }
+            System.out.println("registerForActivityCallbacks "+" closed ");
+
+        } else {
+            System.out.println("registerForActivityCallbacks "+" open ");
+        }
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        onTrimMemory(ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN);
+
     }
 
     public void ResponseOfBookingList(String resultString) {
@@ -259,11 +315,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-
     static  class BookingDetailsRecyclerViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout action;
         TextView booking_id, customer_name, customer_number, vehicle_no;
-      //  Button action_accept;
+        Button action_accept;
 
         public BookingDetailsRecyclerViewHolder(View itemView) {
             super(itemView);
@@ -271,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             customer_name = (TextView) itemView.findViewById(R.id.customer_name);
             customer_number = (TextView) itemView.findViewById(R.id.customer_number);
             vehicle_no = (TextView) itemView.findViewById(R.id.vehicle_no);
-            //action_accept = (Button) itemView.findViewById(R.id.action_accept);
+            action_accept = (Button) itemView.findViewById(R.id.action_accept);
             //action_reject = (Button) itemView.findViewById(R.id.action_decline);
         }
     }
@@ -360,14 +415,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 userViewHolder.booking_id.setText(bookings.getBooking_no());
                 userViewHolder.customer_name.setText(bookings.getCustomer_name());
                 userViewHolder.vehicle_no.setText(bookings.getVehicle_no());
-                /*userViewHolder.action_accept.setOnClickListener(new View.OnClickListener() {
+                userViewHolder.action_accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                         acceptRejectAction(bookings.getBooking_id());
                     PrintClass.printValue("SYSTEMPRINT UserRegister  ", "getBooking_id " + bookings.getBooking_id());
 
                 }
-                });*/
+                });
             } else if (holder instanceof MainActivity.LoadingViewHolder) {
                 MainActivity.LoadingViewHolder loadingViewHolder = (MainActivity.LoadingViewHolder) holder;
                 loadingViewHolder.progressBar.setIndeterminate(true);

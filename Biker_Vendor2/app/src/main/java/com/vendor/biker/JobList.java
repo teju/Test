@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -54,6 +55,8 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
     List<JobListModel> jobList_l=new ArrayList<>();
     private TextView no_records;
     private int total_count=0;
+    private ImageView no_records_img;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +68,7 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
         no_records =(TextView) findViewById(R.id.no_records);
+        no_records_img =(ImageView) findViewById(R.id.no_records_img);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -172,12 +176,14 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
                 } else {
                    mRecyclerView.setVisibility(View.GONE);
                     no_records.setVisibility(View.VISIBLE);
+                    no_records_img.setVisibility(View.VISIBLE);
                     no_records.setText(jsonObject.getString("message"));
 
                 }
             } else {
                 mRecyclerView.setVisibility(View.GONE);
                 no_records.setVisibility(View.VISIBLE);
+                no_records_img.setVisibility(View.VISIBLE);
                 no_records.setText(jsonObject.getString("message"));
             }
             swipeRefreshLayout.setRefreshing(false);
@@ -185,6 +191,7 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
         }catch (Exception e){
             swipeRefreshLayout.setRefreshing(false);
             PrintClass.printValue("ResponseOfjobList Exception ",e.toString());
+            no_records_img.setVisibility(View.VISIBLE);
             no_records.setVisibility(View.VISIBLE);
             try {
                 no_records.setText(jsonObject.getString("message"));

@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/white"
     tools:openDrawer="start">
 
     <android.support.v7.widget.Toolbar
@@ -20,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/parent_layout"
-        android:background="@color/background">
+        android:background="@color/white">
         <include layout="@layout/header"
             android:id="@+id/header"></include>
         <android.support.v4.widget.SwipeRefreshLayout
@@ -35,17 +36,28 @@
                 android:id="@+id/payment_history">
             </android.support.v7.widget.RecyclerView>
         </android.support.v4.widget.SwipeRefreshLayout>
-        <TextView
+        <ImageView
             android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:id="@+id/no_records_img"
+            android:visibility="gone"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/bierlogo" />
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:layout_centerVertical="true"
             android:id="@+id/no_records"
             android:visibility="gone"
             android:padding="10dp"
+            android:textSize="16sp"
+            android:layout_below="@+id/no_records_img"
             android:textColor="@color/black"
             android:layout_centerHorizontal="true"
-            android:text="No Records Found "/>
+            android:text="No Records Found."/>
+
 
     </RelativeLayout>
     <android.support.design.widget.NavigationView
@@ -56,7 +68,6 @@
         android:fitsSystemWindows="true"
         app:menu="@menu/activity_main_drawer"
         app:itemTextColor="@color/black"
-        app:itemIconTint="@color/orange"
         app:headerLayout="@layout/drawer_header" />
 
 </android.support.v4.widget.DrawerLayout>

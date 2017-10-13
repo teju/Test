@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,7 +27,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -414,7 +417,7 @@ public class JobHistory extends AppCompatActivity implements
                     @Override
                     public void onClick(View v) {
                         final int itemPosition = (Integer)v.getTag();
-                        final PopupMenu popupMenu = new PopupMenu(JobHistory.this, v, Gravity.LEFT);
+                        final PopupMenu popupMenu = new PopupMenu(JobHistory.this, v, Gravity.FILL_HORIZONTAL);
                         final Menu menu = popupMenu.getMenu();
                         popupMenu.getMenuInflater().inflate(R.menu.menu_main, menu);
                         popupMenu.show();
@@ -445,6 +448,7 @@ public class JobHistory extends AppCompatActivity implements
                                 return true;
                             }
                         });
+
                     }
                 });
             } else if (holder instanceof LoadingViewHolder) {

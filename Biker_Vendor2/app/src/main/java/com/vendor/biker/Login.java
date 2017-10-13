@@ -85,6 +85,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         prefrence = getSharedPreferences("My_Pref", 0);
         notiprefrence = getSharedPreferences(getString(R.string.fcm_pref), 0);
         editor = prefrence.edit();
+        PrintClass.printValue("FCMInstancdIdService ","resent_token "+notiprefrence.getString(getString(R.string.fcm_token),""));
 
         if(Build.VERSION.SDK_INT < 23){
             //your code here

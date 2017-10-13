@@ -63,7 +63,17 @@
         <activity
             android:name="com.vendor.biker.JobHistory"
             android:screenOrientation="portrait" />
-        <activity android:name="com.vendor.biker.PathGoogleMapActivity"></activity>
+
+        <service android:name=".Utils.FireBaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".Utils.FCMInstancdIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

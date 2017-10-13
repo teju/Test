@@ -104,7 +104,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginBottom="10dp"
         android:layout_centerHorizontal="true"
-        android:background="#269ed4"
+        android:background="@color/orange"
         android:gravity="center_vertical"
         android:drawableLeft="@drawable/map_marker"
         android:drawablePadding="5dp"

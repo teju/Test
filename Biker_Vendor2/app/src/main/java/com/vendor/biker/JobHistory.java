@@ -418,10 +418,27 @@ public class JobHistory extends AppCompatActivity implements
                         final Menu menu = popupMenu.getMenu();
                         popupMenu.getMenuInflater().inflate(R.menu.menu_main, menu);
                         popupMenu.show();
+                        if(jobList_l.get(itemPosition).getStatus().equalsIgnoreCase("Picked")) {
+                            menu.getItem(0).setEnabled(false);
+                            menu.getItem(2).setEnabled(false);
+                            menu.getItem(3).setEnabled(false);
+                        } else if(jobList_l.get(itemPosition).getStatus().equalsIgnoreCase("InProcess")) {
+                            menu.getItem(0).setEnabled(false);
+                            menu.getItem(1).setEnabled(false);
+                            menu.getItem(3).setEnabled(false);
+                        } else if(jobList_l.get(itemPosition).getStatus().equalsIgnoreCase("Completed")) {
+                            menu.getItem(0).setEnabled(false);
+                            menu.getItem(2).setEnabled(false);
+                            menu.getItem(1).setEnabled(false);
+                        } else if(jobList_l.get(itemPosition).getStatus().equalsIgnoreCase("Delivered")) {
+                            menu.getItem(0).setEnabled(false);
+                            menu.getItem(1).setEnabled(false);
+                            menu.getItem(2).setEnabled(false);
+                            jobViewHolder.status.setBackgroundColor(getResources().getColor(R.color.green));
+                        }
                         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             @Override
                             public boolean onMenuItemClick(MenuItem item) {
-
 
                                 changeStatus(item.getTitle().toString(),jobList_l.get(itemPosition).getBooking_id());
                                      jobViewHolder.status.setText(item.getTitle().toString().toUpperCase());

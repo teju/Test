@@ -128,7 +128,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         if(hasContactPermission != PackageManager.PERMISSION_GRANTED ) {
             ActivityCompat.requestPermissions(this, new String[]
                     {android.Manifest.permission.RECEIVE_SMS}, REQUEST_CODE_ASK_PERMISSIONS);
-        }else {
+        } else {
             //Toast.makeText(AddContactsActivity.this, "Contact Permission is already granted", Toast.LENGTH_LONG).show();
         }
     }
@@ -249,12 +249,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                         }
                     }
                 });
-
             } else {
                 new CustomToast().Show_Toast(getApplicationContext(), rootView,
                         jsonObject.getString("message") );
             }
-
         } catch (Exception e){
             System.out.println("SYSTEMPRINT error UserRegister "+e.toString());
         }
@@ -277,7 +275,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
             } else {
 
                 JSONObject errorjsonObject = jsonObject.getJSONObject("errors");
-
                 if(errorjsonObject.has("otp_code")) {
                     JSONArray jsonArray =errorjsonObject.getJSONArray("otp_code");
                     new CustomToast().Show_Toast(getApplicationContext(), rootView,
@@ -302,7 +299,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         this.finish();

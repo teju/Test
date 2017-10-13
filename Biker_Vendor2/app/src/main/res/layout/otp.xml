@@ -10,6 +10,7 @@
         android:text="OTP has been sent to your mobile."
         android:gravity="center_horizontal"
         android:textSize="@dimen/normal"
+        android:padding="12dp"
         android:id="@+id/txtview"
         android:textColor="@color/black"
         android:layout_marginTop="10dp"/>
@@ -17,6 +18,7 @@
         android:layout_width="150dp"
         android:layout_height="45dp"
         android:id="@+id/otp"
+        android:inputType="number"
         android:textSize="@dimen/normal"
         android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"

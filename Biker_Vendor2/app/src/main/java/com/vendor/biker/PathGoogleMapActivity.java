@@ -57,6 +57,7 @@ public class PathGoogleMapActivity extends FragmentActivity {
         dest_latitude=Double.parseDouble(getIntent().getStringExtra("latitude"));
         dest_longitude=Double.parseDouble(getIntent().getStringExtra("longitude"));
         PrintClass.printValue("PathGoogleMapActivity latitude ",dest_latitude+" longitude "+dest_longitude);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         try {
             if (checkLocationPermission()) {

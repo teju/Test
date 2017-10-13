@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     int limit=5;
     List<BookingList> bookingList_l=new ArrayList<>();
     private TextView no_records;
+    ImageView no_records_img;
     private int total_count=0;
     private BookingDetailsRecyclerView mAdapter;
     private BroadcastReceiver receiver;
@@ -108,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         profile_name.setTypeface(typeface);
 
         no_records = (TextView) findViewById(R.id.no_records);
+        no_records_img = (ImageView) findViewById(R.id.no_records_img);
 
         recyclerView = (RecyclerView) findViewById(R.id.booking_history);
         recyclerView.setHasFixedSize(true);
@@ -247,11 +250,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else {
                     recyclerView.setVisibility(View.GONE);
                     no_records.setVisibility(View.VISIBLE);
+                    no_records_img.setVisibility(View.VISIBLE);
                     no_records.setText(jsonObject.getString("message"));
                 }
             } else {
                 recyclerView.setVisibility(View.GONE);
                 no_records.setVisibility(View.VISIBLE);
+                no_records_img.setVisibility(View.VISIBLE);
                 no_records.setText(jsonObject.getString("message"));
             }
             swipeRefreshLayout.setRefreshing(false);
@@ -260,12 +265,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             swipeRefreshLayout.setRefreshing(false);
             PrintClass.printValue("ResponseOfBookingList Exception ",e.toString());
             no_records.setVisibility(View.VISIBLE);
+            no_records_img.setVisibility(View.VISIBLE);
             try {
                 no_records.setText(jsonObject.getString("message"));
             } catch (JSONException e1) {
                 e1.printStackTrace();
             }
-
         }
     }
 

@@ -51,6 +51,7 @@ public class UserRegister extends AppCompatActivity {
     private double getLatitude=0;
     private double getLongitude=0;
     private String getAddress="";
+    boolean isUpdate=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class UserRegister extends AppCompatActivity {
 
         prefrence = getSharedPreferences("My_Pref", 0);
         editor = prefrence.edit();
-
+        isUpdate=false;
         rootView=findViewById(android.R.id.content);
         name=(EditText)findViewById(R.id.name);
         Button click=(Button)findViewById(R.id.buttonclick);
@@ -71,7 +72,7 @@ public class UserRegister extends AppCompatActivity {
         PrintClass.printValue("UserRegisterPrint type ",type);
 
         if(type.equals("edit")) {
-            getProfileInfo("info");
+            getProfileInfo();
             click.setText("UPDATE");
         } else {
             name.setText("");
@@ -180,7 +181,6 @@ public class UserRegister extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Location Not Found", Toast.LENGTH_LONG).show();
                 PrintClass.printValue("LATLOGVALUE ", "location null");
             }
-
         }
     }
     private Location getLastKnownLocation() {
@@ -211,24 +211,21 @@ public class UserRegister extends AppCompatActivity {
         return bestLocation;
     }
 
-    public void getProfileInfo(String type){
+    public void getProfileInfo(){
         if (IsNetworkConnection.checkNetworkConnection(UserRegister.this)) {
             String url = Constants.SERVER_URL + "profile/user-profile";
             JSONObject params = new JSONObject();
             try {
                 params.put("user_id",prefrence.getString("user_id", "") );
                 params.put("access_token",prefrence.getString("access_token", ""));
-                if(type.equals("update")){
-                    Intent i = new Intent(UserRegister.this, MainActivity.class);
-                    startActivity(i);
-                    finish();
-                }
+
             } catch (JSONException e) {
                 e.printStackTrace();
                 PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
             }
             PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
             new post_async(UserRegister.this, "UserGetProfileInfo").execute(url, params.toString());
+
         } else {
             new CustomToast().Show_Toast(getApplicationContext(), rootView,
                     "No Internet Connection");
@@ -318,7 +315,8 @@ public class UserRegister extends AppCompatActivity {
                 editor.putString("user_id",  jsonObject.getString("user_id"));
                 editor.commit();
                 if(type.equals("edit")) {
-                    getProfileInfo("update");
+                    isUpdate=true;
+                    getProfileInfo();
                 } else {
                     Intent i = new Intent(this, Login.class);
                     startActivity(i);
@@ -359,6 +357,12 @@ public class UserRegister extends AppCompatActivity {
                 service_center_name.setText(userInfo.getString("service_center_name"));
                 editor.putString("name",userInfo.getString("first_name"));
                 editor.commit();
+                if(isUpdate){
+                    Intent i = new Intent(UserRegister.this, MainActivity.class);
+                    startActivity(i);
+                    finish();
+                    isUpdate=false;
+                }
             } else {
                 new CustomToast().Show_Toast(getApplicationContext(), rootView,
                         jsonObject.getString("message") );

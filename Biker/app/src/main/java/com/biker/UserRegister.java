@@ -39,6 +39,7 @@ public class UserRegister extends AppCompatActivity {
     private SharedPreferences prefrence;
     private SharedPreferences.Editor editor;
     String type="";
+    boolean isUpdate=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +48,7 @@ public class UserRegister extends AppCompatActivity {
 
         prefrence = getSharedPreferences("My_Pref", 0);
         editor = prefrence.edit();
-
+        isUpdate=false;
         rootView=findViewById(android.R.id.content);
         name=(EditText)findViewById(R.id.name);
         Button click=(Button)findViewById(R.id.buttonclick);
@@ -62,7 +63,7 @@ public class UserRegister extends AppCompatActivity {
         PrintClass.printValue("UserRegisterPrint type ",type);
 
         if(type.equals("edit")) {
-            getProfileInfo("info");
+            getProfileInfo();
             click.setText("UPDATE");
         } else {
             name.setText("");
@@ -71,17 +72,14 @@ public class UserRegister extends AppCompatActivity {
         }
     }
 
-    public void getProfileInfo(String type){
+    public void getProfileInfo(){
         if (IsNetworkConnection.checkNetworkConnection(UserRegister.this)) {
             String url = Constants.SERVER_URL + "profile/user-profile";
             JSONObject params = new JSONObject();
             try {
                 params.put("user_id",prefrence.getString("user_id", "") );
                 params.put("access_token",prefrence.getString("access_token", ""));
-                if(type.equals("update")){
-                    Intent i = new Intent(UserRegister.this, MainActivity.class);
-                    startActivity(i);
-                }
+
             } catch (JSONException e) {
                 e.printStackTrace();
                 PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
@@ -165,7 +163,8 @@ public class UserRegister extends AppCompatActivity {
                 editor.putString("user_id",  jsonObject.getString("user_id"));
                 editor.commit();
                 if(type.equals("edit")) {
-                    getProfileInfo("update");
+                    isUpdate=true;
+                    getProfileInfo();
                 } else {
                     Intent i = new Intent(this, Login.class);
                     i.putExtra("reached_dest","false");
@@ -205,6 +204,11 @@ public class UserRegister extends AppCompatActivity {
                 phone.setText(userInfo.getString("mobile_no"));
                 editor.putString("name",userInfo.getString("first_name"));
                 editor.commit();
+                if(isUpdate){
+                    Intent i = new Intent(UserRegister.this, MainActivity.class);
+                    startActivity(i);
+                    isUpdate=false;
+                }
             } else {
                 new CustomToast().Show_Toast(getApplicationContext(), rootView,
                         jsonObject.getString("message") );

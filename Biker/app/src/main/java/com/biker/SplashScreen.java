@@ -34,6 +34,7 @@ public class SplashScreen extends AppCompatActivity {
                     finish();
                 } else {
                     Intent i = new Intent(SplashScreen.this, Login.class);
+                    i.putExtra("reached_dest","false");
                     startActivity(i);
                     finish();
                 }

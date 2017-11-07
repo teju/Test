@@ -21,6 +21,7 @@ import com.biker.Login;
 import com.biker.MainActivity;
 import com.biker.PaymentHistory;
 import com.biker.R;
+import com.biker.ReachedDestination;
 import com.biker.ServerError;
 import com.biker.UserRegister;
 
@@ -32,6 +33,7 @@ import java.io.UnsupportedEncodingException;
  */
 public class post_async extends AsyncTask<String, Integer, String> {
     static String action = "", resultString = "";
+    private ReachedDestination reachedDestination;
     private PaymentHistory paymentHistory;
     private BookingDetails bookingDetails;
     private MainActivity mainActivity;
@@ -50,6 +52,11 @@ public class post_async extends AsyncTask<String, Integer, String> {
         this.action = action;
         this.context=bookingDetails;
         this.bookingDetails = bookingDetails;
+    }
+    public post_async(ReachedDestination reachedDestination, String action) {
+        this.action = action;
+        this.context=reachedDestination;
+        this.reachedDestination = reachedDestination;
     }
     public post_async(PaymentHistory paymentHistory, String action) {
         this.action = action;
@@ -143,10 +150,10 @@ public class post_async extends AsyncTask<String, Integer, String> {
     }
 
     private void sendResult(String resultString) {
-        dialog.cancel();
         PrintClass.printValue("SYSTEMPRINT postsync  if  ", "action " + action +
                 " resultString " + resultString);
         try {
+            dialog.cancel();
             if (this.userRegister != null && action.equalsIgnoreCase("UserRegister")) {
                 this.userRegister.ResponseOfRegister(resultString);
             } else  if (this.userRegister != null && action.equalsIgnoreCase("UserGetProfileInfo")) {
@@ -165,14 +172,14 @@ public class post_async extends AsyncTask<String, Integer, String> {
                 this.bookingDetails.ResponseOfBookingList(resultString);
             } else  if (this.bookingDetails != null && action.equalsIgnoreCase("BookingDetailsReload")) {
                 this.bookingDetails.ResponseOfBookingListReload(resultString);
-            }
-
-            else  if (this.paymentHistory != null &&
+            } else  if (this.paymentHistory != null &&
                     (action.equalsIgnoreCase("PaymentHistory")
                             || action.equals("PaymentHistoryRefresh"))) {
                 this.paymentHistory.ResponseOfPaymentList(resultString);
             } else  if (this.paymentHistory != null && action.equalsIgnoreCase("PaymentHistoryReload")) {
                 this.paymentHistory.ResponseOfPaymentListReload(resultString);
+            }else  if (this.reachedDestination != null && action.equalsIgnoreCase("ReachedDestination")) {
+                this.reachedDestination.ResponseOfReachedDestination(resultString);
             }
 
         } catch (Exception e) {
@@ -191,7 +198,7 @@ public class post_async extends AsyncTask<String, Integer, String> {
         if(!action.equals("BookingDetailsReload") &&
                 !action.equals("BookingDetailsRefresh") && !action.equals("PaymentHistoryReload") &&
                 !action.equals("PaymentHistoryRefresh") ) {
-            dialog.show();
+                dialog.show();
         }
     }
 

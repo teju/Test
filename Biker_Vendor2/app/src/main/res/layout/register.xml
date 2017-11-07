@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -13,27 +14,35 @@
         android:layout_height="match_parent">
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="160dp"
             android:id="@+id/logo"
             android:src="@drawable/bierlogo"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="40dp"
             android:layout_gravity="center_horizontal"/>
-        <EditText
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign Up into your Account"
+            android:textStyle="bold|italic"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:textAllCaps="true"
+            android:textSize="@dimen/normal"
+            android:textColor="@color/black" />
+        <com.vendor.biker.Utils.MyEditText
             android:layout_width="match_parent"
             android:background="@android:drawable/editbox_background_normal"
             android:layout_height="wrap_content"
             android:id="@+id/name"
             android:textSize="@dimen/normal"
-            android:layout_marginLeft="45dp"
+            android:layout_marginLeft="60dp"
             android:drawableLeft="@drawable/account"
             android:drawablePadding="6dp"
             android:hint="Name"
-            android:layout_marginRight="45dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginRight="60dp"
+            android:layout_marginTop="20dp"
             android:padding="12dp" />
-        <EditText
+        <com.vendor.biker.Utils.MyEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/phone"
@@ -42,29 +51,27 @@
             android:background="@android:drawable/editbox_background_normal"
             android:hint="Phone Number"
             android:padding="12dp"
-            android:layout_marginLeft="45dp"
-            android:layout_marginRight="45dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
             android:drawableLeft="@drawable/cellphone"
             android:drawablePadding="6dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:textColor="@color/black" />
-        <EditText
+        <com.vendor.biker.Utils.MyEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/service_center_name"
             android:textSize="@dimen/normal"
             android:background="@android:drawable/editbox_background_normal"
-            android:hint="Service Center Name"
+            android:hint="Service Centre Name"
             android:padding="12dp"
-            android:layout_marginLeft="45dp"
-            android:layout_marginRight="45dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
             android:drawableLeft="@drawable/account_multiple"
             android:drawablePadding="6dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:textColor="@color/black" />
-        <EditText
+        <com.vendor.biker.Utils.MyEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:drawable/editbox_background_normal"
@@ -73,25 +80,23 @@
             android:hint="Email"
             android:inputType="textEmailAddress"
             android:textSize="@dimen/normal"
-            android:layout_marginLeft="45dp"
-            android:layout_marginRight="45dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
             android:layout_marginTop="10dp"
             android:drawableLeft="@drawable/email"
             android:drawablePadding="6dp"
-            android:textColor="@color/black"
-            android:layout_marginBottom="10dp" />
+            android:textColor="@color/black" />
         <Button
-            android:layout_width="150dp"
+            android:layout_width="120dp"
             android:layout_gravity="center_horizontal"
-            android:layout_height="50dp"
+            android:layout_height="35dp"
             android:onClick="submit"
             android:id="@+id/buttonclick"
             android:textSize="@dimen/normal"
             android:textStyle="bold"
-            android:layout_marginBottom="10dp"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:textColor="@color/white"
             android:background="@drawable/bg"
             android:text="REGISTER"/>

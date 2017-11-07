@@ -1,5 +1,6 @@
 package com.biker;
 
+import android.content.ComponentCallbacks2;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -58,6 +59,7 @@ public class BookingDetails extends AppCompatActivity
     private TextView no_records;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ImageView no_records_img;
+    private Typeface typeface_luci;
 
     @Override
     protected void onResume() {
@@ -69,7 +71,9 @@ public class BookingDetails extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.booking_history);
+
         no_records=(TextView)findViewById(R.id.no_records);
+
         no_records_img=(ImageView)findViewById(R.id.no_records_img);
         rootView=findViewById(android.R.id.content);
         bookingList_l.clear();
@@ -104,9 +108,34 @@ public class BookingDetails extends AppCompatActivity
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
+        if(prefrence.getString("isLoggedIn", "").equals("true")) {
 
-        // Constants.statusColor(this);
-        getBookingList("BookingDetails");
+            // Constants.statusColor(this);
+            getBookingList("BookingDetails");
+        }else {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setTitle("Confirm Login");
+            alertDialog.setMessage("You are not logged in !! Would You like to login ??");
+            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,int which) {
+                    editor.putString("isLoggedIn", "false");
+                    editor.commit();
+                    Intent i=new Intent(BookingDetails.this,Login.class);
+                    i.putExtra("reached_dest","false");
+                    startActivity(i);
+                }
+            });
+            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                    recyclerView.setVisibility(View.GONE);
+                    no_records.setVisibility(View.VISIBLE);
+                    no_records_img.setVisibility(View.VISIBLE);
+                    no_records.setText("You are not logged In !!");
+                }
+            });
+            alertDialog.show();
+        }
     }
 
     public void getBookingList(String action){
@@ -114,6 +143,7 @@ public class BookingDetails extends AppCompatActivity
             if(action.equals("BookingDetailsRefresh")) {
                 swipeRefreshLayout.setRefreshing(true);
             }
+
             String url = Constants.SERVER_URL + "booking/list";
             JSONObject params = new JSONObject();
             try {
@@ -157,19 +187,22 @@ public class BookingDetails extends AppCompatActivity
             } else if (id == R.id.payment_history) {
                 Intent i = new Intent(this, PaymentHistory.class);
                 startActivity(i);
-            } else if (id == R.id.setting) {
+            } /*else if (id == R.id.setting) {
                 Intent i = new Intent(this, Setting.class);
                 startActivity(i);
-            } else if (id == R.id.logout) {
+            } */else if (id == R.id.logout) {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
                 alertDialog.setTitle("Confirm Logout");
                 alertDialog.setMessage("Are you sure you want to Logout ?");
                 alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         editor.putString("isLoggedIn","false");
+                        editor.putString("access_token","1234");
                         editor.commit();
                         Intent i = new Intent(BookingDetails.this, Login.class);
+                        i.putExtra("reached_dest","false");
                         startActivity(i);
+                        finish();
                     }
                 });
                 alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -264,7 +297,8 @@ public class BookingDetails extends AppCompatActivity
 
         }catch (Exception e){
             swipeRefreshLayout.setRefreshing(false);
-            PrintClass.printValue("ResponseOfBookingList Exception ",e.toString());
+            PrintClass.printValue("ResponseOfBookingList Exception ", e.toString());
+            recyclerView.setVisibility(View.GONE);
             no_records.setVisibility(View.VISIBLE);
             no_records_img.setVisibility(View.VISIBLE);
             try {
@@ -292,7 +326,11 @@ public class BookingDetails extends AppCompatActivity
                     bookingList.setStatus(booking_jObj.getString("status"));
                     bookingList.setBooked_on(booking_jObj.getString("booked_on"));
                     bookingList.setAddress(booking_jObj.getString("address"));
-                    bookingList.setVendor_name(booking_jObj.getString("vendor_name"));
+                    if(booking_jObj.has("vendor_name")) {
+                        bookingList.setVendor_name(booking_jObj.getString("vendor_name"));
+                    } else {
+                        bookingList.setVendor_name("");
+                    }
                     bookingList_l.add(bookingList);
                 }
                 mAdapter.notifyDataSetChanged();
@@ -337,16 +375,34 @@ public class BookingDetails extends AppCompatActivity
         getBookingList("BookingDetailsRefresh");
     }
 
-    static  class BookingDetailsRecyclerViewHolder extends RecyclerView.ViewHolder {
-        TextView booking_id, vendor_name, vendor_number, vehicle_no, status;
+    class BookingDetailsRecyclerViewHolder extends RecyclerView.ViewHolder {
+        TextView booking_id, vendor_name, vendor_number, vehicle_no, status,
+                booking_id_text,vendor_name_text,vendor_number_text,vehicle_no_text,status_text;
 
         public BookingDetailsRecyclerViewHolder(View itemView) {
             super(itemView);
+            typeface_luci = Typeface.createFromAsset(getAssets(), "fonts/luci.ttf");
+
             booking_id = (TextView) itemView.findViewById(R.id.booking_id);
+            booking_id.setTypeface(typeface_luci);
             vendor_name = (TextView) itemView.findViewById(R.id.vendor_name);
+            vendor_name.setTypeface(typeface_luci);
             vendor_number = (TextView) itemView.findViewById(R.id.vendor_number);
+            vendor_number.setTypeface(typeface_luci);
             vehicle_no = (TextView) itemView.findViewById(R.id.vehicle_no);
+            vehicle_no.setTypeface(typeface_luci);
             status = (TextView) itemView.findViewById(R.id.status);
+            status.setTypeface(typeface_luci);
+            booking_id_text=(TextView)itemView.findViewById(R.id.booking_id_text);
+            booking_id_text.setTypeface(typeface_luci);
+            vendor_name_text=(TextView)itemView.findViewById(R.id.vendor_name_text);
+            vendor_name_text.setTypeface(typeface_luci);
+            vendor_number_text=(TextView)itemView.findViewById(R.id.vendor_number_text);
+            vendor_number_text.setTypeface(typeface_luci);
+            vehicle_no_text=(TextView)itemView.findViewById(R.id.vehicle_no_text);
+            vehicle_no_text.setTypeface(typeface_luci);
+            status_text=(TextView)itemView.findViewById(R.id.status_text);
+            status_text.setTypeface(typeface_luci);
         }
     }
 

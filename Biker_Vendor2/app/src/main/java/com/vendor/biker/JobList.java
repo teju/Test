@@ -14,10 +14,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +41,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class JobList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener ,
         SwipeRefreshLayout.OnRefreshListener{
@@ -56,6 +61,9 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
     private TextView no_records;
     private int total_count=0;
     private ImageView no_records_img;
+    private String booking_id="";
+    List<String> al = new ArrayList<>();
+    Set<String> hs = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,9 +99,126 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
 
         mRecyclerView = (RecyclerView) findViewById(R.id.job_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        getJobList("jobListDetails");
+        booking_id=getIntent().getStringExtra("booking_id");
 
+        if(!booking_id.equals("")){
+            if (prefrence.getString("isLoggedIn", "").equals("true")) {
+                changeStatus("picked", booking_id);
+            } else {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+                alertDialog.setTitle("Confirm Login");
+                alertDialog.setMessage("You are not logged in !! Would You like to login ??");
+                alertDialog.setPositiveButton("YES",  new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int which) {
+                        editor.putString("isLoggedIn","false");
+                        editor.commit();
+                        Intent i=new Intent(JobList.this,Login.class);
+                        startActivity(i);
+                        finish();
+                    }
+                });
+                alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        mRecyclerView.setVisibility(View.GONE);
+                        no_records.setVisibility(View.VISIBLE);
+                        no_records_img.setVisibility(View.VISIBLE);
+                        no_records.setText("You are not logged In !!");
+                    }
+                });
+                alertDialog.show();
+            }
+        } else {
+            if (prefrence.getString("isLoggedIn", "").equals("true")) {
+                getJobList("jobListDetails");
+            } else {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+                alertDialog.setTitle("Confirm Login");
+                alertDialog.setMessage("You are not logged in !! Would You like to login ??");
+                alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int which) {
+                        editor.putString("isLoggedIn","false");
+                        editor.commit();
+                        Intent i=new Intent(JobList.this,Login.class);
+                        startActivity(i);
+                        finish();
+                    }
+                });
+                alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        mRecyclerView.setVisibility(View.GONE);
+                        no_records.setVisibility(View.VISIBLE);
+                        no_records_img.setVisibility(View.VISIBLE);
+                        no_records.setText("You are not logged In !!");
+                    }
+                });
+                alertDialog.show();
+            }
+        }
     }
+
+    public void changeStatus(String status,String booking_id){
+        if (IsNetworkConnection.checkNetworkConnection(JobList.this)) {
+
+            String url = Constants.SERVER_URL + "vendor/change-status";
+            JSONObject params = new JSONObject();
+            try {
+                params.put("user_id",prefrence.getString("user_id", "") );
+                params.put("access_token",prefrence.getString("access_token", ""));
+                params.put("booking_id",booking_id);
+                params.put("status",status.toLowerCase());
+            } catch (JSONException e) {
+                e.printStackTrace();
+                PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
+            }
+            PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
+            new post_async(JobList.this,"changeStatus").execute(url, params.toString());
+        } else {
+            new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                    "No Internet Connection");
+        }
+    }
+
+    public void ResponseOfChangeStatus(String resultString) {
+        try {
+            JSONObject jsonObject = new JSONObject(resultString);
+            PrintClass.printValue("ResponseOfChangeStatus resultString ", " has data "
+                    + jsonObject.toString());
+            if(jsonObject.getString("status").equalsIgnoreCase("success")) {
+                new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                        "Status Changes Successfully");
+                offset =0 ;
+                jobList_l.clear();
+                if (prefrence.getString("isLoggedIn", "").equals("true")) {
+                    getJobList("jobListDetails");
+                } else {
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+                    alertDialog.setTitle("Confirm Login");
+                    alertDialog.setMessage("You are not logged in !! Would Youlike to login ??");
+                    alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,int which) {
+                            editor.putString("isLoggedIn","false");
+                            editor.commit();
+                            Intent i=new Intent(JobList.this,Login.class);
+                            startActivity(i);
+                            finish();
+                        }
+                    });
+                    alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    alertDialog.show();
+                }
+            }
+        }
+        catch (Exception e){
+            PrintClass.printValue("ResponseOfChangeStatus Exception ", e.toString());
+        }
+    }
+
     public void getJobList(String action){
         if (IsNetworkConnection.checkNetworkConnection(JobList.this)) {
             if(action.equals("JobListDetailsRefresh")) {
@@ -125,6 +250,9 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
             PrintClass.printValue("ResponseOfBookingList resultString "," has data "+jsonObject.toString());
             if(jsonObject.getString("status").equalsIgnoreCase("success")) {
                 if(jsonObject.has("bookinglist")) {
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    no_records.setVisibility(View.GONE);
+                    no_records_img.setVisibility(View.GONE);
                     JSONArray jsonarr_joblist=jsonObject.getJSONArray("bookinglist");
                     PrintClass.printValue("ResponseOfBookingList bookingList ",jsonarr_joblist.toString());
                     for (int i=0;i<jsonarr_joblist.length();i++){
@@ -137,6 +265,7 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
                         jobList.setCustomer_number(booking_jObj.getString("customer_name"));
                         jobList.setBooking_id(booking_jObj.getString("booking_id"));
                         jobList.setOtp(booking_jObj.getString("otp"));
+                        jobList.setStatus(booking_jObj.getString("status"));
                         if(booking_jObj.has("address")) {
                             JSONObject address=booking_jObj.getJSONObject("address");
                             jobList.setLatitude(address.getString("lattitude"));
@@ -225,6 +354,7 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
                     jobList.setCustomer_number(booking_jObj.getString("customer_name"));
                     jobList.setBooking_id(booking_jObj.getString("booking_id"));
                     jobList.setOtp(booking_jObj.getString("otp"));
+                    jobList.setStatus(booking_jObj.getString("status"));
                     if(booking_jObj.has("address")) {
                         JSONObject address=booking_jObj.getJSONObject("address");
                         jobList.setLatitude(address.getString("lattitude"));
@@ -256,26 +386,28 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
             } else {
                 Intent i=new Intent(this,ServerError.class);
                 startActivity(i);
+
             }
             // Handle the camera action
         }  else if (id == R.id.home) {
             Intent i=new Intent(this,MainActivity.class);
             startActivity(i);
-            finish();
         } else if (id == R.id.job_history) {
             Intent i=new Intent(this,JobHistory.class);
             startActivity(i);
-            finish();
         } else if (id == R.id.logout) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.setTitle("Confirm Logout");
             alertDialog.setMessage("Are you sure you want to Logout ?");
             alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,int which) {
-                    /*editor.putString("isLoggedIn","false");
-                    editor.commit();*/
+                    editor.putString("isLoggedIn","false");
+                    editor.putString("access_token","1234");
+                    editor.commit();
                     Intent i=new Intent(JobList.this,Login.class);
                     startActivity(i);
+                    finish();
+
                 }
             });
             alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -294,7 +426,7 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
 
     static class jobViewHolder extends RecyclerView.ViewHolder {
         Button map;
-        TextView booking_id,customer_name,customer_number,vehicle_no,otp;
+        TextView booking_id,customer_name,customer_number,vehicle_no,otp,status;
         public jobViewHolder(View itemView) {
             super(itemView);
             map =(Button)itemView.findViewById(R.id.map);
@@ -303,6 +435,8 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
             customer_number =(TextView)itemView.findViewById(R.id.customer_number);
             vehicle_no =(TextView)itemView.findViewById(R.id.vehicle_no);
             otp =(TextView)itemView.findViewById(R.id.otp);
+            status = (TextView) itemView.findViewById(R.id.status);
+
         }
     }
 
@@ -375,7 +509,7 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof jobViewHolder) {
-                jobViewHolder jobViewHolder = (jobViewHolder) holder;
+                final jobViewHolder jobViewHolder = (jobViewHolder) holder;
                 final JobListModel bookings = jobList_l.get(position);
 
                 jobViewHolder.booking_id.setText(bookings.getBooking_no());
@@ -384,6 +518,57 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
                 jobViewHolder.otp.setText(bookings.getOtp());
                 jobViewHolder.vehicle_no.setText(bookings.getVehicle_no());
                 jobViewHolder.map.setTag(position);
+                jobViewHolder.status.setTag(position);
+                jobViewHolder.status.setText(bookings.getStatus().toUpperCase());
+
+                if(bookings.getStatus().equalsIgnoreCase("Picked")) {
+                    jobViewHolder.status.setVisibility(View.VISIBLE);
+                    jobViewHolder.map.setVisibility(View.GONE);
+                    jobViewHolder.status.setBackgroundColor(getResources().getColor(R.color.light_red2));
+                } else if(bookings.getStatus().equalsIgnoreCase("InProcess")) {
+                    jobViewHolder.status.setVisibility(View.VISIBLE);
+                    jobViewHolder.map.setVisibility(View.GONE);
+                    jobViewHolder.status.setBackgroundColor(getResources().getColor(R.color.yellow));
+                } else if(bookings.getStatus().equalsIgnoreCase("Completed")) {
+                    jobViewHolder.map.setVisibility(View.GONE);
+                    jobViewHolder.status.setVisibility(View.VISIBLE);
+                    jobViewHolder.status.setBackgroundColor(getResources().getColor(R.color.blue));
+                } else if(bookings.getStatus().equalsIgnoreCase("Delivered")) {
+                    jobViewHolder.map.setVisibility(View.GONE);
+                    jobViewHolder.status.setVisibility(View.VISIBLE);
+                    jobViewHolder.status.setBackgroundColor(getResources().getColor(R.color.green));
+                }
+
+                jobViewHolder.status.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final int itemPosition = (Integer) v.getTag();
+                        final PopupMenu popupMenu = new PopupMenu(JobList.this, v, Gravity.FILL_HORIZONTAL);
+                        final Menu menu = popupMenu.getMenu();
+                        popupMenu.getMenuInflater().inflate(R.menu.menu_main, menu);
+                        popupMenu.show();
+                        if (jobList_l.get(itemPosition).getStatus().equalsIgnoreCase("Picked")) {
+                            menu.getItem(0).setEnabled(false);
+                            menu.getItem(2).setEnabled(false);
+                        } else if (jobList_l.get(itemPosition).getStatus().equalsIgnoreCase("InProcess")) {
+                            menu.getItem(0).setEnabled(false);
+                            menu.getItem(1).setEnabled(false);
+                        } else if (jobList_l.get(itemPosition).getStatus().equalsIgnoreCase("Completed")) {
+                            menu.getItem(0).setEnabled(false);
+                            menu.getItem(1).setEnabled(false);
+                        }
+                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+
+                                changeStatus(item.getTitle().toString(), jobList_l.get(itemPosition).getBooking_id());
+                                jobViewHolder.status.setText(item.getTitle().toString().toUpperCase());
+                                return true;
+                            }
+                        });
+
+                    }
+                });
                 jobViewHolder.map.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -393,8 +578,10 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
                         Intent i=new Intent(JobList.this,PathGoogleMapActivity.class);
                         i.putExtra("latitude",bookng.getLatitude());
                         i.putExtra("longitude",bookng.getLongitude());
-                        i.putExtra("otp",bookng.getOtp());
+                        i.putExtra("booking_id",bookng.getBooking_id());
                         startActivity(i);
+                        finish();
+
                     }
                 });
             } else if (holder instanceof LoadingViewHolder) {

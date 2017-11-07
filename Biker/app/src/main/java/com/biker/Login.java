@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.os.Build;
@@ -24,6 +26,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,12 +52,16 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     private BroadcastReceiver receiver;
     private SharedPreferences notiprefrence;
     String getPhoneNo="";
+    private Typeface typeface_luci;
+    private String reached_dest="false";
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         MultiDex.install(this);
+        reached_dest=getIntent().getStringExtra("reached_dest");
 
         receiver = new BroadcastReceiver() {
             @Override
@@ -78,12 +85,17 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 }
             }
         };
-        registerReceiver(receiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+
+       registerReceiver(receiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+        typeface_luci = Typeface.createFromAsset(getAssets(), "fonts/luci.ttf");
 
         rootView=findViewById(android.R.id.content);
         phone=(EditText)findViewById(R.id.phone);
+        phone.setTypeface(typeface_luci);
         sign_up=(TextView)findViewById(R.id.sign_up);
+        Button login_button = (Button) findViewById(R.id.login_button);
         sign_up.setOnClickListener(this);
+        login_button.setTypeface(typeface_luci);
 
         prefrence = getSharedPreferences("My_Pref", 0);
         notiprefrence = getSharedPreferences(getString(R.string.fcm_pref), 0);
@@ -95,6 +107,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
             requestContactPermission();
         }
     }
+
+
 
     public void notificationService(){
         if (IsNetworkConnection.checkNetworkConnection(Login.this)) {
@@ -162,7 +176,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 unregisterReceiver(receiver);
                 receiver = null;
             }
-            System.out.println("registerForActivityCallbacks "+" closed ");
+            System.out.println("registerForActivityCallbacks " + " closed ");
         } else {
             System.out.println("registerForActivityCallbacks "+" open ");
         }
@@ -213,15 +227,20 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 mBottomSheetDialog.show();
                 mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
                 Button submit = (Button) mBottomSheetDialog.findViewById(R.id.submit);
+                submit.setTypeface(typeface_luci);
+
                 TextView textView=(TextView)mBottomSheetDialog.findViewById(R.id.txtview);
+                textView.setTypeface(typeface_luci);
                 textView.setText(jsonObject.getString("message"));
                 otp = (EditText) mBottomSheetDialog.findViewById(R.id.otp);
+                otp.setTypeface(typeface_luci);
+
                 submit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String getotp = otp.getText().toString();
                         if (getotp.length() == 0) {
-                            otp.setError("Enter Your Otp" );
+                            otp.setError("Enter Your Otp");
                         } else {
                             otp.setError(null);
                             if (IsNetworkConnection.checkNetworkConnection(Login.this)) {
@@ -230,7 +249,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                                 JSONObject userparams = new JSONObject();
                                 JSONObject otpparams = new JSONObject();
                                 try {
-                                    userparams.put("username",getPhoneNo);
+                                    userparams.put("username", getPhoneNo);
                                     userparams.put("user_type", "customer");
                                     otpparams.put("otp_code", otp.getText().toString());
                                     jsonBody.put("LoginForm", userparams);
@@ -240,10 +259,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                                     PrintClass.printValue("SYSTEMPRINT PARAMS JSONException ", e.toString());
                                 }
                                 PrintClass.printValue("SYSTEMPRINT PARAMS", jsonBody.toString());
-
+                                mBottomSheetDialog.cancel();
                                 new post_async(Login.this, "LoginOtp").execute(url, jsonBody.toString());
 
-                                mBottomSheetDialog.cancel();
                             } else {
                                 new CustomToast().Show_Toast(getApplicationContext(), rootView,
                                         "No Internet Connection");
@@ -273,9 +291,15 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 editor.putString("access_token",jsonObject.getString("access_token"));
                 editor.commit();
                 notificationService();
-                Intent i = new Intent(Login.this, MainActivity.class);
-                startActivity(i);
-                finish();
+                if(reached_dest.equalsIgnoreCase("false")) {
+                    Intent i = new Intent(Login.this, MainActivity.class);
+                    startActivity(i);
+                    finish();
+                } else {
+                    Intent i = new Intent(Login.this, ReachedDestination.class);
+                    startActivity(i);
+                    finish();
+                }
             } else {
 
                 JSONObject errorjsonObject = jsonObject.getJSONObject("errors");
@@ -295,6 +319,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         }
     }
 
+
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -304,7 +330,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         this.finish();

@@ -9,11 +9,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -25,6 +27,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -33,7 +36,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.vendor.biker.Utils.Constants;
+import com.vendor.biker.Utils.CustomToast;
+import com.vendor.biker.Utils.IsNetworkConnection;
 import com.vendor.biker.Utils.PrintClass;
+import com.vendor.biker.Utils.post_async;
 import com.vendor.biker.model.PathJSONParser;
 
 public class PathGoogleMapActivity extends FragmentActivity {
@@ -45,6 +52,10 @@ public class PathGoogleMapActivity extends FragmentActivity {
     private LocationManager locationManager;
     double dest_latitude=0;
     double dest_longitude=0;
+    private View rootView;
+    private SharedPreferences prefrence;
+    private SharedPreferences.Editor editor;
+    private String booking_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +67,12 @@ public class PathGoogleMapActivity extends FragmentActivity {
         googleMap = fm.getMap();
         dest_latitude=Double.parseDouble(getIntent().getStringExtra("latitude"));
         dest_longitude=Double.parseDouble(getIntent().getStringExtra("longitude"));
+        booking_id=getIntent().getStringExtra("booking_id");
         PrintClass.printValue("PathGoogleMapActivity latitude ",dest_latitude+" longitude "+dest_longitude);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        rootView=findViewById(android.R.id.content);
+        prefrence = getSharedPreferences("My_Pref", 0);
+        editor = prefrence.edit();
 
         try {
             if (checkLocationPermission()) {
@@ -73,6 +88,27 @@ public class PathGoogleMapActivity extends FragmentActivity {
     }
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
+
+    public void deliver(View view){
+        if (IsNetworkConnection.checkNetworkConnection(PathGoogleMapActivity.this)) {
+            String url = Constants.SERVER_URL + "vendor/reached-destination";
+            JSONObject params = new JSONObject();
+            try {
+                params.put("user_id",prefrence.getString("user_id", ""));
+                params.put("access_token",prefrence.getString("access_token", ""));
+                params.put("booking_id",booking_id);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
+            }
+            PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
+            new post_async(PathGoogleMapActivity.this,"Deliver").execute(url, params.toString());
+        } else {
+            new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                    "No Internet Connection");
+        }
+    }
 
     public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
@@ -134,6 +170,7 @@ public class PathGoogleMapActivity extends FragmentActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     Intent I = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     startActivity(I);
+
                 }
             });
             AlertDialog al_gps = alert.create();
@@ -228,6 +265,27 @@ public class PathGoogleMapActivity extends FragmentActivity {
             googleMap.addMarker(new MarkerOptions().position(dest)
                     .title("Second Point"));
 
+        }
+    }
+
+    public void ResponseOfDestinationReached(String resultString) {
+        try {
+            JSONObject jsonObject = new JSONObject(resultString);
+            PrintClass.printValue("ResponseOfBookingAccept resultString ", " has data " + jsonObject.toString());
+            if(jsonObject.getString("status").equalsIgnoreCase("success")) {
+                Intent i=new Intent(this,JobList.class);
+                i.putExtra("booking_id", "");
+
+                startActivity(i);
+                finish();
+                new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                        "Successfully Accepted the booking request");
+            } else {
+                new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                        jsonObject.getString("message"));
+            }
+        } catch (Exception e){
+            PrintClass.printValue("ResponseOfBookingAccept Exception ", e.toString());
         }
     }
 

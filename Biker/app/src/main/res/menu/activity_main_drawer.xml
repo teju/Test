@@ -19,10 +19,12 @@
             android:id="@+id/payment_history"
             android:icon="@drawable/coin"
             android:title="Payment History" />
+<!--
         <item
             android:id="@+id/setting"
             android:icon="@drawable/settings"
             android:title="Settings" />
+-->
         <item
             android:id="@+id/logout"
             android:icon="@drawable/logout"

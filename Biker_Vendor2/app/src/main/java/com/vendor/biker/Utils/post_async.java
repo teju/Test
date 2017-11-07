@@ -19,6 +19,7 @@ import com.vendor.biker.JobHistory;
 import com.vendor.biker.JobList;
 import com.vendor.biker.Login;
 import com.vendor.biker.MainActivity;
+import com.vendor.biker.PathGoogleMapActivity;
 import com.vendor.biker.R;
 import com.vendor.biker.UserRegister;
 
@@ -30,6 +31,7 @@ import java.io.UnsupportedEncodingException;
  */
 public class post_async extends AsyncTask<String, Integer, String> {
     static String action = "", resultString = "";
+    private PathGoogleMapActivity pathGoogleMapActivity;
     private JobHistory jobHistory;
     private JobList jobList;
     private MainActivity mainActivity;
@@ -43,6 +45,11 @@ public class post_async extends AsyncTask<String, Integer, String> {
         this.action = action;
         this.context=userRegister;
         this.userRegister = userRegister;
+    }
+    public post_async(PathGoogleMapActivity pathGoogleMapActivity, String action) {
+        this.action = action;
+        this.context=pathGoogleMapActivity;
+        this.pathGoogleMapActivity = pathGoogleMapActivity;
     }
     public post_async(JobHistory jobHistory, String action) {
         this.action = action;
@@ -141,16 +148,15 @@ public class post_async extends AsyncTask<String, Integer, String> {
     }
 
     private void sendResult(String resultString) {
-        dialog.cancel();
         PrintClass.printValue("SYSTEMPRINT postsync  if  ", "action " + action +
                 " resultString " + resultString);
         try {
-             if (this.login != null && action.equalsIgnoreCase("Login")) {
+            dialog.cancel();
+            if (this.login != null && action.equalsIgnoreCase("Login")) {
             this.login.ResponseOfLogin(resultString);
             } else if (this.login != null && action.equalsIgnoreCase("LoginOtp")) {
                 this.login.ResponseOfLoginOtp(resultString);
-            }
-            if (this.userRegister != null && action.equalsIgnoreCase("UserRegister")) {
+            }else if (this.userRegister != null && action.equalsIgnoreCase("UserRegister")) {
                 this.userRegister.ResponseOfRegister(resultString);
             } else  if (this.userRegister != null && action.equalsIgnoreCase("UserGetProfileInfo")) {
                 this.userRegister.ResponseOfUserInfo(resultString);
@@ -176,8 +182,10 @@ public class post_async extends AsyncTask<String, Integer, String> {
                 this.jobHistory.ResponseOfJobList(resultString);
             } else  if (this.jobHistory != null && action.equalsIgnoreCase("jobHistoryDetailsReload")) {
                 this.jobHistory.ResponseOfjobListReload(resultString);
-            } else  if (this.jobHistory != null && action.equalsIgnoreCase("changeStatus")) {
-                this.jobHistory.ResponseOfChangeStatus(resultString);
+            } else  if (this.jobList != null && action.equalsIgnoreCase("changeStatus")) {
+                this.jobList.ResponseOfChangeStatus(resultString);
+            }else  if (this.pathGoogleMapActivity != null && action.equalsIgnoreCase("Deliver")) {
+                this.pathGoogleMapActivity.ResponseOfDestinationReached(resultString);
             }
         } catch (Exception e) {
             dialog.cancel();

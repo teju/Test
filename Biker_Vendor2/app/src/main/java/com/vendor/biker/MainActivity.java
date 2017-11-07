@@ -116,8 +116,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
-        getBookingList("BookingDetails");
         if (prefrence.getString("isLoggedIn", "").equals("true")) {
+            getBookingList("BookingDetails");
             receiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
@@ -137,10 +137,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Intent i = new Intent(context, ServerError.class);
                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(i);
+                        finish();
                     }
                 }
             };
             registerReceiver(receiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+        } else {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setTitle("Confirm Login");
+            alertDialog.setMessage("You are not logged in !! Would Youlike to login ??");
+            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,int which) {
+                    editor.putString("isLoggedIn","false");
+                    editor.commit();
+                    Intent i=new Intent(MainActivity.this,Login.class);
+                    startActivity(i);
+                    finish();
+                }
+            });
+            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                    recyclerView.setVisibility(View.GONE);
+                    no_records.setVisibility(View.VISIBLE);
+                    no_records_img.setVisibility(View.VISIBLE);
+                    no_records.setText("You are not logged In !!");
+                }
+            });
+            alertDialog.show();
         }
     }
 
@@ -199,6 +223,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             PrintClass.printValue("ResponseOfBookingList resultString "," has data "+jsonObject.toString());
             if(jsonObject.getString("status").equalsIgnoreCase("success")) {
                 if(jsonObject.has("bookinglist")) {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    no_records.setVisibility(View.GONE);
+                    no_records_img.setVisibility(View.GONE);
                     JSONArray jsonarr_bookinglist = jsonObject.getJSONArray("bookinglist");
                     PrintClass.printValue("ResponseOfBookingList bookingList ", jsonarr_bookinglist.toString());
                     for (int i = 0; i < jsonarr_bookinglist.length(); i++) {
@@ -313,7 +340,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getBookingList("BookingDetails");
             } else {
                 new CustomToast().Show_Toast(getApplicationContext(), rootView,
-                        jsonObject.getString("status"));
+                        jsonObject.getString("message"));
             }
         }catch (Exception e){
             PrintClass.printValue("ResponseOfBookingAccept Exception ", e.toString());
@@ -502,6 +529,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Handle the camera action
         }  else if (id == R.id.job_list) {
             Intent i=new Intent(this,JobList.class);
+            i.putExtra("booking_id","");
             startActivity(i);
         } else if (id == R.id.job_history) {
             Intent i=new Intent(this,JobHistory.class);
@@ -513,9 +541,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,int which) {
                     editor.putString("isLoggedIn","false");
+                    editor.putString("access_token","1234");
                     editor.commit();
                     Intent i=new Intent(MainActivity.this,Login.class);
                     startActivity(i);
+                    finish();
                 }
             });
             alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {

@@ -17,7 +17,6 @@ public class    FCMInstancdIdService  extends FirebaseInstanceIdService{
         super.onTokenRefresh();
         String resent_token= FirebaseInstanceId.getInstance().getToken();
         PrintClass.printValue("FCMInstancdIdService ","resent_token "+resent_token);
-
         SharedPreferences sharedPreferences=getApplicationContext().getSharedPreferences
                 (getString(R.string.fcm_pref), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=sharedPreferences.edit();

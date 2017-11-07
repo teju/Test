@@ -2,6 +2,7 @@ package com.biker;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +43,7 @@ public class UserRegister extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
+        Typeface typeface_luci = Typeface.createFromAsset(getAssets(), "fonts/luci.ttf");
 
         prefrence = getSharedPreferences("My_Pref", 0);
         editor = prefrence.edit();
@@ -51,6 +53,10 @@ public class UserRegister extends AppCompatActivity {
         Button click=(Button)findViewById(R.id.buttonclick);
         phone=(EditText)findViewById(R.id.phone);
         email=(EditText)findViewById(R.id.email);
+        name.setTypeface(typeface_luci);
+        phone.setTypeface(typeface_luci);
+        email.setTypeface(typeface_luci);
+        click.setTypeface(typeface_luci);
 
         type=getIntent().getStringExtra("type");
         PrintClass.printValue("UserRegisterPrint type ",type);
@@ -162,12 +168,12 @@ public class UserRegister extends AppCompatActivity {
                     getProfileInfo("update");
                 } else {
                     Intent i = new Intent(this, Login.class);
+                    i.putExtra("reached_dest","false");
                     startActivity(i);
+                    finish();
                 }
-
             } else {
                 JSONObject errorjsonObject = jsonObject.getJSONObject("errors");
-
                 if(errorjsonObject.has("mobile_no")) {
                     JSONArray jsonArray =errorjsonObject.getJSONArray("mobile_no");
                     new CustomToast().Show_Toast(getApplicationContext(), rootView,

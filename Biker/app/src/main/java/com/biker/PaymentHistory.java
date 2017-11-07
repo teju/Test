@@ -1,6 +1,7 @@
 package com.biker;
 
 import android.annotation.TargetApi;
+import android.content.ComponentCallbacks2;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -37,6 +38,7 @@ import com.biker.Utils.IsNetworkConnection;
 import com.biker.Utils.PrintClass;
 import com.biker.Utils.post_async;
 import com.biker.model.BookingList;
+import com.google.android.gms.wallet.PaymentMethodTokenizationParameters;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -109,9 +111,35 @@ public class PaymentHistory extends AppCompatActivity
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
+        if(prefrence.getString("isLoggedIn", "").equals("true")) {
 
+            // Constants.statusColor(this);
+            getPaymentList("PaymentHistory");
+        }else {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setTitle("Confirm Login");
+            alertDialog.setMessage("You are not logged in !! Would You like to login ??");
+            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,int which) {
+                    editor.putString("isLoggedIn","false");
+                    editor.commit();
+                    Intent i=new Intent(PaymentHistory.this,Login.class);
+                    i.putExtra("reached_dest","false");
+                    startActivity(i);
+                }
+            });
+            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                    recyclerView.setVisibility(View.GONE);
+                    no_records.setVisibility(View.VISIBLE);
+                    no_records_img.setVisibility(View.VISIBLE);
+                    no_records.setText("You are not logged In !!");
+                }
+            });
+            alertDialog.show();
+        }
         // Constants.statusColor(this);
-        getPaymentList("PaymentHistory");
     }
 
     public void getPaymentList(String action){
@@ -162,19 +190,22 @@ public class PaymentHistory extends AppCompatActivity
             } else if (id == R.id.booking_details) {
                 Intent i = new Intent(this, BookingDetails.class);
                 startActivity(i);
-            } else if (id == R.id.setting) {
+            } /*else if (id == R.id.setting) {
                 Intent i = new Intent(this, Setting.class);
                 startActivity(i);
-            } else if (id == R.id.logout) {
+            } */else if (id == R.id.logout) {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
                 alertDialog.setTitle("Confirm Logout");
                 alertDialog.setMessage("Are you sure you want to Logout ?");
                 alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        editor.putString("isLoggedIn","false");
+                        editor.putString("isLoggedIn", "false");
+                        editor.putString("access_token","1234");
                         editor.commit();
                         Intent i = new Intent(PaymentHistory.this, Login.class);
+                        i.putExtra("reached_dest","false");
                         startActivity(i);
+                        finish();
                     }
                 });
                 alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -240,7 +271,6 @@ public class PaymentHistory extends AppCompatActivity
                                                                           PaymentList_l.remove(PaymentList_l.size() - 1);
                                                                           mAdapter.notifyItemRemoved(PaymentList_l.size());
                                                                           //Load data
-                                                                          offset = offset + limit;
                                                                           getPaymentList("PaymentHistoryReload");
                                                                       }
                                                                   }

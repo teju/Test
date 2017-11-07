@@ -73,8 +73,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String getAddress="Not Found";
     private SharedPreferences.Editor editor;
     TextView profile_name;
-    private BroadcastReceiver receiver;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,50 +113,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
 
-        if(prefrence.getString("isLoggedIn", "").equals("true")) {
-            receiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    final ConnectivityManager connMgr = (ConnectivityManager) context
-                            .getSystemService(Context.CONNECTIVITY_SERVICE);
-                    System.out.println("NetworkChangeReceiverieieie "+" called");
-                    final android.net.NetworkInfo wifi = connMgr
-                            .getActiveNetworkInfo();
-                    if (wifi != null) {
-                        if (wifi.getType() == ConnectivityManager.TYPE_WIFI) {
-                            // connected to wifi
-                        } else if (wifi.getType() == ConnectivityManager.TYPE_MOBILE) {
-                            // connected to the mobile provider's data plan
-                        }
-                    } else {
-                        System.out.println("NetworkChangeReceiverieieie "+" isNotAvailable");
-                        Intent i=new Intent(context,ServerError.class);
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(i);
-                    }
-                }
-            };
-            registerReceiver(receiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
-
-        }
     }
 
-    public void onTrimMemory(final int level) {
-        System.out.println("registerForActivityCallbacks "+" level "+level);
-
-        if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
-            if(receiver !=null) {
-                unregisterReceiver(receiver);
-                receiver = null;
-            }
-            System.out.println("registerForActivityCallbacks "+" closed ");
-
-        } else {
-            System.out.println("registerForActivityCallbacks "+" open ");
-        }
-
-
-    }
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
@@ -337,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         PrintClass.printValue("SEARCHAUTOCOMPLETE requestCode ","" +requestCode);
 
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
-            PrintClass.printValue("SEARCHAUTOCOMPLETE requestCode"," ok ");
+            PrintClass.printValue("SEARCHAUTOCOMPLETE requestCode", " ok ");
 
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(this, data);
@@ -391,7 +347,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             this.finish();
-            onTrimMemory(ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN);
 
         }
     }
@@ -421,22 +376,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.payment_history) {
             Intent i=new Intent(this,PaymentHistory.class);
             startActivity(i);
-        } else if (id == R.id.setting) {
+        }/* else if (id == R.id.setting) {
             Intent i=new Intent(this,Setting.class);
             startActivity(i);
-        } else if (id == R.id.logout) {
+        } */else if (id == R.id.logout) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.setTitle("Confirm Logout");
             alertDialog.setMessage("Are you sure you want to Logout ?");
             alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,int which) {
                     editor.putString("isLoggedIn","false");
+                    editor.putString("access_token","1234");
                     editor.commit();
                     Intent i=new Intent(MainActivity.this,Login.class);
+                    i.putExtra("reached_dest","false");
                     startActivity(i);
+                    finish();
                 }
             });
-            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            alertDialog.setNegativeButton("NO",               new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
                 }

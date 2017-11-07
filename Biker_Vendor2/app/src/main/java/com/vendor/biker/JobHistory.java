@@ -98,8 +98,34 @@ public class JobHistory extends AppCompatActivity implements
 
         mRecyclerView = (RecyclerView) findViewById(R.id.job_history);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        if (prefrence.getString("isLoggedIn", "").equals("true")) {
+            getJobList("jobHistoryDetails");
+        } else {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setTitle("Confirm Login");
+            alertDialog.setMessage("You are not logged in !! Would Youlike to login ??");
+            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,int which) {
+                    editor.putString("isLoggedIn","false");
+                    editor.putString("access_token","1234");
+                    editor.commit();
+                    Intent i=new Intent(JobHistory.this,Login.class);
+                    startActivity(i);
+                    finish();
+                }
 
-        getJobList("jobHistoryDetails");
+            });
+            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                    mRecyclerView.setVisibility(View.GONE);
+                    no_records.setVisibility(View.VISIBLE);
+                    no_records_img.setVisibility(View.VISIBLE);
+                    no_records.setText("You are not logged In !!");
+                }
+            });
+            alertDialog.show();
+        }
 
     }
 
@@ -108,7 +134,7 @@ public class JobHistory extends AppCompatActivity implements
             if(action.equals("JobListDetailsRefresh")) {
                 swipeRefreshLayout.setRefreshing(true);
             }
-            String url = Constants.SERVER_URL + "vendor/ongoing-requests";
+            String url = Constants.SERVER_URL + "vendor/completed-requests";
             JSONObject params = new JSONObject();
             try {
                 params.put("user_id",prefrence.getString("user_id", "") );
@@ -134,6 +160,9 @@ public class JobHistory extends AppCompatActivity implements
             PrintClass.printValue("ResponseOfBookingList resultString "," has data "+jsonObject.toString());
             if(jsonObject.getString("status").equalsIgnoreCase("success")) {
                 if(jsonObject.has("bookinglist")) {
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    no_records.setVisibility(View.GONE);
+                    no_records_img.setVisibility(View.GONE);
                     JSONArray jsonarr_joblist=jsonObject.getJSONArray("bookinglist");
 
                     PrintClass.printValue("ResponseOfBookingList bookingList ",jsonarr_joblist.toString());
@@ -247,7 +276,7 @@ public class JobHistory extends AppCompatActivity implements
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+         int id = item.getItemId();
 
         if (id == R.id.profile) {
             if (IsNetworkConnection.checkNetworkConnection(JobHistory.this)) {
@@ -261,22 +290,23 @@ public class JobHistory extends AppCompatActivity implements
             // Handle the camera action
         }  else if (id == R.id.job_list) {
             Intent i=new Intent(this,JobList.class);
+            i.putExtra("booking_id","");
             startActivity(i);
-            finish();
         } else if (id == R.id.home) {
             Intent i=new Intent(this,MainActivity.class);
             startActivity(i);
-            finish();
         } else if (id == R.id.logout) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.setTitle("Confirm Logout");
             alertDialog.setMessage("Are you sure you want to Logout ?");
             alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,int which) {
-                    /*editor.putString("isLoggedIn","false");
-                    editor.commit();*/
+                    editor.putString("isLoggedIn","false");
+                    editor.putString("access_token","1234");
+                    editor.commit();
                     Intent i=new Intent(JobHistory.this,Login.class);
                     startActivity(i);
+                    finish();
                 }
             });
             alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -293,26 +323,11 @@ public class JobHistory extends AppCompatActivity implements
         return true;
     }
 
-    public void ResponseOfChangeStatus(String resultString) {
-        try {
-            JSONObject jsonObject = new JSONObject(resultString);
-            PrintClass.printValue("ResponseOfChangeStatus resultString ", " has data "
-                    + jsonObject.toString());
-            if(jsonObject.getString("status").equalsIgnoreCase("success")) {
-                new CustomToast().Show_Toast(getApplicationContext(), rootView,
-                        "Status Changes Successfully");
-                offset =0 ;
-                jobList_l.clear();
-                getJobList("jobHistoryDetails");
-            }
-        }
-        catch (Exception e){
-            PrintClass.printValue("ResponseOfChangeStatus Exception ", e.toString());
-        }
-    }
+
 
     static class jobViewHolder extends RecyclerView.ViewHolder {
-        TextView vendor_name,vendor_number,vehicle_no,booking_no,status;
+        private final TextView status;
+        TextView vendor_name,vendor_number,vehicle_no,booking_no;
         Button map;
         public jobViewHolder(View itemView) {
             super(itemView);
@@ -402,55 +417,8 @@ public class JobHistory extends AppCompatActivity implements
                 jobViewHolder.booking_no.setText(bookings.getBooking_no());
                 //jobViewHolder.vendor_number.setText(bookings.getCustomer_number());
                 jobViewHolder.vehicle_no.setText(bookings.getVehicle_no());
-                jobViewHolder.status.setTag(position);
-                jobViewHolder.status.setText(bookings.getStatus().toUpperCase());
-                if(bookings.getStatus().equalsIgnoreCase("Picked")) {
-                    jobViewHolder.status.setBackgroundColor(getResources().getColor(R.color.orange1));
-                } else if(bookings.getStatus().equalsIgnoreCase("InProcess")) {
-                    jobViewHolder.status.setBackgroundColor(getResources().getColor(R.color.yellow));
-                } else if(bookings.getStatus().equalsIgnoreCase("Completed")) {
-                    jobViewHolder.status.setBackgroundColor(getResources().getColor(R.color.blue));
-                } else if(bookings.getStatus().equalsIgnoreCase("Delivered")) {
-                    jobViewHolder.status.setBackgroundColor(getResources().getColor(R.color.green));
-                }
-                jobViewHolder.status.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        final int itemPosition = (Integer)v.getTag();
-                        final PopupMenu popupMenu = new PopupMenu(JobHistory.this, v, Gravity.FILL_HORIZONTAL);
-                        final Menu menu = popupMenu.getMenu();
-                        popupMenu.getMenuInflater().inflate(R.menu.menu_main, menu);
-                        popupMenu.show();
-                        if(jobList_l.get(itemPosition).getStatus().equalsIgnoreCase("Picked")) {
-                            menu.getItem(0).setEnabled(false);
-                            menu.getItem(2).setEnabled(false);
-                            menu.getItem(3).setEnabled(false);
-                        } else if(jobList_l.get(itemPosition).getStatus().equalsIgnoreCase("InProcess")) {
-                            menu.getItem(0).setEnabled(false);
-                            menu.getItem(1).setEnabled(false);
-                            menu.getItem(3).setEnabled(false);
-                        } else if(jobList_l.get(itemPosition).getStatus().equalsIgnoreCase("Completed")) {
-                            menu.getItem(0).setEnabled(false);
-                            menu.getItem(2).setEnabled(false);
-                            menu.getItem(1).setEnabled(false);
-                        } else if(jobList_l.get(itemPosition).getStatus().equalsIgnoreCase("Delivered")) {
-                            menu.getItem(0).setEnabled(false);
-                            menu.getItem(1).setEnabled(false);
-                            menu.getItem(2).setEnabled(false);
-                            jobViewHolder.status.setBackgroundColor(getResources().getColor(R.color.green));
-                        }
-                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem item) {
+                jobViewHolder.status.setText(bookings.getStatus());
 
-                                changeStatus(item.getTitle().toString(),jobList_l.get(itemPosition).getBooking_id());
-                                     jobViewHolder.status.setText(item.getTitle().toString().toUpperCase());
-                                return true;
-                            }
-                        });
-
-                    }
-                });
             } else if (holder instanceof LoadingViewHolder) {
                 LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
                 loadingViewHolder.progressBar.setIndeterminate(true);

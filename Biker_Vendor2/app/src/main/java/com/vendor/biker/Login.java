@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -72,6 +73,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                     Intent i=new Intent(context,ServerError.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(i);
+                    finish();
                 }
             }
         };
@@ -155,7 +157,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     }
 
     public void onTrimMemory(final int level) {
-        System.out.println("registerForActivityCallbacks "+" level "+level);
+        System.out.println("registerForActivityCallbacks " + " level " + level);
 
         if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
             if(receiver !=null) {
@@ -239,10 +241,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                                     PrintClass.printValue("SYSTEMPRINT PARAMS JSONException ", e.toString());
                                 }
                                 PrintClass.printValue("SYSTEMPRINT PARAMS", jsonBody.toString());
-
+                                mBottomSheetDialog.dismiss();
                                 new post_async(Login.this, "LoginOtp").execute(url, jsonBody.toString());
-
-                                mBottomSheetDialog.cancel();
                             } else {
                                 new CustomToast().Show_Toast(getApplicationContext(), rootView,
                                         "No Internet Connection");
@@ -264,17 +264,16 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
             final JSONObject jsonObject = new JSONObject(response);
             PrintClass.printValue("UserRegisterREsponse ResponseOfLoginOtp "," has data "+jsonObject.toString());
             if(!jsonObject.getString("status").equalsIgnoreCase("failed")){
-                editor.putString("isLoggedIn","true");
-                editor.putString("user_id",jsonObject.getString("user_id"));
-                editor.putString("name",jsonObject.getString("name"));
-                editor.putString("access_token",jsonObject.getString("access_token"));
+                editor.putString("isLoggedIn", "true");
+                editor.putString("user_id", jsonObject.getString("user_id"));
+                editor.putString("name", jsonObject.getString("name"));
+                editor.putString("access_token", jsonObject.getString("access_token"));
                 editor.commit();
                 notificationService();
                 Intent i = new Intent(Login.this, MainActivity.class);
                 startActivity(i);
                 finish();
             } else {
-
                 JSONObject errorjsonObject = jsonObject.getJSONObject("errors");
                 if(errorjsonObject.has("otp_code")) {
                     JSONArray jsonArray =errorjsonObject.getJSONArray("otp_code");
@@ -290,6 +289,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
             System.out.println("SYSTEMPRINT error UserRegister "+e.toString());
         }
     }
+    @Override
+    protected void onStop() {
+        onTrimMemory(ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN);
+        super.onStop();
+    }
+
 
     @Override
     public void onBackPressed() {

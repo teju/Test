@@ -221,6 +221,7 @@ public class UserRegister extends AppCompatActivity {
                 if(type.equals("update")){
                     Intent i = new Intent(UserRegister.this, MainActivity.class);
                     startActivity(i);
+                    finish();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -281,11 +282,17 @@ public class UserRegister extends AppCompatActivity {
                 String url = Constants.SERVER_URL + "profile/user-update-profile";
                 JSONObject jsonBody = new JSONObject();
                 JSONObject params = new JSONObject();
+                JSONObject params2 = new JSONObject();
                 try {
                     params.put("first_name",name.getText().toString() );
                     params.put("email", email.getText().toString());
                     params.put("mobile_no",phone.getText().toString());
+                    params.put("service_center_name", service_center_name.getText().toString());
+                    params2.put("address",getAddress);
+                    params2.put("lattitude", getLatitude);
+                    params2.put("longitude", getLongitude);
                     jsonBody.put("UpdateProfileForm", params);
+                    jsonBody.put("Address", params2);
                     jsonBody.put("user_id", prefrence.getString("user_id", ""));
                     jsonBody.put("access_token", prefrence.getString("access_token", ""));
                 } catch (JSONException e) {
@@ -317,7 +324,6 @@ public class UserRegister extends AppCompatActivity {
                     startActivity(i);
                     finish();
                 }
-
             } else {
                 JSONObject errorjsonObject = jsonObject.getJSONObject("errors");
 
@@ -350,6 +356,7 @@ public class UserRegister extends AppCompatActivity {
                 name.setText(userInfo.getString("first_name"));
                 email.setText(userInfo.getString("email"));
                 phone.setText(userInfo.getString("mobile_no"));
+                service_center_name.setText(userInfo.getString("service_center_name"));
                 editor.putString("name",userInfo.getString("first_name"));
                 editor.commit();
             } else {

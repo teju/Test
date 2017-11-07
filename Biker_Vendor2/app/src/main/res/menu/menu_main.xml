@@ -17,10 +17,5 @@
         android:orderInCategory="100"
         android:title="Completed"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/Delivered"
-        android:orderInCategory="100"
-        android:title="Delivered"
-        app:showAsAction="never" />
 
 </menu>

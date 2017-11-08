@@ -129,6 +129,7 @@ public class UserRegister extends AppCompatActivity {
                             android.Manifest.permission. ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
                         getLatLong();
+                        getProfileInfo();
                     }
 
                 } else {

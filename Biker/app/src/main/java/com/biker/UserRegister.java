@@ -187,7 +187,6 @@ public class UserRegister extends AppCompatActivity {
                     return;
                 }
             }
-
         } catch (Exception e){
             System.out.println("SYSTEMPRINT error UserRegister "+e.toString());
         }

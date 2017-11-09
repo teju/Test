@@ -449,6 +449,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Button submit = (Button) mBottomSheetDialog.findViewById(R.id.submit);
         vehicle_no = (EditText) mBottomSheetDialog.findViewById(R.id.vehicle_no);
         email = (EditText) mBottomSheetDialog.findViewById(R.id.email);
+        email.setText(prefrence.getString("email", ""));
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

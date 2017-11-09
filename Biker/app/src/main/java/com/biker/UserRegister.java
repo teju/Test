@@ -201,7 +201,8 @@ public class UserRegister extends AppCompatActivity {
                 name.setText(userInfo.getString("first_name"));
                 email.setText(userInfo.getString("email"));
                 phone.setText(userInfo.getString("mobile_no"));
-                editor.putString("name",userInfo.getString("first_name"));
+                editor.putString("name", userInfo.getString("first_name"));
+                editor.putString("email",userInfo.getString("email"));
                 editor.commit();
                 if(isUpdate){
                     Intent i = new Intent(UserRegister.this, MainActivity.class);

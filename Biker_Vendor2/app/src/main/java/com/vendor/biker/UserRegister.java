@@ -253,8 +253,8 @@ public class UserRegister extends AppCompatActivity {
                     params.put("first_name",name.getText().toString() );
                     params.put("email", email.getText().toString());
                     params.put("mobile_no",phone.getText().toString());
-                    params.put("user_type", service_center_name.getText().toString());
-                    params.put("service_center_name", "vendor");
+                    params.put("user_type", "vendor");
+                    params.put("service_center_name", service_center_name.getText().toString());
                     params2.put("address",getAddress);
                     params2.put("lattitude", getLatitude);
                     params2.put("longitude", getLongitude);

@@ -35,7 +35,27 @@ public class ReachedDestination extends AppCompatActivity {
         editor = prefrence.edit();
         otp=(EditText)findViewById(R.id.otp);
         rootView.setBackgroundResource(0);
+        if(!prefrence.getString("isLoggedIn", "").equals("true")) {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setTitle("Confirm Login");
+            alertDialog.setMessage("You are not logged in !! Would You like to login ??");
+            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,int which) {
+                    editor.putString("isLoggedIn", "false");
+                    editor.commit();
+                    Intent i=new Intent(ReachedDestination.this,Login.class);
+                    i.putExtra("reached_dest","true");
+                    startActivity(i);
+                }
+            });
+            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
 
+                }
+            });
+            alertDialog.show();
+        }
     }
 
     public void submit(View view){

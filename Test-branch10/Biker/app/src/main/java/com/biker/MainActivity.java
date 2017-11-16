@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google_map);
-
+        getAddress="";
         prefrence = getSharedPreferences("My_Pref", 0);
         editor = prefrence.edit();
       //  Constants.statusColor(this);
@@ -538,7 +538,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     finish();
                 }
             });
-            alertDialog.setNegativeButton("NO",               new DialogInterface.OnClickListener() {
+            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
                 }
@@ -556,52 +556,65 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     public void Submit(View view) {
-        final Dialog mBottomSheetDialog = new Dialog(this);
-        mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mBottomSheetDialog.setContentView(R.layout.books_service);
-        mBottomSheetDialog.setCancelable(true);
-        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        mBottomSheetDialog.show();
-        Button submit = (Button) mBottomSheetDialog.findViewById(R.id.submit);
-        vehicle_no = (EditText) mBottomSheetDialog.findViewById(R.id.vehicle_no);
-        email = (EditText) mBottomSheetDialog.findViewById(R.id.email);
-        email.setText(prefrence.getString("email", ""));
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate()) {
-                    if (IsNetworkConnection.checkNetworkConnection(MainActivity.this)) {
+        if (getAddress.length() != 0) {
+            final Dialog mBottomSheetDialog = new Dialog(this);
+            mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            mBottomSheetDialog.setContentView(R.layout.books_service);
+            mBottomSheetDialog.setCancelable(true);
+            mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            mBottomSheetDialog.show();
+            Button submit = (Button) mBottomSheetDialog.findViewById(R.id.submit);
+            vehicle_no = (EditText) mBottomSheetDialog.findViewById(R.id.vehicle_no);
+            email = (EditText) mBottomSheetDialog.findViewById(R.id.email);
+            email.setText(prefrence.getString("email", ""));
+            submit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (validate()) {
+                        if (IsNetworkConnection.checkNetworkConnection(MainActivity.this)) {
 
-                        String url = Constants.SERVER_URL + "booking/request";
+                            String url = Constants.SERVER_URL + "booking/request";
 
-                        JSONObject jsonBody = new JSONObject();
-                        JSONObject params = new JSONObject();
-                        JSONObject params2 = new JSONObject();
-                        try {
-                            params.put("email_id",email.getText().toString() );
-                            params.put("vehicle_no", vehicle_no.getText().toString());
-                            params2.put("address",getAddress);
-                            params2.put("lattitude",String.valueOf(getLatitude));
-                            params2.put("longitude",String.valueOf(getLongitude));
-                            jsonBody.put("Booking", params);
-                            jsonBody.put("Address", params2);
-                            jsonBody.put("user_id", prefrence.getString("user_id", ""));
-                            jsonBody.put("access_token", prefrence.getString("access_token", ""));
-                            PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + jsonBody.toString());
-                            new post_async(MainActivity.this, "BookingRequest").execute(url, jsonBody.toString());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            PrintClass.printValue("SYSTEMPRINT PARAMS Exception", e.toString());
+                            JSONObject jsonBody = new JSONObject();
+                            JSONObject params = new JSONObject();
+                            JSONObject params2 = new JSONObject();
+                            try {
+                                params.put("email_id", email.getText().toString());
+                                params.put("vehicle_no", vehicle_no.getText().toString());
+                                params2.put("address", getAddress);
+                                params2.put("lattitude", String.valueOf(getLatitude));
+                                params2.put("longitude", String.valueOf(getLongitude));
+                                jsonBody.put("Booking", params);
+                                jsonBody.put("Address", params2);
+                                jsonBody.put("user_id", prefrence.getString("user_id", ""));
+                                jsonBody.put("access_token", prefrence.getString("access_token", ""));
+                                PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + jsonBody.toString());
+                                new post_async(MainActivity.this, "BookingRequest").execute(url, jsonBody.toString());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                PrintClass.printValue("SYSTEMPRINT PARAMS Exception", e.toString());
+                            }
+                            mBottomSheetDialog.cancel();
+                        } else {
+                            new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                                    "No Internet Connection");
                         }
-                        mBottomSheetDialog.cancel();
-                    } else {
-                        new CustomToast().Show_Toast(getApplicationContext(), rootView,
-                                "No Internet Connection");
                     }
                 }
-            }
-        });
+            });
+        } else {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setTitle("Location Not Found");
+            alertDialog.setMessage("Make sure your GPS is enabled to book your service");
+            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,int which) {
+                   dialog.dismiss();
+                }
+            });
+
+            alertDialog.show();
+        }
     }
 
     public void ResponseOfBooking(String response){

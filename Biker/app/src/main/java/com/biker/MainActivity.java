@@ -1,23 +1,19 @@
 package com.biker;
 
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -30,9 +26,10 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.biker.Utils.Constants;
@@ -49,14 +46,25 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -65,25 +73,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ArrayList<LatLng> markerPoints;
     private GoogleMap map;
     private LocationManager locationManager;
-    private EditText vehicle_no, email,editText;
+    private EditText vehicle_no, email, editText;
     private View rootView;
     private SharedPreferences prefrence;
     private int backpress = 0;
-    double getLatitude=0,getLongitude=0;
-    String getAddress="Not Found";
+    double getLatitude = 0, getLongitude = 0;
+    String getAddress = "Not Found";
     private SharedPreferences.Editor editor;
     TextView profile_name;
+    private Button search_button;
+    float zoom_val = 15;
+    private SupportMapFragment fm;
+    private ImageView imageView;
+    private Marker marker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google_map);
-
+        getAddress = "";
         prefrence = getSharedPreferences("My_Pref", 0);
         editor = prefrence.edit();
-      //  Constants.statusColor(this);
-        rootView=findViewById(android.R.id.content);
-        editText=(EditText)findViewById(R.id.editText);
+        //  Constants.statusColor(this);
+        rootView = findViewById(android.R.id.content);
+        editText = (EditText) findViewById(R.id.editText);
+        search_button = (Button) findViewById(R.id.search_button);
+        fm = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+
+        imageView = (ImageView) findViewById(R.id.imageView);
+        imageView.setColorFilter(ContextCompat.getColor(MainActivity.this, R.color.black),
+                android.graphics.PorterDuff.Mode.SRC_IN);
+        RelativeLayout gps_icon = (RelativeLayout) findViewById(R.id.gps_icon);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -97,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
 
-        profile_name=(TextView)header.findViewById(R.id.profile_name);
+        profile_name = (TextView) header.findViewById(R.id.profile_name);
         profile_name.setText(prefrence.getString("name", ""));
         Typeface typeface = Typeface.createFromAsset(getAssets(),
                 "fonts/name_font.ttf");
@@ -107,12 +127,68 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (checkLocationPermission()) {
             if (ContextCompat.checkSelfPermission(this,
-                    android.Manifest.permission. ACCESS_FINE_LOCATION)
+                    android.Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
-                getLatLong();
+                getLatLong(zoom_val);
             }
         }
 
+        gps_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (checkLocationPermission()) {
+                    if (ContextCompat.checkSelfPermission(MainActivity.this,
+                            android.Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        imageView.setColorFilter(ContextCompat.getColor(MainActivity.this, R.color.blue),
+                                android.graphics.PorterDuff.Mode.SRC_IN);
+
+
+                        if (editText.getText().toString().length() == 0) {
+                            getLatLong(zoom_val + 4);
+                        } else {
+                            if (marker != null) {
+                                marker.remove();
+                            }
+                            showMap(getLatitude, getLongitude, zoom_val + 4);
+                        }
+                    }
+                }
+            }
+        });
+
+        if (map != null) {
+            map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    imageView.setColorFilter(ContextCompat.getColor(MainActivity.this, R.color.black),
+                            android.graphics.PorterDuff.Mode.SRC_IN);
+                    if(editText.getText().toString().length() == 0) {
+                        getLatLong(zoom_val + 2);
+                    } else {
+                        if(marker != null){
+                            marker.remove();
+                        }
+                        showMap(getLatitude,getLongitude,zoom_val);
+                    }
+                }
+            });
+        }
+
+        search_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(editText.getText().toString().trim().length() != 0) {
+                    if(marker != null){
+                        marker.remove();
+                    }
+                    search();
+                } else {
+                    new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                            "Enter the name of place you want to search");
+                }
+            }
+        });
     }
 
 
@@ -152,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     if (ContextCompat.checkSelfPermission(this,
                             android.Manifest.permission. ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
-                            getLatLong();
+                            getLatLong(zoom_val);
                     }
 
                 } else {
@@ -163,60 +239,84 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public void getLatLong(){
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.setMessage("Yout GPS seems to be disabled, do you want to enable it?");
-            alert.setPositiveButton("Back", new DialogInterface.OnClickListener() {
-
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            alert.setNegativeButton("Go to Settings", new DialogInterface.OnClickListener() {
-
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent I = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    startActivity(I);
-                }
-            });
-            AlertDialog al_gps = alert.create();
-            al_gps.show();
+    public void getLatLong(float zoom_val){
+        GPSTracker gps = new GPSTracker(this);
+        if(!gps.canGetLocation()){
+            gps.showSettingsAlert();
         } else {
-            Location location = getLastKnownLocation();
-            if (location != null) {
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
-                getLatitude=latitude;
-                getLongitude=longitude;
-                Geocoder geocoder;
-                List<Address> addresses = new ArrayList<>();
-                geocoder = new Geocoder(this, Locale.getDefault());
-                try {
-                    addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Location Not Found", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                getAddress = addresses.get(0).getAddressLine(0);
-                PrintClass.printValue("LATLOGVALUE ", "LAT :" + location.getLatitude() +
-                        " longitude " + getAddress);
-                showMap(latitude,longitude);
-            } else {
-                Toast.makeText(getApplicationContext(), "Location Not Found", Toast.LENGTH_LONG).show();
-                PrintClass.printValue("LATLOGVALUE ", "location null");
-            }
+            final double latitude = gps.getLatitude();
+            final double longitude = gps.getLongitude();
+            getLatitude=latitude;
+            getLongitude=longitude;
 
-        }
+            Thread t =new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject ret = getLocationInfo(latitude,longitude,"null");
+                    JSONObject json_location;
+                    try {
+                        json_location = ret.getJSONArray("results").getJSONObject(0);
+                        System.out.println("json_locationRESULT "+json_location);
+                        getAddress = json_location.getString("formatted_address");
+                        PrintClass.printValue("LATLOGVALUE ", "LAT :" + latitude +
+                                " longitude " + longitude+" address "+getAddress);
+                    } catch (JSONException e1) {
+                        e1.printStackTrace();
+                        PrintClass.printValue("LATLOGVALUE ", "JSONException  :"+e1.toString());
+                    }
+                }
+            }); t.start();
+            if(marker != null){
+                marker.remove();
+            }
+                showMap(latitude,longitude,zoom_val);
+            }
     }
 
-    public void showMap(double latitude,double longitude){
+    public JSONObject getLocationInfo(double lat,double lng,String address) {
+        HttpGet httpGet = null;
+        if(lat != 0 &&  lng != 0) {
+            httpGet = new HttpGet("http://maps.google.com/maps/api/geocode/json?latlng=" + lat + "," + lng + "&sensor=true");
+        } else {
+            try {
+                httpGet = new HttpGet("http://maps.googleapis.com/maps/api/geocode/json?address="+URLEncoder.encode(address,"UTF-8")
+                        +"&sensor=true");
+                PrintClass.printValue("getLocationInfo1234 ",
+                        "http://maps.googleapis.com/maps/api/geocode/json?address="+URLEncoder.encode(address,"UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+        HttpClient client = new DefaultHttpClient();
+        HttpResponse response;
+        StringBuilder stringBuilder = new StringBuilder();
+
+        try {
+            response = client.execute(httpGet);
+            HttpEntity entity = response.getEntity();
+            InputStream stream = entity.getContent();
+            int b;
+            while ((b = stream.read()) != -1) {
+                stringBuilder.append((char) b);
+            }
+        } catch (ClientProtocolException e) {
+        } catch (IOException e) {
+        }
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject = new JSONObject(stringBuilder.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
+    public void showMap(double latitude,double longitude,float zoom){
         dest = new LatLng(latitude, longitude);
         // Initializing
         markerPoints = new ArrayList<LatLng>();
         // Getting reference to SupportMapFragment of the activity_main
-        SupportMapFragment fm = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         // Getting Map for the SupportMapFragment
         map = fm.getMap();
         System.out.println("GOOGLEMAOP " + map);
@@ -226,9 +326,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             MarkerOptions options = new MarkerOptions();
             // Setting the position of the marker
             options.position(dest);
-            map.addMarker(options);
+            marker = map.addMarker(options);
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(dest,
-                    15));
+                    zoom));
             if (checkLocationPermission()) {
                 if (ContextCompat.checkSelfPermission(this,
                         android.Manifest.permission. ACCESS_FINE_LOCATION)
@@ -248,14 +348,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onRestart() {
-        super.onResume();
+        super.onRestart();
+        imageView.setColorFilter(ContextCompat.getColor(MainActivity.this, R.color.black),
+                android.graphics.PorterDuff.Mode.SRC_IN);
         PrintClass.printValue("ONRESUMEISBEING","CALLED");
         if(editText.getText().toString().length()==0) {
             if (checkLocationPermission()) {
                 if (ContextCompat.checkSelfPermission(this,
                         android.Manifest.permission.ACCESS_FINE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED) {
-                    getLatLong();
+                    getLatLong(zoom_val);
                 }
             }
         }
@@ -296,38 +398,82 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             PrintClass.printValue("SEARCHAUTOCOMPLETE requestCode", " ok ");
 
             if (resultCode == RESULT_OK) {
-                Place place = PlaceAutocomplete.getPlace(this, data);
+                final Place place = PlaceAutocomplete.getPlace(this, data);
                 PrintClass.printValue("SEARCHAUTOCOMPLETE ","" +place.getAddress());
                 Geocoder coder = new Geocoder(this);
                 List<Address> address;
                 editText.setText(place.getAddress());
-                try {
-                    address = coder.getFromLocationName(place.getAddress().toString(), 5);
-                    getAddress=place.getAddress().toString();
-                    if (address == null) {
-                        new CustomToast().Show_Toast(getApplicationContext(), rootView,
-                                "Address Not Found");
-                        getLatLong();
+                getAddress =place.getAddress().toString();
+                Thread t =new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        JSONObject ret = getLocationInfo(0,0, (String) place.getAddress().toString());
+                        try {
+                            try {
+
+                                final double longitute = ((JSONArray) ret.get("results")).getJSONObject(0)
+                                        .getJSONObject("geometry").getJSONObject("location")
+                                        .getDouble("lng");
+
+                                final double latitude = ((JSONArray)ret.get("results")).getJSONObject(0)
+                                        .getJSONObject("geometry").getJSONObject("location")
+                                        .getDouble("lat");
+
+                                getLatitude=latitude;
+                                getLongitude=longitute;
+                                PrintClass.printValue("SEARCHAUTOCOMPLETE "," getAddress " +getAddress
+                                        +" latitude "+getLatitude+" longitude "+getLongitude);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if(marker != null){
+                                            marker.remove();
+                                        }
+                                        showMap(latitude,longitute,15);
+
+                                    }
+                                });
+
+                            } catch (JSONException e) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                                                "Address Not Found");
+                                        getLatLong(zoom_val);
+
+                                    }
+                                });
+
+                                PrintClass.printValue("SEARCHAUTOCOMPLETE ","JSONException"  +e.toString());
+                            }
+                        } catch (Exception e1) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                                            "Address Not Found");
+                                    getLatLong(zoom_val);
+                                }
+                            });
+                            e1.printStackTrace();
+                            PrintClass.printValue("SEARCHAUTOCOMPLETE ","Exception " +e1.toString());
+                        }
                     }
-                    Address location = address.get(0);
-                    showMap(location.getLatitude(),location.getLongitude());
-                    getLongitude=location.getLatitude();
-                    getLongitude=location.getLongitude();
-                } catch (Exception e){
-                    getLatLong();
-                }
+                });t.start();
+
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
                 // TODO: Handle the error.
                 PrintClass.printValue("SEARCHAUTOCOMPLETE ","" +status.getStatusMessage());
                 new CustomToast().Show_Toast(getApplicationContext(), rootView,
                         "Address Not Found");
-                getLatLong();
+                getLatLong(zoom_val);
 
             } else if (resultCode == RESULT_CANCELED) {
                 new CustomToast().Show_Toast(getApplicationContext(), rootView,
                         "Address Not Found");
-                getLatLong();
+                getLatLong(zoom_val);
             }
         }
     }
@@ -394,7 +540,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     finish();
                 }
             });
-            alertDialog.setNegativeButton("NO",               new DialogInterface.OnClickListener() {
+            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
                 }
@@ -410,81 +556,67 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-    private Location getLastKnownLocation() {
-        List<String> providers = locationManager.getProviders(true);
-        Location bestLocation = null;
-        for (String provider : providers) {
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
-                            != PackageManager.PERMISSION_GRANTED) {
-
-            }
-            Location l = locationManager.getLastKnownLocation(provider);
-            PrintClass.printValue("LATLOGVALUE ", "last known location, provider: %s, location: %s" + provider +
-                    l);
-            if (l == null) {
-                continue;
-            }
-            if (bestLocation == null
-                    || l.getAccuracy() < bestLocation.getAccuracy()) {
-                PrintClass.printValue("LATLOGVALUE ", "found best last known location: %s" + l);
-                bestLocation = l;
-            }
-        }
-        if (bestLocation == null) {
-            return null;
-        }
-        return bestLocation;
-    }
 
     public void Submit(View view) {
-        final Dialog mBottomSheetDialog = new Dialog(this);
-        mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mBottomSheetDialog.setContentView(R.layout.books_service);
-        mBottomSheetDialog.setCancelable(true);
-        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        mBottomSheetDialog.show();
-        Button submit = (Button) mBottomSheetDialog.findViewById(R.id.submit);
-        vehicle_no = (EditText) mBottomSheetDialog.findViewById(R.id.vehicle_no);
-        email = (EditText) mBottomSheetDialog.findViewById(R.id.email);
-        email.setText(prefrence.getString("email", ""));
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate()) {
-                    if (IsNetworkConnection.checkNetworkConnection(MainActivity.this)) {
+        if (getAddress.length() != 0) {
+            final Dialog mBottomSheetDialog = new Dialog(this);
+            mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            mBottomSheetDialog.setContentView(R.layout.books_service);
+            mBottomSheetDialog.setCancelable(true);
+            mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            mBottomSheetDialog.show();
+            Button submit = (Button) mBottomSheetDialog.findViewById(R.id.submit);
+            vehicle_no = (EditText) mBottomSheetDialog.findViewById(R.id.vehicle_no);
+            email = (EditText) mBottomSheetDialog.findViewById(R.id.email);
+            email.setText(prefrence.getString("email", ""));
+            submit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (validate()) {
+                        if (IsNetworkConnection.checkNetworkConnection(MainActivity.this)) {
 
-                        String url = Constants.SERVER_URL + "booking/request";
+                            String url = Constants.SERVER_URL + "booking/request";
 
-                        JSONObject jsonBody = new JSONObject();
-                        JSONObject params = new JSONObject();
-                        JSONObject params2 = new JSONObject();
-                        try {
-                            params.put("email_id",email.getText().toString() );
-                            params.put("vehicle_no", vehicle_no.getText().toString());
-                            params2.put("address",getAddress);
-                            params2.put("lattitude",String.valueOf(getLatitude));
-                            params2.put("longitude",String.valueOf(getLongitude));
-                            jsonBody.put("Booking", params);
-                            jsonBody.put("Address", params2);
-                            jsonBody.put("user_id", prefrence.getString("user_id", ""));
-                            jsonBody.put("access_token", prefrence.getString("access_token", ""));
-                            PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + jsonBody.toString());
-                            new post_async(MainActivity.this, "BookingRequest").execute(url, jsonBody.toString());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            PrintClass.printValue("SYSTEMPRINT PARAMS Exception", e.toString());
+                            JSONObject jsonBody = new JSONObject();
+                            JSONObject params = new JSONObject();
+                            JSONObject params2 = new JSONObject();
+                            try {
+                                params.put("email_id", email.getText().toString());
+                                params.put("vehicle_no", vehicle_no.getText().toString());
+                                params2.put("address", getAddress);
+                                params2.put("lattitude", String.valueOf(getLatitude));
+                                params2.put("longitude", String.valueOf(getLongitude));
+                                jsonBody.put("Booking", params);
+                                jsonBody.put("Address", params2);
+                                jsonBody.put("user_id", prefrence.getString("user_id", ""));
+                                jsonBody.put("access_token", prefrence.getString("access_token", ""));
+                                PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + jsonBody.toString());
+                                new post_async(MainActivity.this, "BookingRequest").execute(url, jsonBody.toString());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                PrintClass.printValue("SYSTEMPRINT PARAMS Exception", e.toString());
+                            }
+                            mBottomSheetDialog.cancel();
+                        } else {
+                            new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                                    "No Internet Connection");
                         }
-                        mBottomSheetDialog.cancel();
-                    } else {
-                        new CustomToast().Show_Toast(getApplicationContext(), rootView,
-                                "No Internet Connection");
                     }
                 }
-            }
-        });
+            });
+        } else {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setTitle("Location Not Found");
+            alertDialog.setMessage("Make sure your GPS is enabled to book your service");
+            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,int which) {
+                   dialog.dismiss();
+                }
+            });
+
+            alertDialog.show();
+        }
     }
 
     public void ResponseOfBooking(String response){

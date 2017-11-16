@@ -237,14 +237,14 @@ public class BookingDetails extends AppCompatActivity
                     bookingList.setVehicle_no(booking_jObj.getString("vehicle_no"));
                     bookingList.setStatus(booking_jObj.getString("status"));
                     bookingList.setBooked_on(booking_jObj.getString("booked_on"));
-                    if(booking_jObj.has("mobile_no")) {
-                        bookingList.setVendor_no(booking_jObj.getString("mobile_no"));
-                    } else {
-                        bookingList.setVendor_no("");
-                    }
                     bookingList.setAddress(booking_jObj.getString("address"));
-                    if(booking_jObj.has("vendor_name")) {
+                    if(booking_jObj.has("mobile_no")) {
                         bookingList.setVendor_name(booking_jObj.getString("vendor_name"));
+                    } else {
+                        bookingList.setVendor_name("");
+                    }
+                    if(booking_jObj.has("mobile_no")) {
+                        bookingList.setVendor_nuber(booking_jObj.getString("mobile_no"));
                     } else {
                         bookingList.setVendor_name("");
                     }
@@ -327,17 +327,17 @@ public class BookingDetails extends AppCompatActivity
                     BookingList bookingList =new BookingList();
                     bookingList.setBooking_no(booking_jObj.getString("booking_no"));
                     bookingList.setEmail_id(booking_jObj.getString("email_id"));
-                    if(booking_jObj.has("mobile_no")) {
-                        bookingList.setVendor_no(booking_jObj.getString("mobile_no"));
-                    } else {
-                        bookingList.setVendor_no("");
-                    }
                     bookingList.setVehicle_no(booking_jObj.getString("vehicle_no"));
                     bookingList.setStatus(booking_jObj.getString("status"));
                     bookingList.setBooked_on(booking_jObj.getString("booked_on"));
                     bookingList.setAddress(booking_jObj.getString("address"));
                     if(booking_jObj.has("vendor_name")) {
                         bookingList.setVendor_name(booking_jObj.getString("vendor_name"));
+                    } else {
+                        bookingList.setVendor_name("");
+                    }
+                    if(booking_jObj.has("mobile_no")) {
+                        bookingList.setVendor_nuber(booking_jObj.getString("mobile_no"));
                     } else {
                         bookingList.setVendor_name("");
                     }
@@ -499,7 +499,7 @@ public class BookingDetails extends AppCompatActivity
                 userViewHolder.booking_id.setText(bookings.getBooking_no());
                 userViewHolder.vendor_name.setText(bookings.getVendor_name());
                 userViewHolder.vehicle_no.setText(bookings.getVehicle_no());
-                userViewHolder.vendor_number.setText(bookings.getVendor_no());
+                userViewHolder.vendor_number.setText(bookings.getVendor_nuber());
                 userViewHolder.status.setText(bookings.getStatus());
             } else if (holder instanceof BookingDetails.LoadingViewHolder) {
                 BookingDetails.LoadingViewHolder loadingViewHolder = (BookingDetails.LoadingViewHolder) holder;

@@ -2,7 +2,8 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
+    useLibrary  'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.biker"
@@ -31,6 +32,7 @@ dependencies {
     compile('com.google.android.gms:play-services:9.0.0') {
         exclude group: 'com.android.support', module: 'support-v4'
     }
+    compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
     compile 'com.google.gms:google-services:3.0.0'
     compile 'com.google.android.gms:play-services-gcm:9.0.0'
     compile 'com.google.firebase:firebase-crash:9.0.0'

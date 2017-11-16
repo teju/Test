@@ -288,7 +288,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 editor.putString("isLoggedIn","true");
                 editor.putString("user_id",jsonObject.getString("user_id"));
                 if(jsonObject.has("email")) {
-                    editor.putString("email", jsonObject.getString("email"));
+                    editor.putString("email",jsonObject.getString("email"));
                 }
                 editor.putString("name",jsonObject.getString("name"));
                 editor.putString("access_token",jsonObject.getString("access_token"));

@@ -170,6 +170,7 @@ public class JobHistory extends AppCompatActivity implements
                         JSONObject booking_jObj=jsonarr_joblist.getJSONObject(i);
                         JobListModel jobList =new JobListModel();
                         jobList.setBooking_no(booking_jObj.getString("booking_no"));
+                        jobList.setMobile_no(booking_jObj.getString("mobile_no"));
                         jobList.setVehicle_no(booking_jObj.getString("vehicle_no"));
                         jobList.setAddress(booking_jObj.getString("address"));
                         jobList.setCustomer_name(booking_jObj.getString("customer_name"));
@@ -255,6 +256,7 @@ public class JobHistory extends AppCompatActivity implements
                     JSONObject booking_jObj=jsonarr_joblist.getJSONObject(i);
                     JobListModel jobList =new JobListModel();
                     jobList.setBooking_no(booking_jObj.getString("booking_no"));
+                    jobList.setMobile_no(booking_jObj.getString("mobile_no"));
                     jobList.setVehicle_no(booking_jObj.getString("vehicle_no"));
                     jobList.setAddress(booking_jObj.getString("address"));
                     jobList.setCustomer_name(booking_jObj.getString("customer_name"));
@@ -413,7 +415,7 @@ public class JobHistory extends AppCompatActivity implements
 
                 //Setting the ArrayAdapter data on the Spinner
                 jobViewHolder.vendor_name.setText(bookings.getCustomer_name());
-                jobViewHolder.vendor_name.setText(bookings.getCustomer_name());
+                jobViewHolder.vendor_number.setText(bookings.getMobile_no());
                 jobViewHolder.booking_no.setText(bookings.getBooking_no());
                 //jobViewHolder.vendor_number.setText(bookings.getCustomer_number());
                 jobViewHolder.vehicle_no.setText(bookings.getVehicle_no());

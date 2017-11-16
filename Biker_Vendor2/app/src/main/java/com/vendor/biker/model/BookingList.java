@@ -55,6 +55,16 @@ public class BookingList {
 
     String booking_no;
     String vehicle_no;
+
+    public String getMobile_no() {
+        return mobile_no;
+    }
+
+    public void setMobile_no(String mobile_no) {
+        this.mobile_no = mobile_no;
+    }
+
+    String mobile_no;
     String status;
     String email_id;
     String booked_on;

@@ -265,6 +265,7 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
                         jobList.setCustomer_number(booking_jObj.getString("customer_name"));
                         jobList.setBooking_id(booking_jObj.getString("booking_id"));
                         jobList.setOtp(booking_jObj.getString("otp"));
+                        jobList.setMobile_no(booking_jObj.getString("mobile_no"));
                         jobList.setStatus(booking_jObj.getString("status"));
                         if(booking_jObj.has("address")) {
                             JSONObject address=booking_jObj.getJSONObject("address");
@@ -353,6 +354,7 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
                     jobList.setCustomer_name(booking_jObj.getString("customer_name"));
                     jobList.setCustomer_number(booking_jObj.getString("customer_name"));
                     jobList.setBooking_id(booking_jObj.getString("booking_id"));
+                    jobList.setMobile_no(booking_jObj.getString("mobile_no"));
                     jobList.setOtp(booking_jObj.getString("otp"));
                     jobList.setStatus(booking_jObj.getString("status"));
                     if(booking_jObj.has("address")) {
@@ -432,7 +434,7 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
             map =(Button)itemView.findViewById(R.id.map);
             booking_id =(TextView)itemView.findViewById(R.id.booking_id);
             customer_name =(TextView)itemView.findViewById(R.id.customer_name);
-            customer_number =(TextView)itemView.findViewById(R.id.customer_number);
+            customer_number =(TextView)itemView.findViewById(R.id.vendor_number);
             vehicle_no =(TextView)itemView.findViewById(R.id.vehicle_no);
             otp =(TextView)itemView.findViewById(R.id.otp);
             status = (TextView) itemView.findViewById(R.id.status);
@@ -514,7 +516,7 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
 
                 jobViewHolder.booking_id.setText(bookings.getBooking_no());
                 jobViewHolder.customer_name.setText(bookings.getCustomer_name());
-                //jobViewHolder.customer_number.setText(bookings.getCustomer_number());
+                jobViewHolder.customer_number.setText(bookings.getMobile_no());
                 jobViewHolder.otp.setText(bookings.getOtp());
                 jobViewHolder.vehicle_no.setText(bookings.getVehicle_no());
                 jobViewHolder.map.setTag(position);

@@ -55,6 +55,16 @@ public class BookingList {
 
     String booking_no;
     String vehicle_no;
+
+    public String getVendor_no() {
+        return vendor_no;
+    }
+
+    public void setVendor_no(String vendor_no) {
+        this.vendor_no = vendor_no;
+    }
+
+    String vendor_no;
     String status;
     String email_id;
     String booked_on;

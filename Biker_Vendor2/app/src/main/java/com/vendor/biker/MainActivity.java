@@ -234,6 +234,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         bookingList.setBooking_no(booking_jObj.getString("booking_no"));
                         bookingList.setBooking_id(booking_jObj.getString("booking_id"));
                         bookingList.setEmail_id(booking_jObj.getString("email_id"));
+                        bookingList.setMobile_no(booking_jObj.getString("mobile_no"));
                         bookingList.setVehicle_no(booking_jObj.getString("vehicle_no"));
                         bookingList.setStatus(booking_jObj.getString("status"));
                         bookingList.setBooked_on(booking_jObj.getString("booked_on"));
@@ -312,7 +313,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     JSONObject booking_jObj=jsonarr_bookinglist.getJSONObject(i);
                     BookingList bookingList =new BookingList();
                     bookingList.setBooking_no(booking_jObj.getString("booking_no"));
-                    bookingList.setBooking_id(booking_jObj.getString("booking_id"));
+                    bookingList.setMobile_no(booking_jObj.getString("mobile_no"));
                     bookingList.setEmail_id(booking_jObj.getString("email_id"));
                     bookingList.setVehicle_no(booking_jObj.getString("vehicle_no"));
                     bookingList.setStatus(booking_jObj.getString("status"));
@@ -447,6 +448,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 userViewHolder.booking_id.setText(bookings.getBooking_no());
                 userViewHolder.customer_name.setText(bookings.getCustomer_name());
                 userViewHolder.vehicle_no.setText(bookings.getVehicle_no());
+                userViewHolder.customer_number.setText(bookings.getMobile_no());
                 userViewHolder.action_accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

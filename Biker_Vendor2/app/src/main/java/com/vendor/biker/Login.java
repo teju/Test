@@ -211,6 +211,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 mBottomSheetDialog.setCancelable(true);
                 mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
+                 mBottomSheetDialog.setCanceledOnTouchOutside(false);
                 mBottomSheetDialog.show();
                 mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
                 Button submit = (Button) mBottomSheetDialog.findViewById(R.id.submit);

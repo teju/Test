@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_account_option"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.win.winfertility.AccountOptionActivity">
+    <include layout="@layout/view_main_bg"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <com.win.winfertility.tools.LogoActionBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </com.win.winfertility.tools.LogoActionBar>
+        <TextView style="@style/WinHeaderStyle"/>
+        <View style="@style/WinDividerLargeStyle"/>
+        <TextView
+            style="@style/WinTitleRedStyle"
+            android:text="Create An Account"/>
+        <View style="@style/WinDividerExLargeStyle"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <RadioButton
+                            android:clickable="false"
+                            android:id="@+id/rb_option_a"
+                            style="@null"
+                            android:button="@null"
+                            android:background="@drawable/draw_option_red"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="vertical">
+                            <TextView android:clickable="false" style="@style/WinBoldTextStyle" android:text="I want to get pregnant"/>
+                            <TextView android:clickable="false" style="@style/WinTextStyle" android:text="I want to learn about fertility and know when the most favorable days are for conception."/>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <View
+                        android:id="@+id/vw_option_a"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="#01000000"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </RelativeLayout>
+                <View style="@style/WinDividerLargeStyle"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <RadioButton
+                            android:clickable="false"
+                            android:id="@+id/rb_option_b"
+                            style="@null"
+                            android:button="@null"
+                            android:background="@drawable/draw_option_red"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="vertical">
+                            <TextView android:clickable="false" style="@style/WinBoldTextStyle" android:text="I just want to track my cycles"/>
+                            <TextView android:clickable="false" style="@style/WinTextStyle" android:text="I want to learn more about fertility and learn more about my cycle."/>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <View
+                        android:id="@+id/vw_option_b"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="#01000000"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <View style="@style/WinDividerExLargeStyle"/>
+            <Button
+                android:id="@+id/btn_next"
+                style="@style/WinRedButtonStyle"
+                android:layout_width="150dp"
+                android:text="Next"/>
+            <View style="@style/WinDividerExLargeStyle"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

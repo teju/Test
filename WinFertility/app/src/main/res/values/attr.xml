@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="WinAppStyleable">
+        <attr name="hide_back" format="boolean"/>
+        <attr name="src" format="reference"/>
+        <attr name="text" format="string"/>
+        <attr name="title" format="string"/>
+        <attr name="cell_height" format="integer"/>
+        <attr name="icon" format="reference"/>
+    </declare-styleable>
+</resources>

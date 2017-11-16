@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_reminder"
+    android:layout_width="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:layout_height="match_parent"
+    tools:context="com.win.winfertility.ReminderActivity">
+    <include layout="@layout/view_main_bg"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp">
+            <com.win.winfertility.tools.HomeActionBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </com.win.winfertility.tools.HomeActionBar>
+            <TextView
+                style="@style/WinTitleRedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Set A Reminder"
+                android:textColor="@color/WinDarkRedColor"
+                android:textSize="15dp"
+                android:padding="0dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"/>
+        </RelativeLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/WinDarkRedColor"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"/>
+        <LinearLayout
+            android:id="@+id/vw_controls"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            android:weightSum="8">
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"/>
+            <TextView
+                android:id="@+id/btn_delete"
+                style="@style/WinLabelStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="DELETE" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"/>
+        </LinearLayout>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="45dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp">
+                <TextView
+                    style="@style/WinEditRedStyle"
+                    android:id="@+id/reminder_type"
+                    android:padding="10dp"
+                    android:text="Reminder Type"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+                <View style="@style/WinDividerLargeStyle"/>
+
+                <EditText
+                    android:id="@+id/txt_title"
+                    style="@style/WinEditRedStyle"
+                    android:inputType="textCapSentences"
+                    android:hint="Reminder Title"/>
+                <View style="@style/WinDividerLargeStyle"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        style="@style/WinTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="All Day"/>
+                    <ToggleButton
+                        android:id="@+id/tb_all_days"
+                        android:layout_width="40dp"
+                        android:layout_height="20dp"
+                        android:textOn=""
+                        android:textOff=""
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/draw_red_toggle_button"/>
+                </RelativeLayout>
+                <View style="@style/WinDividerLargeStyle"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        style="@style/WinTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="Start Time"/>
+                    <TextView
+                        android:id="@+id/lbl_start_time"
+                        style="@style/WinTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/WinDarkRedColor"
+                        android:text="Tuesday, June 13 10:00 AM"/>
+                </RelativeLayout>
+                <View style="@style/WinDividerStyle"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        style="@style/WinTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="End Time"/>
+                    <TextView
+                        android:id="@+id/lbl_end_time"
+                        style="@style/WinTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/WinDarkRedColor"
+                        android:text="Tuesday, June 13 11:00 AM"/>
+                </RelativeLayout>
+                <View style="@style/WinDividerLargeStyle"/>
+                <EditText
+                    android:id="@+id/txt_email_to"
+                    style="@style/WinEditRedStyle"
+                    android:inputType="textEmailAddress"
+                    android:hint="Email Reminder To"/>
+                <View style="@style/WinDividerLargeStyle"/>
+
+                <EditText
+                    android:id="@+id/txt_reminder_text"
+                    style="@style/WinEditRedStyle"
+                    android:inputType="textMultiLine"
+                    android:layout_height="100dp"
+                    android:gravity="left|top"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:hint="Text of reminder"/>
+
+                <View style="@style/WinDividerLargeStyle"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+                    <TextView
+                        android:id="@+id/lbl_alert_time"
+                        style="@style/WinTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="Remind 15 Minutes Before"/>
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/win_right"
+                        android:scaleType="fitXY"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:alpha=".7"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/WinDarkRedColor"
+                        android:layout_alignParentBottom="true"/>
+                    <TextView
+                        android:textColor="#00000000"
+                        android:id="@+id/vw_alert_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+                    <EditText
+                        android:id="@+id/txt_location"
+                        style="@style/WinTextStyle"
+                        android:background="#00000000"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:hint="Set Location"/>
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/win_map"
+                        android:scaleType="fitXY"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:alpha=".7"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/WinDarkRedColor"
+                        android:layout_alignParentBottom="true"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+                    <TextView
+                        style="@style/WinTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="Repeat"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true">
+                        <TextView
+                            android:id="@+id/lbl_repeat"
+                            style="@style/WinLabelStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="10dp"
+                            android:inputType="textCapCharacters"
+                            android:textAllCaps="true"
+                            android:text="NEVER"/>
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/win_right"
+                            android:scaleType="fitXY"
+                            android:layout_gravity="center_vertical"
+                            android:alpha=".7"/>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/WinDarkRedColor"
+                        android:layout_alignParentBottom="true"/>
+                    <TextView
+                        android:textColor="#00000000"
+                        android:id="@+id/vw_repeat"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </RelativeLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/WinDarkRedColor"
+        android:layout_alignParentBottom="true"
+        android:textSize="15dp"
+        android:textColor="#FFFFFF"
+        android:text="SAVE"/>
+</RelativeLayout>

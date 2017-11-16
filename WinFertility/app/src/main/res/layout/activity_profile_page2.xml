@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_profile_page2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context="com.win.winfertility.ProfilePage2Activity">
+    <include layout="@layout/view_main_bg"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <com.win.winfertility.tools.LogoActionBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </com.win.winfertility.tools.LogoActionBar>
+            <View style="@style/WinDividerStyle"/>
+            <TextView
+                style="@style/WinTitleRedStyle"
+                android:text="Create A Fertility Profile"/>
+            <View style="@style/WinDividerExLargeStyle"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp">
+                <TextView
+                    style="@style/WinLabelStyle"
+                    android:text="BMI (Body Mass Index)"/>
+                <View style="@style/WinDividerStyle"/>
+                <EditText
+                    android:id="@+id/txt_height"
+                    style="@style/WinEditRedStyle"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:hint="Height (inches)"/>
+                <View style="@style/WinDividerStyle"/>
+                <EditText
+                    android:id="@+id/txt_weight"
+                    style="@style/WinEditRedStyle"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:hint="Weight (lbs)"/>
+                <View style="@style/WinDividerLargeStyle"/>
+                <TextView
+                    style="@style/WinLabelStyle"
+                    android:text="Medications and Conditions"/>
+                <View style="@style/WinDividerStyle"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+                    <TextView
+                        android:id="@+id/sel_thyroid"
+                        style="@style/WinRedSelectBoxStyle"
+                        android:layout_width="0px"
+                        android:layout_weight="1"
+                        android:layout_marginRight="5dp"
+                        android:hint="Thyroid"
+                        android:gravity="center"/>
+                    <TextView
+                        android:id="@+id/sel_diabetes"
+                        style="@style/WinRedSelectBoxStyle"
+                        android:layout_width="0px"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:hint="Diabetes"
+                        android:gravity="center"/>
+                </LinearLayout>
+                <View style="@style/WinDividerStyle"/>
+                <TextView
+                    android:id="@+id/sel_tobacco_use"
+                    style="@style/WinRedSelectBoxStyle"
+                    android:hint="Tobacco Use"/>
+                <View style="@style/WinDividerStyle"/>
+                <TextView
+                    android:id="@+id/sel_recreational_drugs"
+                    style="@style/WinRedSelectBoxStyle"
+                    android:hint="Recreational Drug Use"/>
+                <View style="@style/WinDividerStyle"/>
+                <TextView
+                    android:id="@+id/sel_std"
+                    style="@style/WinRedSelectBoxStyle"
+                    android:hint="STD's"/>
+                <View style="@style/WinDividerStyle"/>
+                <TextView
+                    android:id="@+id/sel_prev_pregnancy"
+                    style="@style/WinRedSelectBoxStyle"
+                    android:hint="Previous Pregnancy"/>
+                <View style="@style/WinDividerStyle"/>
+                <EditText
+                    android:id="@+id/txt_medications"
+                    android:maxLength="100"
+                    style="@style/WinEditRedStyle"
+                    android:inputType="textCapWords"
+                    android:hint="List medications"/>
+                <View style="@style/WinDividerExLargeStyle"/>
+                <Button
+                    android:id="@+id/btn_next"
+                    style="@style/WinRedButtonStyle"
+                    android:layout_width="150dp"
+                    android:text="Next"/>
+                <View style="@style/WinDividerStyle"/>
+                <TextView
+                    android:id="@+id/btn_skip_for_now"
+                    style="@style/WinLinkStyle"
+                    android:layout_marginBottom="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Skip this for now"/>
+                <View style="@style/WinDividerExLargeStyle"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.win.winfertility.LoginActivity">
+    <include layout="@layout/view_main_bg"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <com.win.winfertility.tools.LogoActionBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </com.win.winfertility.tools.LogoActionBar>
+        <TextView style="@style/WinHeaderStyle"/>
+        <View style="@style/WinDividerLargeStyle"/>
+        <TextView
+            style="@style/WinTitleVioletStyle"
+            android:text="Sign In"/>
+        <View style="@style/WinDividerLargeStyle"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp">
+            <EditText
+                android:id="@+id/txt_email"
+                style="@style/WinEditVioletStyle"
+                android:inputType="textEmailAddress"
+                android:hint="Email Address"/>
+            <View style="@style/WinDividerStyle"/>
+            <EditText
+                android:id="@+id/txt_password"
+                style="@style/WinEditVioletStyle"
+                android:inputType="textPassword"
+                android:hint="Password"/>
+            <View style="@style/WinDividerExLargeStyle"/>
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="180dp"
+                style="@style/WinVioletButtonStyle"
+                android:text="Log In"/>
+        </LinearLayout>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/btn_forgot_password"
+        style="@style/WinLinkStyle"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="Forgot My Password"/>
+</RelativeLayout>

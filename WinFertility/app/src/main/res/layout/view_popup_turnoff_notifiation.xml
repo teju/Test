@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#40000000"
+    android:clickable="false"
+    android:focusable="false">
+
+        <RelativeLayout
+            android:paddingTop="60dp"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/dialog_holo_light_frame"
+                android:layout_margin="10dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16dp"
+                            android:text="Turn off notifications"
+                            android:textColor="#666666"
+                            android:textStyle="bold"
+                            android:layout_marginLeft="10dp"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_horizontal"/>
+                    </LinearLayout>
+                    <View style="@style/WinDividerLargeStyle"/>
+                    <TextView
+                        style="@style/WinTextStyle"
+                        android:textAlignment="center"
+                        android:text="Would you recommend this app to a friend?"/>
+                    <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_horizontal">
+                        <RadioButton
+                            android:checked="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Yes"
+                            android:paddingLeft="5dp"
+                            android:id="@+id/rb_turn_off_notify_recommend_yes"
+                            android:button="@drawable/draw_option_blue"/>
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="No"
+                            android:paddingLeft="5dp"
+                            android:id="@+id/rb_turn_off_notify_recommend_no"
+                            android:button="@drawable/draw_option_blue"
+                            android:layout_marginLeft="20dp"/>
+                    </RadioGroup>
+                    <View style="@style/WinDividerStyle"/>
+                    <TextView
+                        style="@style/WinTextStyle"
+                        android:textAlignment="center"
+                        android:text="What additional application features would be helpful to you?"/>
+                    <View style="@style/WinDividerStyle"/>
+                    <EditText
+                        android:id="@+id/txt_turnoff_notification_text"
+                        style="@style/WinEditBlueStyle"
+                        android:inputType="textCapSentences"
+                        android:layout_height="80dp"
+                        android:hint="Comments"
+                        android:padding="10dp"
+                        android:gravity="top|left"/>
+                    <View style="@style/WinDividerStyle"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp">
+                        <Button
+                            android:id="@+id/btn_turnoff_notification_proceed"
+                            style="@style/WinBlueButtonStyle"
+                            android:text="Proceed"
+                            android:layout_width="150dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_margin="5dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+            <ImageView
+                android:background="@drawable/draw_white_round"
+                android:id="@+id/btn_turnoff_notification_close"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/win_blue_close"
+                android:scaleType="fitXY"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
+</RelativeLayout>

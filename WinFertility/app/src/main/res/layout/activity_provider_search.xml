@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_provider_search"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.win.winfertility.ProviderSearchActivity">
+    <include layout="@layout/view_main_bg"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp">
+            <com.win.winfertility.tools.HomeActionBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </com.win.winfertility.tools.HomeActionBar>
+            <TextView
+                style="@style/WinTitleGreenStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Provider Search"
+                android:textSize="15dp"
+                android:padding="0dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/WinGreenColor"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    style="@style/WinTextStyle"
+                    android:layout_margin="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="Speak with a WINFertility Nurse to select a in-network provider that meets your specific needs or click on the logo below to see all providers available."/>
+                <include layout="@layout/view_contact_options"/>
+                <View style="@style/WinDividerStyle"/>
+
+                <LinearLayout
+                    android:id="@+id/pnl_win_fertility"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/WinGreenColor"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_alignParentBottom="true"/>
+                    <View style="@style/WinDividerLargeStyle"/>
+                    <TextView
+                        style="@style/WinTitleGreenStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="@string/provider_caption"
+                        android:textSize="15dp"
+                        android:inputType="textCapWords"
+                        android:padding="0dp"/>
+                    <View style="@style/WinDividerLargeStyle"/>
+                    <ImageView
+                        android:id="@+id/vw_fertility_logo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/win_fertility_logo"/>
+                    <View style="@style/WinDividerLargeStyle"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/pnl_employer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/WinGreenColor"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_alignParentBottom="true"/>
+                    <View style="@style/WinDividerLargeStyle"/>
+                    <TextView
+                        style="@style/WinTitleGreenStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="@string/provider_caption"
+                        android:textSize="15dp"
+                        android:inputType="textCapWords"
+                        android:padding="0dp"/>
+                    <View style="@style/WinDividerLargeStyle"/>
+<!--
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/img_employer"
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:layout_margin="10dp"
+                            android:layout_centerInParent="true"/>
+                    </RelativeLayout>
+-->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ListView
+                            android:id="@+id/lvw_links"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:divider="#0000"
+                            android:dividerHeight="0dp"
+                            android:background="#0000">
+                        </ListView>
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+    <include android:id="@+id/vw_richtext_input_dialog" android:visibility="gone" layout="@layout/view_popup_feedback"/>
+</RelativeLayout>

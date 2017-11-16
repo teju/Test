@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_margin="10dp"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:id="@+id/logo"
+        android:src="@drawable/bierlogo"
+        android:layout_marginTop="70dp"
+        android:layout_gravity="center_horizontal"/>
+    <com.biker.Utils.MyTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logo"
+        android:text="Verify Your OTP."
+        android:gravity="center_horizontal"
+        android:textSize="@dimen/normal"
+        android:id="@+id/txtview"
+        android:textColor="@color/black"
+        android:layout_marginTop="10dp"/>
+    <com.biker.Utils.MyEditText
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:layout_below="@+id/txtview"
+        android:id="@+id/otp"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/normal"
+        android:inputType="number"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@android:drawable/editbox_background_normal"
+        android:layout_marginBottom="20dp"
+        android:textAlignment="center"
+        android:hint="OTP"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/otp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="35dp"
+        android:onClick="submit"
+        android:id="@+id/submit"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@drawable/bg"
+        android:textColor="@color/white"
+        android:layout_marginBottom="20dp"
+        android:text="SUBMIT OTP"/>
+</RelativeLayout>
+    </RelativeLayout>

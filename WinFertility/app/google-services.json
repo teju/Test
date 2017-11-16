@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "749928760599",
+    "firebase_url": "https://winfertility-ispl-2017.firebaseio.com",
+    "project_id": "winfertility-ispl-2017",
+    "storage_bucket": "winfertility-ispl-2017.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:749928760599:android:e6a590f498a29298",
+        "android_client_info": {
+          "package_name": "com.win.winfertility"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "749928760599-0si88e3868a774it2i8tm6cqqdt6gva0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIHWErITIQjp2qYW778RAnk-oxoMjhkYE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

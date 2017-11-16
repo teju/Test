@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_profile_page3"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.win.winfertility.MenstrualInfoActivity">
+    <include layout="@layout/view_main_bg"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <com.win.winfertility.tools.LogoActionBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </com.win.winfertility.tools.LogoActionBar>
+            <View style="@style/WinDividerStyle"/>
+            <TextView
+                style="@style/WinTitleRedStyle"
+                android:text="Create A Fertility Profile"/>
+            <View style="@style/WinDividerStyle"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp">
+                <TextView
+                    style="@style/WinTextStyle"
+                    android:layout_marginBottom="20dp"
+                    android:textAlignment="center"
+                    android:text="Tracking your periods can be helpful in identify potential fertility issues. Please indicate the following."/>
+                <TextView
+                    style="@style/WinLabelStyle"
+                    android:text="When did your last period start?"/>
+                <View style="@style/WinDividerStyle"/>
+                <TextView
+                    android:id="@+id/sel_months"
+                    style="@style/WinRedSelectBoxStyle"
+                    android:hint="Month"/>
+                <View style="@style/WinDividerStyle"/>
+                <TextView
+                    android:id="@+id/sel_days"
+                    style="@style/WinRedSelectBoxStyle"
+                    android:inputType="number"
+                    android:hint="Day"/>
+                <View style="@style/WinDividerLargeStyle"/>
+                <TextView
+                    style="@style/WinLabelStyle"
+                    android:text="On average, how long does your period last?"/>
+                <View style="@style/WinDividerStyle"/>
+                <TextView
+                    android:id="@+id/sel_period_days"
+                    style="@style/WinRedSelectBoxStyle"
+                    android:inputType="text"
+                    android:hint="Number of days"/>
+                <View style="@style/WinDividerStyle"/>
+                <TextView
+                    style="@style/WinLabelStyle"
+                    android:text="On average, how long is your cycle?"/>
+                <View style="@style/WinDividerStyle"/>
+                <TextView
+                    android:id="@+id/sel_cycle_days"
+                    style="@style/WinRedSelectBoxStyle"
+                    android:inputType="text"
+                    android:hint="Number of days"/>
+                <View style="@style/WinDividerExLargeStyle"/>
+                <Button
+                    android:id="@+id/btn_next"
+                    style="@style/WinRedButtonStyle"
+                    android:layout_width="150dp"
+                    android:text="Next"/>
+                <View style="@style/WinDividerStyle"/>
+                <TextView
+                    android:id="@+id/btn_skip_for_now"
+                    style="@style/WinLinkStyle"
+                    android:layout_marginBottom="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Skip this for now"/>
+                <View style="@style/WinDividerExLargeStyle"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

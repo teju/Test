@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_profile_page1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.win.winfertility.ProfilePage1Activity">
+    <include layout="@layout/view_main_bg"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <com.win.winfertility.tools.LogoActionBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </com.win.winfertility.tools.LogoActionBar>
+            <View style="@style/WinDividerStyle"/>
+            <TextView
+                style="@style/WinTitleRedStyle"
+                android:text="Create A Fertility Profile"/>
+            <View style="@style/WinDividerStyle"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp">
+                <TextView
+                    style="@style/WinTextStyle"
+                    android:textAlignment="center"
+                    android:text="There are many factors that determine your likelihood to become pregnant."/>
+                <TextView
+                    style="@style/WinTextStyle"
+                    android:layout_marginBottom="20dp"
+                    android:textAlignment="center"
+                    android:text="The questions below will help to identify potential factors and allow you to generate a report which you can provide to a health professional if you choose to."/>
+                <TextView
+                    style="@style/WinLabelStyle"
+                    android:text="Profile and Relationship"/>
+                <View style="@style/WinDividerStyle"/>
+                <TextView
+                    android:id="@+id/sel_relationship"
+                    style="@style/WinRedSelectBoxStyle"
+                    android:inputType="text"
+                    android:hint="I am in a relationship with…"/>
+                <View style="@style/WinDividerStyle"/>
+                <TextView
+                    android:id="@+id/sel_sexual_orientation"
+                    style="@style/WinRedSelectBoxStyle"
+                    android:inputType="text"
+                    android:hint="Sexual Orientation"/>
+                <View style="@style/WinDividerLargeStyle"/>
+                <TextView
+                    style="@style/WinLabelStyle"
+                    android:text="Lifestyle"/>
+                <View style="@style/WinDividerStyle"/>
+                <TextView
+                    android:id="@+id/sel_sleep_hours"
+                    style="@style/WinRedSelectBoxStyle"
+                    android:inputType="text"
+                    android:hint="Number of hours of sleep per night"/>
+                <View style="@style/WinDividerStyle"/>
+                <TextView
+                    android:id="@+id/sel_exercise"
+                    style="@style/WinRedSelectBoxStyle"
+                    android:inputType="text"
+                    android:hint="Exercise"/>
+                <View style="@style/WinDividerStyle"/>
+                <TextView
+                    android:id="@+id/sel_stress_level"
+                    style="@style/WinRedSelectBoxStyle"
+                    android:inputType="text"
+                    android:hint="General Stress Level"/>
+                <View style="@style/WinDividerExLargeStyle"/>
+                <Button
+                    android:id="@+id/btn_next"
+                    style="@style/WinRedButtonStyle"
+                    android:layout_width="150dp"
+                    android:text="Next"/>
+                <View style="@style/WinDividerStyle"/>
+                <TextView
+                    android:id="@+id/btn_skip_for_now"
+                    style="@style/WinLinkStyle"
+                    android:layout_marginBottom="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Skip this for now"/>
+                <View style="@style/WinDividerExLargeStyle"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

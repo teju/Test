@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_edit_profile"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.win.winfertility.ViewProfileActivity">
+    <include layout="@layout/view_main_bg"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
+        <com.win.winfertility.tools.HomeActionBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </com.win.winfertility.tools.HomeActionBar>
+        <TextView
+            style="@style/WinTitleRedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Profile Settings"
+            android:textColor="@color/WinBlueColor"
+            android:textSize="15dp"
+            android:padding="0dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/WinBlueColor"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="45dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp">
+            <LinearLayout
+                android:id="@+id/vw_upload_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/img_profile"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/win_profile"
+                    app:civ_border_width="1px"
+                    app:civ_border_color="@color/WinDarkRedColor"/>
+                <TextView
+                    android:id="@+id/lbl_upload_photo"
+                    style="@style/WinBoldTextStyle"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="wrap_content"
+                    android:text="Upload Photo"/>
+            </LinearLayout>
+            <View style="@style/WinDividerLargeStyle"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="5">
+                <TextView
+                    style="@style/WinBoldTextStyle"
+                    android:layout_weight="2.2"
+                    android:layout_width="0dp"
+                    android:text="Name"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    style="@style/WinBoldTextStyle"
+                    android:text=" : "/>
+                <TextView
+                    android:id="@+id/lbl_name"
+                    style="@style/WinTextStyle"
+                    android:layout_weight="2.8"
+                    android:layout_width="0dp"
+                    android:text=""/>
+            </LinearLayout>
+            <View style="@style/WinDividerStyle"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="5">
+                <TextView
+                    style="@style/WinBoldTextStyle"
+                    android:layout_weight="2.2"
+                    android:layout_width="0dp"
+                    android:text="Date of birth"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    style="@style/WinBoldTextStyle"
+                    android:text=" : "/>
+                <TextView
+                    android:id="@+id/lbl_dob"
+                    style="@style/WinTextStyle"
+                    android:layout_weight="2.8"
+                    android:layout_width="0dp"
+                    android:text=""/>
+            </LinearLayout>
+            <View style="@style/WinDividerStyle"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="5">
+                <TextView
+                    style="@style/WinBoldTextStyle"
+                    android:layout_weight="2.2"
+                    android:layout_width="0dp"
+                    android:text="Your goal"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    style="@style/WinBoldTextStyle"
+                    android:text=" : "/>
+                <TextView
+                    android:id="@+id/lbl_goal"
+                    style="@style/WinTextStyle"
+                    android:layout_weight="2.8"
+                    android:layout_width="0dp"
+                    android:text=""/>
+            </LinearLayout>
+            <View style="@style/WinDividerStyle"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="5">
+                <TextView
+                    style="@style/WinBoldTextStyle"
+                    android:layout_weight="2.2"
+                    android:layout_width="0dp"
+                    android:text="Your BMI"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    style="@style/WinBoldTextStyle"
+                    android:text=" : "/>
+                <TextView
+                    android:id="@+id/lbl_bmi"
+                    style="@style/WinTextStyle"
+                    android:layout_weight="2.8"
+                    android:layout_width="0dp"
+                    android:text=""/>
+            </LinearLayout>
+            <View style="@style/WinDividerStyle"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="5">
+                <TextView
+                    style="@style/WinBoldTextStyle"
+                    android:layout_weight="2.2"
+                    android:layout_width="0dp"
+                    android:text="Phone Number"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    style="@style/WinBoldTextStyle"
+                    android:text=" : "/>
+                <TextView
+                    android:id="@+id/lbl_phone"
+                    style="@style/WinTextStyle"
+                    android:layout_weight="2.8"
+                    android:layout_width="0dp"
+                    android:text=""/>
+            </LinearLayout>
+            <View style="@style/WinDividerStyle"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="5">
+                <TextView
+                    style="@style/WinBoldTextStyle"
+                    android:layout_weight="2.2"
+                    android:layout_width="0dp"
+                    android:text="Relationship"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    style="@style/WinBoldTextStyle"
+                    android:text=" : "/>
+                <TextView
+                    android:id="@+id/lbl_relationship"
+                    style="@style/WinTextStyle"
+                    android:layout_weight="2.8"
+                    android:layout_width="0dp"
+                    android:text=""/>
+            </LinearLayout>
+            <View style="@style/WinDividerStyle"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="5">
+                <TextView
+                    style="@style/WinBoldTextStyle"
+                    android:layout_weight="2.2"
+                    android:layout_width="0dp"
+                    android:text="Employer"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    style="@style/WinBoldTextStyle"
+                    android:text=" : "/>
+                <TextView
+                    android:id="@+id/lbl_company"
+                    style="@style/WinTextStyle"
+                    android:layout_weight="2.8"
+                    android:layout_width="0dp"
+                    android:text=""/>
+            </LinearLayout>
+            <View style="@style/WinDividerStyle"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="5">
+                <TextView
+                    style="@style/WinBoldTextStyle"
+                    android:layout_weight="2.2"
+                    android:layout_width="0dp"
+                    android:text="Promo Code"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    style="@style/WinBoldTextStyle"
+                    android:text=" : "/>
+                <TextView
+                    android:id="@+id/lbl_promocode"
+                    style="@style/WinTextStyle"
+                    android:layout_weight="2.8"
+                    android:layout_width="0dp"
+                    android:text=""/>
+            </LinearLayout>
+            <View style="@style/WinDividerLargeStyle"/>
+            <Button
+                android:id="@+id/btn_update_profile"
+                style="@style/WinBlueButtonStyle"
+                android:text="Update My Info"/>
+            <View style="@style/WinDividerStyle"/>
+            <TextView
+                android:id="@+id/btn_log_out"
+                style="@style/WinLinkStyle"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:text="LOG OUT"/>
+            <View style="@style/WinDividerExLargeStyle"/>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

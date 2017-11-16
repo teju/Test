@@ -1,0 +1,197 @@
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <color name="WinDarkRedColor">#E91863</color>
+    <color name="WinGreenColor">#26A14F</color>
+    <color name="WinRedColor">#FB838D</color>
+    <color name="WinBlueColor">#80A6DE</color>
+    <color name="WinOrangeColor">#F8981D</color>
+    <color name="WinVioletColor">#A454AF</color>
+    <color name="WinLightGreenColor">#2026A14F</color>
+    <color name="WinLightRedColor">#20FB838D</color>
+    <color name="WinLightBlueColor">#2080A6DE</color>
+    <color name="WinLightOrangeColor">#20F8981D</color>
+    <color name="WinLightBGColor">#A0FDF8F8</color>
+    <color name="WinExLightBGColor">#80FDF8F8</color>
+    <color name="WinLightVioletColor">#20A454AF</color>
+    <color name="skyBlue">#1ABDD4</color>
+
+    <style name="WinExBlueHeaderStyle" parent="WinTitleBlueStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:inputType">textCapWords</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">22dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#1ABDD4</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+    <style name="WinButtonStyle">
+        <item name="android:textSize">15dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:paddingTop">0px</item>
+        <item name="android:paddingBottom">0px</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:gravity">center_horizontal|center_vertical</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    <style name="WinRedButtonStyle" parent="WinButtonStyle">
+        <item name="android:background">@drawable/draw_btn_red</item>
+        <item name="android:textColor">@color/WinRedColor</item>
+    </style>
+    <style name="WinGreenButtonStyle" parent="WinButtonStyle">
+        <item name="android:background">@drawable/draw_btn_green</item>
+        <item name="android:textColor">@color/WinGreenColor</item>
+    </style>
+    <style name="WinBlueButtonStyle" parent="WinButtonStyle">
+        <item name="android:background">@drawable/draw_btn_blue</item>
+        <item name="android:textColor">@color/WinBlueColor</item>
+    </style>
+    <style name="WinVioletButtonStyle" parent="WinButtonStyle">
+        <item name="android:background">@drawable/draw_btn_violet</item>
+        <item name="android:textColor">@color/WinVioletColor</item>
+    </style>
+    <style name="WinEditStyle">
+        <item name="android:textSize">13dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#666666</item>
+    </style>
+    <style name="WinPlainEditStyle" parent="WinEditStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">#00000000</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingRight">0dp</item>
+        <item name="android:textColor">#888888</item>
+    </style>
+    <style name="WinEditRedStyle" parent="WinEditStyle">
+        <item name="android:background">@drawable/draw_btn_red</item>
+    </style>
+    <style name="WinEditGreenStyle" parent="WinEditStyle">
+        <item name="android:background">@drawable/draw_btn_green</item>
+    </style>
+    <style name="WinEditBlueStyle" parent="WinEditStyle">
+        <item name="android:background">@drawable/draw_btn_blue</item>
+    </style>
+    <style name="WinEditVioletStyle" parent="WinEditStyle">
+        <item name="android:background">@drawable/draw_btn_violet</item>
+    </style>
+    <style name="WinRedSelectBoxStyle" parent="WinEditRedStyle">
+        <item name="android:minHeight">35dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:inputType">textMultiLine</item>
+        <item name="android:singleLine">false</item>
+        <item name="android:lineSpacingExtra">8dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+    <style name="WinBlueSelectBoxStyle" parent="WinRedSelectBoxStyle">
+        <item name="android:background">@drawable/draw_btn_blue</item>
+    </style>
+    <style name="WinLabelStyle">
+        <item name="android:textSize">14dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/WinDarkRedColor</item>
+        <item name="android:inputType">textNoSuggestions</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+    <style name="WinHeaderStyle">
+        <item name="android:textSize">24dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/WinOrangeColor</item>
+        <item name="android:inputType">textCapWords</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">@string/app_header_text</item>
+    </style>
+    <style name="WinTitleStyle">
+        <item name="android:textSize">18dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="WinTitleGreenStyle" parent="WinTitleStyle">
+        <item name="android:textColor">@color/WinGreenColor</item>
+    </style>
+    <style name="WinTitleRedStyle" parent="WinTitleStyle">
+        <item name="android:textColor">@color/WinRedColor</item>
+    </style>
+    <style name="WinTitleBlueStyle" parent="WinTitleStyle">
+        <item name="android:textColor">@color/WinBlueColor</item>
+    </style>
+    <style name="WinTitleVioletStyle" parent="WinTitleStyle">
+        <item name="android:textColor">@color/WinVioletColor</item>
+    </style>
+    <style name="WinLinkStyle">
+        <item name="android:textSize">14dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#666666</item>
+        <item name="android:inputType">textCapSentences</item>
+    </style>
+    <style name="WinTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:inputType">textFilter|textMultiLine</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:textColor">#666666</item>
+        <item name="android:singleLine">false</item>
+    </style>
+    <style name="WinBoldTextStyle" parent="WinTextStyle">
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="WinDividerStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">10dp</item>
+    </style>
+    <style name="WinDividerLargeStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">20dp</item>
+    </style>
+    <style name="WinDividerExLargeStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dp</item>
+    </style>
+    <style name="WinRadioButtonRedStyle">
+        <item name="android:textSize">13dp</item>
+        <item name="android:textColor">#666666</item>
+        <item name="android:button">@drawable/draw_option_red</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <!--Calendar Styles-->
+    <style name="WinCalendarHeaderStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:background">#EEEEEE</item>
+    </style>
+    <style name="WinExActivityStyle" parent="@style/Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:divider">#FFFFFF</item>
+    </style>
+</resources>

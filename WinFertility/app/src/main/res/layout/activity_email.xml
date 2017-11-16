@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_email"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context="com.win.winfertility.EmailActivity">
+    <include layout="@layout/view_main_bg"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
+        <com.win.winfertility.tools.HomeActionBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </com.win.winfertility.tools.HomeActionBar>
+        <TextView
+            style="@style/WinTitleBlueStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Speak With a WINFertility Nurse"
+            android:textSize="14dp"
+            android:padding="0dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/WinBlueColor"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="45dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp">
+            <TextView
+                style="@style/WinTextStyle"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textAlignment="center"
+                android:text="We will ask you a few quick questions so we can give you the best possible care. A WINFertility Service Team Member will contact you at your convenience and get you started on your successful journey."/>
+            <View style="@style/WinDividerLargeStyle"/>
+            <EditText
+                android:id="@+id/txt_first_name"
+                style="@style/WinEditBlueStyle"
+                android:hint="First Name"
+                android:inputType="textCapWords"/>
+            <View style="@style/WinDividerStyle"/>
+            <EditText
+                android:id="@+id/txt_last_name"
+                style="@style/WinEditBlueStyle"
+                android:hint="Last Name"
+                android:inputType="textCapWords"/>
+            <View style="@style/WinDividerStyle"/>
+            <EditText
+                android:id="@+id/txt_email"
+                style="@style/WinEditBlueStyle"
+                android:hint="Email Address"
+                android:inputType="textEmailAddress"/>
+            <View style="@style/WinDividerStyle"/>
+            <EditText
+                android:id="@+id/txt_phone"
+                style="@style/WinEditBlueStyle"
+                android:hint="Phone Number"
+                android:inputType="phone"
+                android:maxLength="10"/>
+            <View style="@style/WinDividerStyle"/>
+            <TextView
+                android:id="@+id/txt_dob"
+                style="@style/WinEditBlueStyle"
+                android:hint="Date of Birth"
+                android:inputType="date"/>
+            <View style="@style/WinDividerStyle"/>
+            <TextView
+                android:id="@+id/vw_time_to_call"
+                style="@style/WinEditBlueStyle"
+                android:hint="Best Time to Call"
+                android:inputType="text"/>
+            <View style="@style/WinDividerStyle"/>
+            <TextView
+                android:id="@+id/vw_discuss_about"
+                style="@style/WinBlueSelectBoxStyle"
+                android:hint="I want to discuss (Check all that apply)"/>
+            <View style="@style/WinDividerStyle"/>
+            <EditText
+                android:id="@+id/txt_comments"
+                style="@style/WinEditBlueStyle"
+                android:hint="Any additional comments or information you consider important for us to know"
+                android:inputType="textCapSentences|textMultiLine"
+                android:layout_height="65dp"
+                android:gravity="left|top"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"/>
+            <View style="@style/WinDividerLargeStyle"/>
+            <Button
+                android:id="@+id/btn_submit"
+                style="@style/WinBlueButtonStyle"
+                android:text="Submit"
+                android:layout_width="150dp"/>
+            <View style="@style/WinDividerExLargeStyle"/>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

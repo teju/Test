@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_event"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.win.winfertility.EventActivity">
+    <include layout="@layout/view_main_bg"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginBottom="45dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp">
+            <com.win.winfertility.tools.HomeActionBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </com.win.winfertility.tools.HomeActionBar>
+            <TextView
+                style="@style/WinTitleRedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Record An Event"
+                android:textColor="@color/WinDarkRedColor"
+                android:textSize="15dp"
+                android:padding="0dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/WinBlueColor"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
+            <TextView
+                android:id="@+id/lbl_day"
+                style="@style/WinLinkStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.6"
+                android:text="JUN 13"
+                android:textSize="16dp"
+                android:gravity="center"/>
+        </LinearLayout>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <com.win.winfertility.tools.WinAccordion
+                    android:id="@+id/vw_sex_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:title="Did you have sex?"
+                    app:icon="@drawable/win_sex">
+                </com.win.winfertility.tools.WinAccordion>
+                <com.win.winfertility.tools.WinAccordion
+                    android:id="@+id/vw_flow_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:title="How’s your flow?"
+                    app:icon="@drawable/win_your_flow">
+                </com.win.winfertility.tools.WinAccordion>
+                <com.win.winfertility.tools.WinAccordion
+                    android:id="@+id/vw_sex_drive"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:title="Sex Drive"
+                    app:icon="@drawable/win_sex_drive">
+                </com.win.winfertility.tools.WinAccordion>
+                <com.win.winfertility.tools.WinAccordion
+                    android:id="@+id/vw_symptoms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:title="Log Symptoms"
+                    app:icon="@drawable/win_symptoms">
+                </com.win.winfertility.tools.WinAccordion>
+                <com.win.winfertility.tools.WinAccordion
+                    android:id="@+id/vw_feelings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:title="How are you feeling today?"
+                    app:icon="@drawable/win_feeling">
+                </com.win.winfertility.tools.WinAccordion>
+                <com.win.winfertility.tools.WinAccordion
+                    android:id="@+id/vw_medications"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:title="Medications taken"
+                    app:icon="@drawable/win_medication">
+                </com.win.winfertility.tools.WinAccordion>
+                <com.win.winfertility.tools.WinAccordion
+                    android:id="@+id/vw_ovulation_tests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:title="Performed Ovulation Test"
+                    app:icon="@drawable/win_ovulation_test">
+                </com.win.winfertility.tools.WinAccordion>
+                <com.win.winfertility.tools.WinAccordion
+                    android:id="@+id/vw_pregnancy_tests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:title="Performed Pregnancy Test"
+                    app:icon="@drawable/win_pregnancy_test">
+                </com.win.winfertility.tools.WinAccordion>
+                <com.win.winfertility.tools.WinAccordion
+                    android:id="@+id/vw_notes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:title="Notes"
+                    app:icon="@drawable/win_notes">
+                </com.win.winfertility.tools.WinAccordion>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/WinDarkRedColor"
+        android:layout_alignParentBottom="true"
+        android:textSize="15dp"
+        android:textColor="#FFFFFF"
+        android:text="SAVE"/>
+</RelativeLayout>

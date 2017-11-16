@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_account_info"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context="com.win.winfertility.AccountInfoActivity">
+    <include layout="@layout/view_main_bg"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <com.win.winfertility.tools.LogoActionBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </com.win.winfertility.tools.LogoActionBar>
+            <TextView style="@style/WinHeaderStyle"/>
+            <View style="@style/WinDividerLargeStyle"/>
+            <TextView
+                style="@style/WinTitleRedStyle"
+                android:text="Create An Account"/>
+            <View style="@style/WinDividerLargeStyle"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp">
+                <EditText
+                    android:id="@+id/txt_first_name"
+                    style="@style/WinEditRedStyle"
+                    android:inputType="textCapWords"
+                    android:hint="First Name"/>
+                <View style="@style/WinDividerStyle"/>
+                <EditText
+                    android:id="@+id/txt_last_name"
+                    style="@style/WinEditRedStyle"
+                    android:inputType="textCapWords"
+                    android:hint="Last Name"/>
+                <View style="@style/WinDividerStyle"/>
+                <EditText
+                    android:id="@+id/txt_email"
+                    style="@style/WinEditRedStyle"
+                    android:inputType="textEmailAddress"
+                    android:hint="Email Address"/>
+                <View style="@style/WinDividerStyle"/>
+                <EditText
+                    android:id="@+id/txt_phone"
+                    style="@style/WinEditRedStyle"
+                    android:inputType="phone"
+                    android:hint="Phone Number"
+                    android:maxLength="10"/>
+                <View style="@style/WinDividerStyle"/>
+                <EditText
+                    android:id="@+id/txt_password"
+                    style="@style/WinEditRedStyle"
+                    android:inputType="textPassword"
+                    android:hint="Create Password"/>
+                <View android:id="@+id/vw_pwd_divider"
+                    style="@style/WinDividerStyle"/>
+                <EditText
+                    android:id="@+id/confirm_txt_password"
+                    style="@style/WinEditRedStyle"
+                    android:inputType="textPassword"
+                    android:hint="Confirm Password"/>
+                <View android:id="@+id/vw_confirm_pwd_divider"
+                    style="@style/WinDividerStyle"/>
+                <TextView
+                    android:id="@+id/txt_dob"
+                    style="@style/WinEditRedStyle"
+                    android:inputType="date"
+                    android:hint="Date of Birth"/>
+                <View style="@style/WinDividerStyle"/>
+                <TextView
+                    android:id="@+id/txt_gender"
+                    style="@style/WinRedSelectBoxStyle"
+                    android:textAllCaps="false"
+                    android:orientation="horizontal"
+                    android:textStyle="normal"
+                    android:hint="Gender"/>
+                <View style="@style/WinDividerLargeStyle"/>
+                <TextView style="@style/WinLabelStyle"
+                    android:textAlignment="center"
+                    android:text="Does your employer or insurance provide Fertility Benefits through WINFertility."
+                    android:inputType="textMultiLine"/>
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp">
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Yes"
+                        android:paddingLeft="5dp"
+                        android:id="@+id/rb_provide_yes"
+                        android:button="@drawable/draw_option_red"/>
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No"
+                        android:paddingLeft="5dp"
+                        android:id="@+id/rb_provide_no"
+                        android:button="@drawable/draw_option_red"
+                        android:layout_marginLeft="20dp"/>
+                </RadioGroup>
+                <View style="@style/WinDividerStyle"/>
+                <EditText
+                    android:id="@+id/txt_company"
+                    style="@style/WinEditRedStyle"
+                    android:inputType="textCapWords"
+                    android:hint="Name of Company (Optional)"/>
+                <View style="@style/WinDividerStyle"/>
+                <EditText
+                    android:id="@+id/txt_promo_code"
+                    style="@style/WinEditRedStyle"
+                    android:inputType="textCapWords"
+                    android:hint="Access or Promo Code (Optional)"/>
+                <View style="@style/WinDividerExLargeStyle"/>
+                <Button
+                    android:id="@+id/btn_next"
+                    style="@style/WinRedButtonStyle"
+                    android:layout_width="150dp"
+                    android:text="Next"/>
+                <View style="@style/WinDividerExLargeStyle"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <include android:id="@+id/vw_popup" android:visibility="gone" layout="@layout/view_account_msg"/>
+</RelativeLayout>

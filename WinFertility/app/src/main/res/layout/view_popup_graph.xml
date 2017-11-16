@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#40000000"
+    android:clickable="false"
+    android:focusable="false">
+        <RelativeLayout
+            android:padding="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/dialog_holo_light_frame"
+                android:layout_margin="10dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16dp"
+                            android:text="Send Me My Fertility Chart"
+                            android:textColor="#666666"
+                            android:textStyle="bold"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="center_horizontal"
+                            android:layout_gravity="center_vertical"/>
+                    </LinearLayout>
+                    <View style="@style/WinDividerLargeStyle"/>
+                    <TextView
+                        android:id="@+id/vw_text"
+                        style="@style/WinTextStyle"
+                        android:textAlignment="center"
+                        android:text="Your fertility chart will be sent to you in easy to read PDF format to take with you to a potential doctor visit or have for yourself."/>
+                    <View style="@style/WinDividerStyle"/>
+                    <EditText
+                        android:id="@+id/txt_email"
+                        style="@style/WinEditBlueStyle"
+                        android:hint="Email Address"
+                        android:inputType="textEmailAddress"/>
+                    <View style="@style/WinDividerStyle"/>
+                    <TextView
+                        android:id="@+id/vw_data_to_include"
+                        style="@style/WinEditBlueStyle"/>
+                    <View style="@style/WinDividerStyle"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp">
+                        <Button
+                            android:id="@+id/btn_email_me"
+                            style="@style/WinBlueButtonStyle"
+                            android:text="Email Me"
+                            android:layout_width="150dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_margin="5dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+            <ImageView
+                android:background="@drawable/draw_white_round"
+                android:id="@+id/btn_close"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/win_blue_close"
+                android:scaleType="fitXY"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
+</RelativeLayout>

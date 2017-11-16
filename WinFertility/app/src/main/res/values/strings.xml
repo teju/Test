@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">WINFertility\nCompanion</string>
+    <string name="app_header_text">Your Fertility Companion</string>
+    <string name="app_home_menu_education">Fertility\nEducation</string>
+    <string name="app_home_menu_fertility">My\nFertility</string>
+    <string name="app_home_menu_search">Provider\nSearch</string>
+    <string name="app_home_menu_coach">Speak with\nWINFertility\nNurse</string>
+    <string name="provider_caption">Fertility Benefits Provider Lookup</string>
+</resources>

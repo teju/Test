@@ -147,7 +147,7 @@ public class PaymentHistory extends AppCompatActivity
             if(action.equals("PaymentHistoryRefresh")) {
                 swipeRefreshLayout.setRefreshing(true);
             }
-            String url = Constants.SERVER_URL + "booking/paymenthistory";
+            String url = Constants.SERVER_URL + "booking/completed";
             JSONObject params = new JSONObject();
             try {
                 params.put("user_id",prefrence.getString("user_id", "") );

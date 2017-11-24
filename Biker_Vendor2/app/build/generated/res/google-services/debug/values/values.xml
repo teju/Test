@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">728890294956-oaegs1sn07m52rngin2dr7q27c2qf08c.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://biker-180415.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">728890294956</string>
+    <string name="google_api_key" translatable="false">AIzaSyAk_7IhDRemJBZWO5a7hCbtvv9PcTAvLaA</string>
+    <string name="google_app_id" translatable="false">1:728890294956:android:318aafe276ce1fbd</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAk_7IhDRemJBZWO5a7hCbtvv9PcTAvLaA</string>
+    <string name="google_storage_bucket" translatable="false">biker-180415.appspot.com</string>
+    <string name="project_id" translatable="false">biker-180415</string>
+</resources>

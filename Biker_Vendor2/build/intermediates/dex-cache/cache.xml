@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-tagmanager\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="8126914f5bc372a33e27ea90f02412c32468ce8a">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-tagmanager-9.0.0_06333eacbb5921ea5f23b3a63d84153e91034dfc.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="e4d0cbb0b999604b349062f0214a0a228a7fd151">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.android.support-appcompat-v7-23.2.1_9110295bf280c163912596b58ee964a5fca11de9.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\jars\libs\internal_impl-23.2.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="607a3d0b8013b4ccbfeb0b7cb293351994e021fb">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\internal_impl-23.2.1_f15b27c77dd2481c1409675b3e0d1da22e6ff437.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-ads-lite\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="79e4b41db41d4dbbf364c7bd6aaeee5b876c9d8b">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-ads-lite-9.0.0_67d162eca723b9244953742350ac348d72ce08aa.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appindexing\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="4431efe5d0f67fab36a698dde725946b33a6bf4a">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-appindexing-9.0.0_c108925abf60d5ceb51f44cd6030e9c8db9f6400.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.android.volley\volley\1.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="2cd4b982617e544728de0782d718a58ce1b06e3f">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.android.volley-volley-1.0.0_26d8c37c4517740104a67acd8209f31760a474db.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-safetynet\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="c11cf7a7a6e5adf8fa564303a11dbc351fc11b7c">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-safetynet-9.0.0_2e31e52aa7e9894b27b0606b57ac1d766411543e.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="673d77a5bbddd766037f088e775df525c46407f0">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.android.support-support-vector-drawable-23.2.1_531edd24305917cbbb808462b3736ed7d713b4f2.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-gcm\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="4caf75b2cfb7ec6e80a57d0ee64fc102ad3578b8">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-gcm-9.0.0_5f8f6265be382dd4740f0c64c2544f88341b24aa.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-location\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="59cca9b91688dc2467754d36793b3d23bebd21a9">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-location-9.0.0_dc17d5b618bb828a4830292f50d4399f8199fc71.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.firebase\firebase-messaging\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="005786793d72c6deacbbbfd38177ed58e1aa6653">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-messaging-9.0.0_9a7137f88c81dc42841d3656dd1a2b0f7c2c3264.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-drive\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="294d49a66cc1238d9f7fd352136a45622fa98c0f">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-drive-9.0.0_5cb5c7b172caf6eaf68b3d58bcdfa7b9032bc961.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.firebase\firebase-storage-common\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ed16ff19f0a9515604a0f08104ca0317b82e29e3">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-storage-common-9.0.0_6f762eb36f8066b517a2248ae2cc415882b379d1.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.firebase\firebase-auth-module\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="24536a7b97926a9c155c88425da6875adeb11b51">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-auth-module-9.0.0_e9a1b05ca7149873aa16caec5646321360de86a5.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.firebase\firebase-iid\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ea4b54dcbfe5ac05efb0a314105f07258118d3a7">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-iid-9.0.0_263a747dbbe97f1322510004c90775ea5eccdae1.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="6f65c144283b31b4b9a70e6e7aa4c4a1c897d4b8">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-base-9.0.0_a6380f41835c6a2a9a6c9e2cbd35ccc03bcc8e1f.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.android.support\design\23.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="72961d8b453b46e277702f18de9d210bc019e36e">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.android.support-design-23.2.1_a5b136fe350246736e55d872670c07c19de86849.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.firebase\firebase-common\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="42df48c7305b08b14fa0e84561091b0c24d70d26">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-common-9.0.0_8dda7bb52660e6835ddceb6d08bdfbd36541efbb.jar" />
+    </item>
+    <item
+        jar="C:\Users\Teju\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.2.1\support-annotations-23.2.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ccb693bc0774fcb637246f7360de25b4af7df318">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\support-annotations-23.2.1_bb1c37cd513dc1a4289743deaf1eb12f616f3682.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-iid\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="379d1834afa3c08f43be23a23b103053537b65b5">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-iid-9.0.0_19adf69f7648f00ee72aa158c60fa1cd84dfd33a.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.firebase\firebase-auth\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="70ddab48594608953b20164b82f1f890a9a8174a">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-auth-9.0.0_ec0418ef620620b5314be16f892e2b7006852ea9.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.firebase\firebase-analytics-impl\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="0dc8ab07eeceda5e99b305c8069765056b6e5c9d">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-analytics-impl-9.0.0_20fc7bdb5e55ac823b1fe83e0a18f7569bcc9a1e.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-identity\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="5289e799a43a64c4137d109bf992e10a2f952aa3">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-identity-9.0.0_87aa04c3bc792bc4050da8643623ae9e36fc9156.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-maps\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="a819aae4f0c711e50b4fd633922a3c1a176cb51e">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-maps-9.0.0_3a8692cdf5da99b1f4061d957214bf266c6bd327.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-cast\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="e595f98f8c525201dccd119f43ad1ddacd4c48d6">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-cast-9.0.0_a361f9fa1fc49d5ba8bec6e4ea14ae3a2af956b9.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="3469cb457f10f74c28cbc05f069b6c894f6cbdd0">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.android.support-animated-vector-drawable-23.2.1_2798b45b228dc15474e722927f4bc429300adc29.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.firebase\firebase-auth-common\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="5f0f6913a208a126269aaa68004ed0329a832c5b">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-auth-common-9.0.0_a3fa2da27d48e3a91f17c9bd2183df02cf90ad4b.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-nearby\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="0facc6fc326f2406f4bb9b02f442994c5ce6a403">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-nearby-9.0.0_5b08c882f661e0d6978edb783ba7ae43deb8f74b.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-wallet\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d7002ed92a3c46c6a89a786877ecf7978a4f0459">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-wallet-9.0.0_06ebaff38f1b56f74a954181deb0b02c9a195bf4.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.firebase\firebase-database-connection\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ef5c5c2afbd174d55cf1cfcac7d0346cbc4c1322">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-database-connection-9.0.0_213ed2e63b761de820f2ff9107099f461976a4cd.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-wearable\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="184428c29b2a4b220cd44284d515db5d8cb5fc76">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-wearable-9.0.0_a780df4f3c0f98e7b61619951da9fcb6ec7861de.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-panorama\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="67a7d712de3e7d025f4efdcec1da183f764bdbab">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-panorama-9.0.0_add20573b3cbee7e8feea5c2b9a0d4c82a447ee2.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-basement\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="cc178928721f3222b3b06bdfbd9497378ccb9792">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-basement-9.0.0_972948a3494770b872bec8d0858486e26b44aa38.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-plus\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="817b9101192f2fd6dc0fd8cd522d8f4a1a75fcdc">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-plus-9.0.0_48c49e8524c07f165a686f83d7acb1fb35172041.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.firebase\firebase-crash\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="7e467a973b749c6390a5991c9a8edbde96fc10c9">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-crash-9.0.0_dc5e4091fbb5058863179a999e7e727cad4e4648.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-analytics\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="b8bedab61b3b5238cd9a07d3b04449d7fecdbc3b">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-analytics-9.0.0_018c3af93b9bbcd32c5c28545b377d8cc8a13a63.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-analytics-impl\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="373cd65725af2781d100ddc193c7d3f14464a774">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-analytics-impl-9.0.0_e29c916d068e2b9950cf2536e05e25a78fa2cf19.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.firebase\firebase-storage\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="733964f04c339e425439545b1d172c23b53f8c13">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-storage-9.0.0_a29d935791842bfd65f675a5b1cff0fc015b0fb2.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.firebase\firebase-analytics\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="4ef8ab5fee042023018249474bc93bd4b2b9c17e">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-analytics-9.0.0_5aab15c8128f385a9dae55b9fade41565c47e6fe.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.android.support\mediarouter-v7\23.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d358b3dd49a7c67844622dcbc9cf4339e13952ce">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.android.support-mediarouter-v7-23.0.0_b7edd43d906ef59a080df75492e9883662051243.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appinvite\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d96f9f3ef66494d1231304cafd28c962dda80dea">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-appinvite-9.0.0_91955a60275945727620942a946ce566596825ff.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="e3885783ff8926ed9e2fdcd16816c2e1e73e7aee">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.android.support-recyclerview-v7-23.2.1_60551eb40320078843c8c2bdd941d4579d1bd41b.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-auth-base\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="7a23185c9b1c100e7d1a32275017e4712e31c796">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-auth-base-9.0.0_fe214b90e1673318150795e1e0bdc5913edbc402.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-fitness\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="2f7bd8cc7519d5231aa8d2ae8e905d3f602bd491">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-fitness-9.0.0_03f8a07f532fa0e1f6ab4e4a482dabca712f33ce.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-vision\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="f4e85eafa876cd7d7641244867dac3f88d71e866">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-vision-9.0.0_77889ad90bc3aec7e122b502cc38e7cd9d1eacad.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.android.support\mediarouter-v7\23.0.0\jars\libs\internal_impl-23.0.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="03d38bb042efe3e5ce27ba66b729a9523c36d8fe">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\internal_impl-23.0.0_88ea39be21ac2e2ff233df271386fc86203a9760.jar" />
+    </item>
+    <item
+        jar="C:\Users\Teju\.gradle\caches\modules-2\files-2.1\com.google.gms\google-services\3.0.0\ee538ce9cf4148485e43017c5542202b8c78ff8e\google-services-3.0.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ee538ce9cf4148485e43017c5542202b8c78ff8e">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\google-services-3.0.0_de1f5dd8dac9c8535d634df9e9d87addb2fc2a31.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="3be474b1b21b31cf2fa93fe6bd641ae108d96452">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.android.support-support-v4-23.2.1_cd08e0e070bc0121effd637582f249a989bfea3b.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-tasks\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1941832901fc4e7a93300b53762e9f65d7650b99">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-tasks-9.0.0_c534ffa3940d4d5bef75b71fdc339eee3fe722d7.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.firebase\firebase-database\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="32a5a566ae197603d0bed3e6d1d275f6a771564e">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-database-9.0.0_49edacc5c657a8adacc30e783dda28fbc17df1c4.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.android.support\multidex\1.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="78ea232052df889856dcb7b7b542707c89bb3bfb">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.android.support-multidex-1.0.1_e933df511f51f8e6a986d4828181d65bb3959ff9.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-auth\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="7da84426d876216ed4cdddd85e739be5ecabdd04">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-auth-9.0.0_d31bce0690e805bb067525743b75d7dc1600c1e4.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-games\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="2c5bc0ebbe69c9fab587c2216b36ec44ab8f0704">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-games-9.0.0_360ecb14db04286c6309b8a77846c05310bb452e.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.firebase\firebase-config\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ebfde1a055aea400df77584a68aa60609f618bed">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-config-9.0.0_aa425294b35b139281d093a09c13875600f272fc.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-tagmanager-api\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="69472e334350cafbf442776da05c9a04955252fb">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-tagmanager-api-9.0.0_26d32793ea2b33b0ca7fa4a20c88b45b5f6b1fb9.jar" />
+    </item>
+    <item
+        jar="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-ads\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="2cb29455028e92e024bbad0d41c6ec772f2433d1">
+        <dex dex="G:\Teju\android\Test\Biker_Vendor2\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-ads-9.0.0_5f6d2dbf5555621ffd36ba3cdb01b8120da71108.jar" />
+    </item>
+
+</items>

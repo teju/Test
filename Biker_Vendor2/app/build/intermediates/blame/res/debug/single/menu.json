@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/G:\\Teju\\android\\Test\\Biker_Vendor2\\app\\build\\intermediates\\res\\merged\\debug\\menu\\activity_main_drawer.xml",
+        "source": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/G:\\Teju\\android\\Test\\Biker_Vendor2\\app\\src\\main\\res\\menu\\activity_main_drawer.xml"
+    },
+    {
+        "merged": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/intermediates/res/merged/debug/menu/activity_main_drawer.xml",
+        "source": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/src/main/res/menu/activity_main_drawer.xml"
+    },
+    {
+        "merged": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/G:\\Teju\\android\\Test\\Biker_Vendor2\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_main.xml",
+        "source": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/G:\\Teju\\android\\Test\\Biker_Vendor2\\app\\src\\main\\res\\menu\\menu_main.xml"
+    },
+    {
+        "merged": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/intermediates/res/merged/debug/menu/menu_main.xml",
+        "source": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/src/main/res/menu/menu_main.xml"
+    }
+]

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <org.sufficientlysecure.htmltextview.HtmlTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:paddingTop="10dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="10dp"
+        android:lineSpacingExtra="2dp"
+        android:id="@+id/terms_conditions" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:id="@+id/agree"
+        android:layout_height="wrap_content"
+        android:text="Agree to terms and conditions"
+        android:layout_gravity="center_horizontal"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ok"
+        android:layout_gravity="center_horizontal"
+        android:text="OK"/>
+</LinearLayout>

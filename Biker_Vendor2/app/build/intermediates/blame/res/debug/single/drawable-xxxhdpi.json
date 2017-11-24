@@ -1,0 +1,58 @@
+[
+    {
+        "merged": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/message_bulleted.png",
+        "source": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/generated/res/pngs/debug/drawable-xxxhdpi/message_bulleted.png"
+    },
+    {
+        "merged": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/cellphone_basic.png",
+        "source": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/generated/res/pngs/debug/drawable-xxxhdpi/cellphone_basic.png"
+    },
+    {
+        "merged": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/cellphone.png",
+        "source": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/generated/res/pngs/debug/drawable-xxxhdpi/cellphone.png"
+    },
+    {
+        "merged": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/account_multiple.png",
+        "source": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/generated/res/pngs/debug/drawable-xxxhdpi/account_multiple.png"
+    },
+    {
+        "merged": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/logout.png",
+        "source": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/generated/res/pngs/debug/drawable-xxxhdpi/logout.png"
+    },
+    {
+        "merged": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/coin.png",
+        "source": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/generated/res/pngs/debug/drawable-xxxhdpi/coin.png"
+    },
+    {
+        "merged": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/settings.png",
+        "source": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/generated/res/pngs/debug/drawable-xxxhdpi/settings.png"
+    },
+    {
+        "merged": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/account.png",
+        "source": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/generated/res/pngs/debug/drawable-xxxhdpi/account.png"
+    },
+    {
+        "merged": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/home.png",
+        "source": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/generated/res/pngs/debug/drawable-xxxhdpi/home.png"
+    },
+    {
+        "merged": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/menu.png",
+        "source": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/generated/res/pngs/debug/drawable-xxxhdpi/menu.png"
+    },
+    {
+        "merged": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/bell.png",
+        "source": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/generated/res/pngs/debug/drawable-xxxhdpi/bell.png"
+    },
+    {
+        "merged": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/key_variant.png",
+        "source": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/generated/res/pngs/debug/drawable-xxxhdpi/key_variant.png"
+    },
+    {
+        "merged": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/map_marker.png",
+        "source": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/generated/res/pngs/debug/drawable-xxxhdpi/map_marker.png"
+    },
+    {
+        "merged": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/email.png",
+        "source": "/Users/ideamac/Documents/android/Test/Biker_Vendor2/app/build/generated/res/pngs/debug/drawable-xxxhdpi/email.png"
+    }
+]

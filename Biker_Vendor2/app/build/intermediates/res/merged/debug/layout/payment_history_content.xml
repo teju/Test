@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:drawable/editbox_background_normal"
+    android:layout_marginTop="1dp"
+    android:layout_marginBottom="-5dp"
+    android:layout_marginLeft="1.5dp"
+    android:padding="10dp"
+    android:layout_marginRight="1.5dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/main"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="150dp"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="27dp">
+                <com.vendor.biker.Utils.MyTextView
+                    android:layout_width="130dp"
+                    android:background="@color/white"
+                    android:layout_height="wrap_content"
+                    android:text="Booking No."
+                    android:padding="5dp"
+                    android:textSize="@dimen/normal"
+                    android:textColor="@color/black"
+                    android:id="@+id/booking_id_text"/>
+                <com.vendor.biker.Utils.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=":"
+                    android:background="@color/white"
+                    android:padding="5dp"
+                    android:textSize="@dimen/normal"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="27dp">
+                <com.vendor.biker.Utils.MyTextView
+                    android:layout_width="130dp"
+                    android:background="@color/white"
+                    android:layout_height="27dp"
+                    android:text="Customer Name"
+                    android:padding="5dp"
+                    android:textSize="@dimen/normal"
+                    android:textColor="@color/black"
+                    android:id="@+id/vendor_name_text" />
+                <com.vendor.biker.Utils.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=":"
+                    android:background="@color/white"
+                    android:padding="5dp"
+                    android:textSize="@dimen/normal"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="27dp">
+                <com.vendor.biker.Utils.MyTextView
+                    android:layout_width="130dp"
+                    android:background="@color/white"
+                    android:layout_height="wrap_content"
+                    android:text="Customer No."
+                    android:padding="5dp"
+                    android:textSize="@dimen/normal"
+                    android:textColor="@color/black"
+                    android:id="@+id/vendor_number_text" />
+                <com.vendor.biker.Utils.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=":"
+                    android:background="@color/white"
+                    android:padding="5dp"
+                    android:textSize="@dimen/normal"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="27dp">
+                <com.vendor.biker.Utils.MyTextView
+                    android:layout_width="130dp"
+                    android:background="@color/white"
+                    android:layout_height="wrap_content"
+                    android:text="Vehicle No."
+                    android:textSize="@dimen/normal"
+                    android:textColor="@color/black"
+                    android:padding="5dp"
+                    android:id="@+id/vehicle_no_text"/>
+                <com.vendor.biker.Utils.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=":"
+                    android:padding="5dp"
+                    android:background="@color/white"
+                    android:textSize="@dimen/normal"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:orientation="horizontal"
+                android:layout_height="27dp">
+                <com.vendor.biker.Utils.MyTextView
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:text="Status"
+                    android:background="@color/white"
+                    android:padding="5dp"
+                    android:textSize="@dimen/normal"
+                    android:textColor="@color/black"
+                    android:id="@+id/status_text"/>
+                <com.vendor.biker.Utils.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=":"
+                    android:background="@color/white"
+                    android:padding="5dp"
+                    android:textSize="@dimen/normal"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <com.vendor.biker.Utils.MyTextView
+                android:layout_width="wrap_content"
+                android:background="@color/white"
+                android:layout_height="27dp"
+                android:textSize="@dimen/normal"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:id="@+id/Payment_id"/>
+            <com.vendor.biker.Utils.MyTextView
+                android:layout_width="wrap_content"
+                android:background="@color/white"
+                android:layout_height="27dp"
+                android:padding="5dp"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black"
+                android:id="@+id/vendor_name"/>
+            <com.vendor.biker.Utils.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="27dp"
+                android:padding="5dp"
+                android:background="@color/white"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black"
+                android:id="@+id/vendor_number"/>
+            <com.vendor.biker.Utils.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="27dp"
+                android:padding="5dp"
+                android:background="@color/white"
+                android:textColor="@color/black"
+                android:textSize="@dimen/normal"
+                android:id="@+id/vehicle_no"/>
+            <com.vendor.biker.Utils.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="27dp"
+                android:background="@color/white"
+                android:padding="5dp"
+                android:textSize="@dimen/normal"
+                android:textAllCaps="true"
+                android:textColor="@color/green"
+                android:id="@+id/status"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>

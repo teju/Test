@@ -8,7 +8,6 @@
         android:layout_height="wrap_content"
         android:stepSize="1"
         android:numStars="5"
-        android:isIndicator="true"
         style= "@style/CustomRatingBar"
         android:layout_gravity="center_horizontal"
         android:id="@+id/ratings" />

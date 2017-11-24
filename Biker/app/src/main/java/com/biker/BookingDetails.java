@@ -300,7 +300,7 @@ public class BookingDetails extends AppCompatActivity
             }
             swipeRefreshLayout.setRefreshing(false);
 
-        }catch (Exception e){
+        } catch (Exception e){
             swipeRefreshLayout.setRefreshing(false);
             PrintClass.printValue("ResponseOfBookingList Exception ", e.toString());
             recyclerView.setVisibility(View.GONE);
@@ -501,6 +501,16 @@ public class BookingDetails extends AppCompatActivity
                 userViewHolder.vehicle_no.setText(bookings.getVehicle_no());
                 userViewHolder.vendor_number.setText(bookings.getVendor_nuber());
                 userViewHolder.status.setText(bookings.getStatus());
+                if(bookings.getStatus().equalsIgnoreCase("Picked")) {
+                    userViewHolder.status.setTextColor(getResources().getColor(R.color.light_red2));
+                } else if(bookings.getStatus().equalsIgnoreCase("InProcess")) {
+                    userViewHolder.status.setBackgroundColor(getResources().getColor(R.color.yellow));
+                } else if(bookings.getStatus().equalsIgnoreCase("Completed")) {
+                    userViewHolder.status.setTextColor(getResources().getColor(R.color.blue));
+                } else if(bookings.getStatus().equalsIgnoreCase("Delivered")) {
+                    userViewHolder.status.setTextColor(getResources().getColor(R.color.green));
+                }
+
             } else if (holder instanceof BookingDetails.LoadingViewHolder) {
                 BookingDetails.LoadingViewHolder loadingViewHolder = (BookingDetails.LoadingViewHolder) holder;
                 loadingViewHolder.progressBar.setIndeterminate(true);

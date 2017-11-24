@@ -1,5 +1,6 @@
 package com.biker;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -8,6 +9,7 @@ import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -53,6 +55,7 @@ public class UserRegister extends AppCompatActivity {
         name=(EditText)findViewById(R.id.name);
         Button click=(Button)findViewById(R.id.buttonclick);
         phone=(EditText)findViewById(R.id.phone);
+        LinearLayout terms_conditions = (LinearLayout) findViewById(R.id.terms_conditions);
         email=(EditText)findViewById(R.id.email);
         name.setTypeface(typeface_luci);
         phone.setTypeface(typeface_luci);
@@ -70,6 +73,29 @@ public class UserRegister extends AppCompatActivity {
             email.setText("");
             phone.setText("");
         }
+
+        terms_conditions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Dialog mBottomSheetDialog = new Dialog(UserRegister.this);
+                mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                mBottomSheetDialog.setContentView(R.layout.activity_terms_conditions);
+                mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                mBottomSheetDialog.show();
+                TextView termCon=(TextView)mBottomSheetDialog.findViewById(R.id.terms_conditions);
+                Button ok=(Button)mBottomSheetDialog.findViewById(R.id.ok);
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mBottomSheetDialog.dismiss();
+                    }
+                });
+
+
+
+            }
+        });
     }
 
     public void getProfileInfo(){

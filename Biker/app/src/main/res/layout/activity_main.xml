@@ -15,12 +15,14 @@
         android:layout_below="@+id/header"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
 
-    <com.biker.Utils.MyEditText
+    <AutoCompleteTextView
         android:id="@+id/editText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:background="@color/white"
-        android:padding="14dp"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingLeft="4dp"
         android:layout_marginTop="6dp"
         android:textSize="@dimen/normal"
         android:layout_below="@+id/header"

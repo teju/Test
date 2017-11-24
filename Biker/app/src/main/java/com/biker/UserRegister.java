@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.biker.Utils.Constants;
 import com.biker.Utils.CustomToast;
 import com.biker.Utils.IsNetworkConnection;
@@ -77,23 +84,63 @@ public class UserRegister extends AppCompatActivity {
         terms_conditions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Dialog mBottomSheetDialog = new Dialog(UserRegister.this);
-                mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                mBottomSheetDialog.setContentView(R.layout.activity_terms_conditions);
-                mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT);
-                mBottomSheetDialog.show();
-                TextView termCon=(TextView)mBottomSheetDialog.findViewById(R.id.terms_conditions);
-                Button ok=(Button)mBottomSheetDialog.findViewById(R.id.ok);
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mBottomSheetDialog.dismiss();
-                    }
-                });
+                final Dialog dialog = new Dialog(UserRegister.this);
+                dialog.setCancelable(false);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.spinner);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                dialog.show();
+                if (IsNetworkConnection.checkNetworkConnection(UserRegister.this)) {
 
+                    RequestQueue queue = Volley.newRequestQueue(UserRegister.this);
+                    String url = "http://chouguleeducation.in/biker/api/web/user/customer-terms-condition";
 
+// Request a string response from the provided URL.
+                    StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    dialog.dismiss();
+                                    try {
+                                        JSONObject jsonObject = new JSONObject(response);
+                                        if (jsonObject.getString("status").equals("success")) {
+                                            final Dialog mBottomSheetDialog = new Dialog(UserRegister.this);
+                                            mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                            mBottomSheetDialog.setContentView(R.layout.activity_terms_conditions);
+                                            mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                                                    LinearLayout.LayoutParams.WRAP_CONTENT);
+                                            mBottomSheetDialog.show();
+                                            TextView termCon = (TextView) mBottomSheetDialog.findViewById(R.id.terms_conditions);
+                                            Button ok = (Button) mBottomSheetDialog.findViewById(R.id.ok);
+                                            ok.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    mBottomSheetDialog.dismiss();
+                                                }
+                                            });
+                                            // Display the first 500 characters of the response string.
+                                            termCon.setText(jsonObject.getString("terms"));
+                                        } else {
+                                            new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                                                    "Something went wrong please try again later");
+                                        }
+                                    } catch (Exception e) {
+                                        new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                                                "Something went wrong please try again later");
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                        }
+                    });
+// Add the request to the RequestQueue.
+                    queue.add(stringRequest);
 
+                } else {
+                    new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                            "No Internet Connection");
+                }
             }
         });
     }

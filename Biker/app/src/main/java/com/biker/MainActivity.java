@@ -170,7 +170,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getLatLong(zoom_val);
             }
         }
+        auto_tv.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    if(auto_tv.getText().toString().trim().length() != 0) {
+                        dialog.show();
+                        if(marker != null){
+                            marker.remove();
+                        }
+                        getLatLogFromAddress(auto_tv.getText().toString());
 
+                    } else {
+                        new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                                "Enter the name of place you want to search");
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
         gps_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

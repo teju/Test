@@ -83,8 +83,8 @@ public class ReferUser extends AppCompatActivity implements
         } else if (id == R.id.home) {
             Intent i=new Intent(this,MainActivity.class);
             startActivity(i);
-        } else if (id == R.id.refer) {
-            Intent i=new Intent(this,ReferUser.class);
+        } else if (id == R.id.job_history) {
+            Intent i=new Intent(this,JobHistory.class);
             startActivity(i);
         } else if (id == R.id.logout) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);

@@ -541,7 +541,6 @@ public class BookingDetails extends AppCompatActivity
                         final RatingBar ratings = (RatingBar) mBottomSheetDialog.findViewById(R.id.ratings);
                         final EditText feedback = (EditText) mBottomSheetDialog.findViewById(R.id.feedback);
                         ratings.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-
                             @Override
                             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
 

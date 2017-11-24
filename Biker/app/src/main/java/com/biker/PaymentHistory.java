@@ -1,6 +1,7 @@
 package com.biker;
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.content.ComponentCallbacks2;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,7 +26,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -251,7 +255,7 @@ public class PaymentHistory extends AppCompatActivity
                     if (PaymentList_l.size() != 0) {
                         mAdapter = new PaymentHistory.PaymentHistoryRecyclerView();
                         recyclerView.setAdapter(mAdapter);
-                        if (jsonObject.has("Paymentlist")) {
+                        if (jsonObject.has("bookinglist")) {
                             final JSONObject finalJsonObject = jsonObject;
                             mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
                                 @Override
@@ -261,21 +265,22 @@ public class PaymentHistory extends AppCompatActivity
                                     mAdapter.notifyItemInserted(PaymentList_l.size() - 1);
                                     //Load more data for reyclerview
                                     new Handler().postDelayed(new Runnable() {
-                                                                  @Override
-                                                                  public void run() {
-                                                                      Log.e("haint", "Load More 2");
-                                                                      if (finalJsonObject.has("Paymentlist")) {
-                                                                          PrintClass.printValue("ResponseOfPaymentList onLoadMore "
-                                                                                  , "LOOPED");
-                                                                          //Remove loading item
-                                                                          PaymentList_l.remove(PaymentList_l.size() - 1);
-                                                                          mAdapter.notifyItemRemoved(PaymentList_l.size());
-                                                                          //Load data
-                                                                          getPaymentList("PaymentHistoryReload");
-                                                                      }
-                                                                  }
-                                                              },
-                                            1000);
+                                          @Override
+                                          public void run() {
+                                              Log.e("haint", "Load More 2");
+                                              if (finalJsonObject.has("bookinglist")) {
+                                                  PrintClass.printValue("ResponseOfPaymentList onLoadMore "
+                                                          , "LOOPED");
+                                                  //Remove loading item
+                                                  PaymentList_l.remove(PaymentList_l.size() - 1);
+                                                  mAdapter.notifyItemRemoved(PaymentList_l.size());
+                                                  //Load data
+                                                  offset = offset + limit;
+                                                  getPaymentList("PaymentHistoryReload");
+                                              }
+                                          }
+                                      },
+                                1000);
                                 }
                             });
 
@@ -375,11 +380,13 @@ public class PaymentHistory extends AppCompatActivity
     }
 
     static  class PaymentHistoryRecyclerViewHolder extends RecyclerView.ViewHolder {
+        private final Button payNow;
         TextView Payment_id, vendor_name, vendor_number, amount, status;
 
         public PaymentHistoryRecyclerViewHolder(View itemView) {
             super(itemView);
             Payment_id = (TextView) itemView.findViewById(R.id.Payment_id);
+            payNow = (Button) itemView.findViewById(R.id.payNow);
             vendor_name = (TextView) itemView.findViewById(R.id.vendor_name);
             vendor_number = (TextView) itemView.findViewById(R.id.vendor_number);
             amount = (TextView) itemView.findViewById(R.id.amount);
@@ -465,13 +472,36 @@ public class PaymentHistory extends AppCompatActivity
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof PaymentHistory.PaymentHistoryRecyclerViewHolder) {
                 BookingList Payments = PaymentList_l.get(position);
-               /* PaymentHistory.PaymentHistoryRecyclerViewHolder userViewHolder =
+                PaymentHistory.PaymentHistoryRecyclerViewHolder userViewHolder =
                         (PaymentHistory.PaymentHistoryRecyclerViewHolder) holder;
                 userViewHolder.Payment_id.setText(Payments.getBooking_no());
                 userViewHolder.vendor_name.setText(Payments.getEmail_id());
-                userViewHolder.vendor_number.setText(Payments.getVehicle_no());
-                userViewHolder.status.setText(getformatteddate(Payments.getBooked_on()));
-                userViewHolder.status.setText(Payments.getStatus());*/
+                userViewHolder.vendor_number.setText(Payments.getVendor_nuber());
+                userViewHolder.payNow.setTag(position);
+                userViewHolder.payNow.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final int itemPosition = (Integer) view.getTag();
+                        final BookingList bookin = PaymentList_l.get(itemPosition);
+
+                        final Dialog mBottomSheetDialog = new Dialog(PaymentHistory.this);
+                        mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        mBottomSheetDialog.setContentView(R.layout.pay_now);
+                        mBottomSheetDialog.setCancelable(true);
+                        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT);
+                        mBottomSheetDialog.show();
+                        Button ok = (Button) mBottomSheetDialog.findViewById(R.id.ok);
+                        ok.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                mBottomSheetDialog.dismiss();
+                            }
+                        });
+
+                    }
+                });
+               // userViewHolder.status.setText(Payments.getStatus());
             } else if (holder instanceof PaymentHistory.LoadingViewHolder) {
                 PaymentHistory.LoadingViewHolder loadingViewHolder = (PaymentHistory.LoadingViewHolder) holder;
                 loadingViewHolder.progressBar.setIndeterminate(true);

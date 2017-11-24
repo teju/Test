@@ -158,17 +158,17 @@
             android:textAllCaps="true"
             android:textColor="@color/orange"
             android:id="@+id/status"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:id="@+id/payNow"
+            android:text="Pay Now"
+            android:visibility="visible"
+            android:textColor="@color/white"
+            android:background="@drawable/bg_green"
+            android:layout_alignParentRight="true" />
 
     </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:id="@+id/payNow"
-        android:text="Pay Now"
-        android:visibility="gone"
-        android:textColor="@color/white"
-        android:background="@drawable/bg_green"
-        android:layout_alignParentRight="true" />
 
 </LinearLayout>

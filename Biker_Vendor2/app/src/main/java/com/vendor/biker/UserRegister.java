@@ -1,10 +1,12 @@
 package com.vendor.biker;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -15,10 +17,19 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.vendor.biker.Utils.Constants;
 import com.vendor.biker.Utils.CustomToast;
 import com.vendor.biker.Utils.IsNetworkConnection;
@@ -28,6 +39,8 @@ import com.vendor.biker.Utils.post_async;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.sufficientlysecure.htmltextview.HtmlHttpImageGetter;
+import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,12 +65,13 @@ public class UserRegister extends AppCompatActivity {
     private double getLongitude=0;
     private String getAddress="";
     boolean isUpdate=false;
+    private boolean agreed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
-
+        agreed = false;
         prefrence = getSharedPreferences("My_Pref", 0);
         editor = prefrence.edit();
         isUpdate=false;
@@ -67,6 +81,8 @@ public class UserRegister extends AppCompatActivity {
         phone=(EditText)findViewById(R.id.phone);
         email=(EditText)findViewById(R.id.email);
         service_center_name=(EditText)findViewById(R.id.service_center_name);
+        LinearLayout terms_conditions = (LinearLayout) findViewById(R.id.terms_conditions);
+        final CheckBox agree = (CheckBox)findViewById(R.id.agree);
 
         type=getIntent().getStringExtra("type");
         PrintClass.printValue("UserRegisterPrint type ",type);
@@ -74,6 +90,8 @@ public class UserRegister extends AppCompatActivity {
         if(type.equals("edit")) {
             getProfileInfo();
             click.setText("UPDATE");
+            agree.setVisibility(View.GONE);
+
         } else {
             name.setText("");
             email.setText("");
@@ -92,6 +110,96 @@ public class UserRegister extends AppCompatActivity {
         } catch (Exception e){
             PrintClass.printValue("PathGoogleMapActivity Exception ",e.toString());
         }
+        agree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(agree.isChecked()){
+                    agreed = true;
+                } else  {
+                    agreed=false;
+                }
+            }
+        });
+        terms_conditions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Dialog dialog = new Dialog(UserRegister.this);
+                dialog.setCancelable(false);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.spinner);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                dialog.show();
+                if (IsNetworkConnection.checkNetworkConnection(UserRegister.this)) {
+
+                    RequestQueue queue = Volley.newRequestQueue(UserRegister.this);
+                    String url = "http://chouguleeducation.in/biker/api/web/user/customer-terms-condition";
+
+// Request a string response from the provided URL.
+                    StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    dialog.dismiss();
+                                    try {
+                                        JSONObject jsonObject = new JSONObject(response);
+                                        if (jsonObject.getString("status").equals("success")) {
+                                            final Dialog mBottomSheetDialog = new Dialog(UserRegister.this);
+                                            mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                            mBottomSheetDialog.setContentView(R.layout.activity_terms_conditions);
+                                            mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                                                    LinearLayout.LayoutParams.WRAP_CONTENT);
+                                            mBottomSheetDialog.show();
+                                            Button ok = (Button) mBottomSheetDialog.findViewById(R.id.ok);
+                                            final CheckBox agree = (CheckBox) mBottomSheetDialog.findViewById(R.id.agree);
+                                            agree.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    if(agree.isChecked()){
+                                                        agreed = true;
+
+                                                    } else  {
+                                                        agreed=false;
+                                                    }
+                                                }
+                                            });
+                                            ok.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    mBottomSheetDialog.dismiss();
+                                                }
+                                            });
+                                            HtmlTextView termCon = (HtmlTextView) mBottomSheetDialog.findViewById(R.id.terms_conditions);
+                                            // Spanned result = Html.fromHtml(childText);
+                                            // txtListChild.setText(result);
+                                            termCon.setHtml(jsonObject.getString("terms"), new HtmlHttpImageGetter(termCon));
+
+                                            // Display the first 500 characters of the response string.
+                                        } else {
+                                            dialog.dismiss();
+                                            new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                                                    "Something went wrong please try again later");
+                                        }
+                                    } catch (Exception e) {
+                                        dialog.dismiss();
+                                        new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                                                "Something went wrong please try again later");
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                        }
+                    });
+// Add the request to the RequestQueue.
+                    queue.add(stringRequest);
+
+                } else {
+                    new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                            "No Internet Connection");
+                }
+            }
+        });
+
     }
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
@@ -338,6 +446,11 @@ public class UserRegister extends AppCompatActivity {
                     new CustomToast().Show_Toast(getApplicationContext(), rootView,
                             jsonArray.getString(0) );
                     return;
+                } else if(errorjsonObject.has("first_name")) {
+                    JSONArray jsonArray =errorjsonObject.getJSONArray("first_name");
+                    new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                            jsonArray.getString(0) );
+                    return;
                 }
             }
 
@@ -410,6 +523,10 @@ public class UserRegister extends AppCompatActivity {
             } else {
                 return true;
             }
+        } else if(!type.equals("edit") && !agreed) {
+            new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                    "Please accept to terms & conditions");
+            return false;
         } else if (getAddress.equals("")) {
             new CustomToast().Show_Toast(getApplicationContext(), rootView,
                    "Address Not Found. Please Turn on your Gps");

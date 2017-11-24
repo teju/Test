@@ -38,6 +38,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.vendor.biker.Utils.Constants;
 import com.vendor.biker.Utils.CustomToast;
+import com.vendor.biker.Utils.GPSTracker;
 import com.vendor.biker.Utils.IsNetworkConnection;
 import com.vendor.biker.Utils.PrintClass;
 import com.vendor.biker.Utils.post_async;
@@ -176,17 +177,14 @@ public class PathGoogleMapActivity extends FragmentActivity {
             AlertDialog al_gps = alert.create();
             al_gps.show();
         } else {
-            Location location = getLastKnownLocation();
-            if (location != null) {
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
-
-                showMap(latitude,longitude);
+            GPSTracker gps = new GPSTracker(this);
+            if(!gps.canGetLocation()){
+                gps.showSettingsAlert();
             } else {
-                Toast.makeText(getApplicationContext(), "Location Not Found", Toast.LENGTH_LONG).show();
-                PrintClass.printValue("LATLOGVALUE ", "location null");
+                final double latitude = gps.getLatitude();
+                final double longitude = gps.getLongitude();
+                showMap(latitude,longitude);
             }
-
         }
     }
 

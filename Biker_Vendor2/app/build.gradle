@@ -27,6 +27,8 @@ dependencies {
     compile('com.google.android.gms:play-services:9.0.0') {
         exclude group: 'com.android.support', module: 'support-v4'
     }
+    compile 'org.sufficientlysecure:html-textview:3.4'
+
     compile 'com.google.gms:google-services:3.0.0'
     compile 'com.google.android.gms:play-services-gcm:9.0.0'
     compile 'com.google.firebase:firebase-crash:9.0.0'

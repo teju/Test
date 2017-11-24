@@ -17,6 +17,7 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/agree"
         android:text="Agree to terms and conditions"
         android:layout_gravity="center_horizontal"/>
     <Button

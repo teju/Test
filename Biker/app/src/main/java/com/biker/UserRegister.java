@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,6 +33,8 @@ import com.biker.Utils.post_async;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.sufficientlysecure.htmltextview.HtmlHttpImageGetter;
+import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -49,10 +52,13 @@ public class UserRegister extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     String type="";
     boolean isUpdate=false;
+    private boolean agreed=false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
+        agreed=false;
         Typeface typeface_luci = Typeface.createFromAsset(getAssets(), "fonts/luci.ttf");
 
         prefrence = getSharedPreferences("My_Pref", 0);
@@ -71,16 +77,27 @@ public class UserRegister extends AppCompatActivity {
 
         type=getIntent().getStringExtra("type");
         PrintClass.printValue("UserRegisterPrint type ",type);
+        final CheckBox agree = (CheckBox)findViewById(R.id.agree);
 
         if(type.equals("edit")) {
             getProfileInfo();
             click.setText("UPDATE");
+            agree.setVisibility(View.GONE);
         } else {
             name.setText("");
             email.setText("");
             phone.setText("");
         }
-
+        agree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(agree.isChecked()){
+                    agreed = true;
+                }else  {
+                    agreed=false;
+                }
+            }
+        });
         terms_conditions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,7 +127,6 @@ public class UserRegister extends AppCompatActivity {
                                             mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
                                                     LinearLayout.LayoutParams.WRAP_CONTENT);
                                             mBottomSheetDialog.show();
-                                            TextView termCon = (TextView) mBottomSheetDialog.findViewById(R.id.terms_conditions);
                                             Button ok = (Button) mBottomSheetDialog.findViewById(R.id.ok);
                                             ok.setOnClickListener(new View.OnClickListener() {
                                                 @Override
@@ -118,13 +134,31 @@ public class UserRegister extends AppCompatActivity {
                                                     mBottomSheetDialog.dismiss();
                                                 }
                                             });
+                                            final CheckBox agree = (CheckBox) mBottomSheetDialog.findViewById(R.id.agree);
+                                            agree.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    if(agree.isChecked()){
+                                                        agreed = true;
+
+                                                    }else  {
+                                                        agreed=false;
+                                                    }
+                                                }
+                                            });
+                                            HtmlTextView termCon = (HtmlTextView) mBottomSheetDialog.findViewById(R.id.terms_conditions);
+                                            // Spanned result = Html.fromHtml(childText);
+                                            // txtListChild.setText(result);
+                                            termCon.setHtml(jsonObject.getString("terms"), new HtmlHttpImageGetter(termCon));
+
                                             // Display the first 500 characters of the response string.
-                                            termCon.setText(jsonObject.getString("terms"));
                                         } else {
+                                            dialog.dismiss();
                                             new CustomToast().Show_Toast(getApplicationContext(), rootView,
                                                     "Something went wrong please try again later");
                                         }
                                     } catch (Exception e) {
+                                        dialog.dismiss();
                                         new CustomToast().Show_Toast(getApplicationContext(), rootView,
                                                 "Something went wrong please try again later");
                                     }
@@ -258,6 +292,11 @@ public class UserRegister extends AppCompatActivity {
                     new CustomToast().Show_Toast(getApplicationContext(), rootView,
                             jsonArray.getString(0) );
                     return;
+                } else if(errorjsonObject.has("first_name")) {
+                    JSONArray jsonArray =errorjsonObject.getJSONArray("first_name");
+                    new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                            jsonArray.getString(0) );
+                    return;
                 }
             }
         } catch (Exception e){
@@ -315,7 +354,11 @@ public class UserRegister extends AppCompatActivity {
             phone.setError("Your Phone Number is Invalid.");
             return false;
 
-        } else if(getEmail.length() > 0) {
+        } else if(!type.equals("edit") && !agreed) {
+            new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                    "Please accept to terms & conditions");
+            return false;
+        }  else if(getEmail.length() > 0) {
             if(!m.find()) {
                 name.setError(null);
                 phone.setError(null);

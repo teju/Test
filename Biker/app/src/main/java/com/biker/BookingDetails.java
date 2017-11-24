@@ -1,6 +1,8 @@
 package com.biker;
 
+import android.app.Dialog;
 import android.content.ComponentCallbacks2;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,8 +24,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 
@@ -233,11 +240,11 @@ public class BookingDetails extends AppCompatActivity
                     JSONObject booking_jObj=jsonarr_bookinglist.getJSONObject(i);
                     BookingList bookingList =new BookingList();
                     bookingList.setBooking_no(booking_jObj.getString("booking_no"));
+                    bookingList.setBooking_id(booking_jObj.getString("booking_id"));
                     bookingList.setEmail_id(booking_jObj.getString("email_id"));
                     bookingList.setVehicle_no(booking_jObj.getString("vehicle_no"));
                     bookingList.setStatus(booking_jObj.getString("status"));
                     bookingList.setBooked_on(booking_jObj.getString("booked_on"));
-                    bookingList.setAddress(booking_jObj.getString("address"));
                     if(booking_jObj.has("mobile_no")) {
                         bookingList.setVendor_name(booking_jObj.getString("vendor_name"));
                     } else {
@@ -254,7 +261,7 @@ public class BookingDetails extends AppCompatActivity
                     total_count = Integer.parseInt(jsonObject.getString("totalCount"));
                 }
                 if(bookingList_l.size() !=0) {
-                    mAdapter = new BookingDetails.BookingDetailsRecyclerView();
+                    mAdapter = new BookingDetails.BookingDetailsRecyclerView(this);
                     recyclerView.setAdapter(mAdapter);
                     if (jsonObject.has("bookinglist")) {
                         final JSONObject finalJsonObject = jsonObject;
@@ -327,6 +334,7 @@ public class BookingDetails extends AppCompatActivity
                     BookingList bookingList =new BookingList();
                     bookingList.setBooking_no(booking_jObj.getString("booking_no"));
                     bookingList.setEmail_id(booking_jObj.getString("email_id"));
+                    bookingList.setBooking_id(booking_jObj.getString("booking_id"));
                     bookingList.setVehicle_no(booking_jObj.getString("vehicle_no"));
                     bookingList.setStatus(booking_jObj.getString("status"));
                     bookingList.setBooked_on(booking_jObj.getString("booked_on"));
@@ -386,6 +394,7 @@ public class BookingDetails extends AppCompatActivity
     }
 
     class BookingDetailsRecyclerViewHolder extends RecyclerView.ViewHolder {
+        private final Button payNow;
         TextView booking_id, vendor_name, vendor_number, vehicle_no, status,
                 booking_id_text,vendor_name_text,vendor_number_text,vehicle_no_text,status_text;
 
@@ -402,6 +411,7 @@ public class BookingDetails extends AppCompatActivity
             vehicle_no = (TextView) itemView.findViewById(R.id.vehicle_no);
             vehicle_no.setTypeface(typeface_luci);
             status = (TextView) itemView.findViewById(R.id.status);
+            payNow = (Button) itemView.findViewById(R.id.payNow);
             status.setTypeface(typeface_luci);
             booking_id_text=(TextView)itemView.findViewById(R.id.booking_id_text);
             booking_id_text.setTypeface(typeface_luci);
@@ -412,6 +422,7 @@ public class BookingDetails extends AppCompatActivity
             vehicle_no_text=(TextView)itemView.findViewById(R.id.vehicle_no_text);
             vehicle_no_text.setTypeface(typeface_luci);
             status_text=(TextView)itemView.findViewById(R.id.status_text);
+            status_text.setTypeface(typeface_luci);
             status_text.setTypeface(typeface_luci);
         }
     }
@@ -428,13 +439,15 @@ public class BookingDetails extends AppCompatActivity
     class BookingDetailsRecyclerView extends RecyclerView.Adapter < RecyclerView.ViewHolder > {
         private final int VIEW_TYPE_ITEM = 0;
         private final int VIEW_TYPE_LOADING = 1;
+        private final Context context;
         private OnLoadMoreListener mOnLoadMoreListener;
         private boolean isLoading=false;
         private int visibleThreshold = 4;
         private int lastVisibleItem,
                 totalItemCount;
 
-        public BookingDetailsRecyclerView() {
+        public BookingDetailsRecyclerView(Context context) {
+            this.context=context;
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -500,20 +513,87 @@ public class BookingDetails extends AppCompatActivity
                 userViewHolder.vendor_name.setText(bookings.getVendor_name());
                 userViewHolder.vehicle_no.setText(bookings.getVehicle_no());
                 userViewHolder.vendor_number.setText(bookings.getVendor_nuber());
+                userViewHolder.payNow.setTag(position);
                 userViewHolder.status.setText(bookings.getStatus());
                 if(bookings.getStatus().equalsIgnoreCase("Picked")) {
                     userViewHolder.status.setTextColor(getResources().getColor(R.color.light_red2));
                 } else if(bookings.getStatus().equalsIgnoreCase("InProcess")) {
-                    userViewHolder.status.setBackgroundColor(getResources().getColor(R.color.yellow));
+                    userViewHolder.status.setTextColor(getResources().getColor(R.color.yellow));
                 } else if(bookings.getStatus().equalsIgnoreCase("Completed")) {
                     userViewHolder.status.setTextColor(getResources().getColor(R.color.blue));
                 } else if(bookings.getStatus().equalsIgnoreCase("Delivered")) {
                     userViewHolder.status.setTextColor(getResources().getColor(R.color.green));
                 }
+                userViewHolder.payNow.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final int itemPosition = (Integer) view.getTag();
+                        final BookingList bookin = bookingList_l.get(itemPosition);
 
+                        final Dialog mBottomSheetDialog = new Dialog(context);
+                        mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        mBottomSheetDialog.setContentView(R.layout.rating_feedback);
+                        mBottomSheetDialog.setCancelable(true);
+                        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT);
+                        mBottomSheetDialog.show();
+                        Button submit = (Button) mBottomSheetDialog.findViewById(R.id.submit);
+                        final RatingBar ratings = (RatingBar) mBottomSheetDialog.findViewById(R.id.ratings);
+                        final EditText feedback = (EditText) mBottomSheetDialog.findViewById(R.id.feedback);
+                        ratings.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+
+                            @Override
+                            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+
+                                String rateValue = String.valueOf(ratingBar.getRating());
+                                System.out.println("Rate for Module is"+rateValue);
+                            }
+                        });
+                        submit.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if(ratings.getRating() == 0) {
+                                    new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                                            "Please Provide your rating");
+                                } else if(feedback.getText().toString().trim().length() == 0 ) {
+                                    new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                                            "Please Provide your feedback");
+                                } else {
+                                    giveFeedback(bookin.getBooking_id(), bookin.getVendor_nuber(),
+                                            String.valueOf(ratings.getRating()), feedback.getText().toString());
+                                }
+                                mBottomSheetDialog.dismiss();
+                            }
+                        });
+                    }
+                });
             } else if (holder instanceof BookingDetails.LoadingViewHolder) {
                 BookingDetails.LoadingViewHolder loadingViewHolder = (BookingDetails.LoadingViewHolder) holder;
                 loadingViewHolder.progressBar.setIndeterminate(true);
+            }
+        }
+
+        public void giveFeedback(String booking_id,String vendor_id,String rating,String comment) {
+            if (IsNetworkConnection.checkNetworkConnection(context)) {
+
+                String url = Constants.SERVER_URL + "booking/booking-rating";
+                JSONObject params = new JSONObject();
+                try {
+                    params.put("user_id",prefrence.getString("user_id", "") );
+                    params.put("access_token",prefrence.getString("access_token", ""));
+                    params.put("booking_id",booking_id);
+                    params.put("vendor_id",vendor_id);
+                    params.put("rating",rating);
+                    params.put("comment",comment);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
+                }
+                PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
+                new post_async(BookingDetails.this,"RateFeedBAck").execute(url, params.toString());
+            } else {
+                new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                        "No Internet Connection");
             }
         }
 

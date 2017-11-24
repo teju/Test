@@ -158,7 +158,14 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
         }
     }
 
-    public void changeStatus(String status,String booking_id){
+    @Override
+    protected void onResume() {
+        super.onResume();
+        profile_name.setText(prefrence.getString("name", ""));
+
+    }
+
+    public void changeStatus(String status, String booking_id){
         if (IsNetworkConnection.checkNetworkConnection(JobList.this)) {
 
             String url = Constants.SERVER_URL + "vendor/change-status";
@@ -396,6 +403,9 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
             startActivity(i);
         } else if (id == R.id.job_history) {
             Intent i=new Intent(this,JobHistory.class);
+            startActivity(i);
+        } else if (id == R.id.refer) {
+            Intent i=new Intent(this,ReferUser.class);
             startActivity(i);
         } else if (id == R.id.logout) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);

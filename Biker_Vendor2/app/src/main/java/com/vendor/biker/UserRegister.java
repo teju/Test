@@ -132,7 +132,7 @@ public class UserRegister extends AppCompatActivity {
                 if (IsNetworkConnection.checkNetworkConnection(UserRegister.this)) {
 
                     RequestQueue queue = Volley.newRequestQueue(UserRegister.this);
-                    String url = "http://chouguleeducation.in/biker/api/web/user/customer-terms-condition";
+                    String url = "http://chouguleeducation.in/biker/api/web/user/vendor-terms-condition";
 
 // Request a string response from the provided URL.
                     StringRequest stringRequest = new StringRequest(Request.Method.GET, url,

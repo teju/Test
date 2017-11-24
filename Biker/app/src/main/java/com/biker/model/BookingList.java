@@ -57,8 +57,28 @@ public class BookingList {
     String vehicle_no;
     String status;
     String email_id;
+
+    public String getBooking_id() {
+        return booking_id;
+    }
+
+    public void setBooking_id(String booking_id) {
+        this.booking_id = booking_id;
+    }
+
     String booked_on;
     String address;
+    String booking_id;
+
+    public String getVendor_id() {
+        return vendor_id;
+    }
+
+    public void setVendor_id(String vendor_id) {
+        this.vendor_id = vendor_id;
+    }
+
+    String vendor_id;
 
     public String getVendor_name() {
         return vendor_name;

@@ -536,6 +536,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.job_history) {
             Intent i=new Intent(this,JobHistory.class);
             startActivity(i);
+        } else if (id == R.id.refer) {
+            Intent i=new Intent(this,ReferUser.class);
+            startActivity(i);
         } else if (id == R.id.logout) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.setTitle("Confirm Logout");
@@ -561,4 +564,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

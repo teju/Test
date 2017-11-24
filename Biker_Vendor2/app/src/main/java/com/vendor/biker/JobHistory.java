@@ -243,7 +243,12 @@ public class JobHistory extends AppCompatActivity implements
         jobList_l.clear();
         getJobList("jobHistoryDetailsRefresh");
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        profile_name.setText(prefrence.getString("name", ""));
 
+    }
     public void ResponseOfjobListReload(String resultString) {
         try {
             JSONObject jsonObject = new JSONObject(resultString);
@@ -296,6 +301,9 @@ public class JobHistory extends AppCompatActivity implements
             startActivity(i);
         } else if (id == R.id.home) {
             Intent i=new Intent(this,MainActivity.class);
+            startActivity(i);
+        } else if (id == R.id.refer) {
+            Intent i=new Intent(this,ReferUser.class);
             startActivity(i);
         } else if (id == R.id.logout) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);

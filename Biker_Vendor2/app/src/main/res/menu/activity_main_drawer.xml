@@ -18,6 +18,11 @@
             android:icon="@drawable/settings"
             android:title="Job History" />
         <item
+            android:id="@+id/refer"
+            android:icon="@drawable/logout"
+            android:title="Refer User" />
+
+        <item
             android:id="@+id/logout"
             android:icon="@drawable/logout"
             android:title="LogOut" />

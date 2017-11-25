@@ -1,13 +1,11 @@
 package com.biker;
 
-import android.annotation.TargetApi;
 import android.app.Dialog;
-import android.content.ComponentCallbacks2;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -21,7 +19,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,8 +28,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 
@@ -42,7 +37,6 @@ import com.biker.Utils.IsNetworkConnection;
 import com.biker.Utils.PrintClass;
 import com.biker.Utils.post_async;
 import com.biker.model.BookingList;
-import com.google.android.gms.wallet.PaymentMethodTokenizationParameters;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,7 +47,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class PaymentHistory extends AppCompatActivity
+public class BookingCompleted extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,SwipeRefreshLayout.OnRefreshListener{
     private RecyclerView recyclerView;
     private LinearLayoutManager mLayoutManager;
@@ -64,7 +58,7 @@ public class PaymentHistory extends AppCompatActivity
     private View rootView;
     int offset=0;
     int limit=5;
-    PaymentHistory.PaymentHistoryRecyclerView mAdapter ;
+    BookingCompleted.PaymentHistoryRecyclerView mAdapter ;
     private int total_count=0;
     private TextView no_records;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -118,7 +112,7 @@ public class PaymentHistory extends AppCompatActivity
         if(prefrence.getString("isLoggedIn", "").equals("true")) {
 
             // Constants.statusColor(this);
-            getPaymentList("PaymentHistory");
+            getPaymentList("BookingCompleted");
         }else {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.setTitle("Confirm Login");
@@ -127,7 +121,7 @@ public class PaymentHistory extends AppCompatActivity
                 public void onClick(DialogInterface dialog,int which) {
                     editor.putString("isLoggedIn","false");
                     editor.commit();
-                    Intent i=new Intent(PaymentHistory.this,Login.class);
+                    Intent i=new Intent(BookingCompleted.this,Login.class);
                     i.putExtra("reached_dest","false");
                     startActivity(i);
                 }
@@ -147,7 +141,7 @@ public class PaymentHistory extends AppCompatActivity
     }
 
     public void getPaymentList(String action){
-        if (IsNetworkConnection.checkNetworkConnection(PaymentHistory.this)) {
+        if (IsNetworkConnection.checkNetworkConnection(BookingCompleted.this)) {
             if(action.equals("PaymentHistoryRefresh")) {
                 swipeRefreshLayout.setRefreshing(true);
             }
@@ -163,7 +157,7 @@ public class PaymentHistory extends AppCompatActivity
                 PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
             }
             PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
-            new post_async(PaymentHistory.this,action).execute(url, params.toString());
+            new post_async(BookingCompleted.this,action).execute(url, params.toString());
         } else {
             new CustomToast().Show_Toast(getApplicationContext(), rootView,
                     "No Internet Connection");
@@ -182,7 +176,7 @@ public class PaymentHistory extends AppCompatActivity
                 startActivity(i);
                 // Handle the camera action
             } else if (id == R.id.profile) {
-                if (IsNetworkConnection.checkNetworkConnection(PaymentHistory.this)) {
+                if (IsNetworkConnection.checkNetworkConnection(BookingCompleted.this)) {
                     Intent i = new Intent(this, UserRegister.class);
                     i.putExtra("type", "edit");
                     startActivity(i);
@@ -206,7 +200,7 @@ public class PaymentHistory extends AppCompatActivity
                         editor.putString("isLoggedIn", "false");
                         editor.putString("access_token","1234");
                         editor.commit();
-                        Intent i = new Intent(PaymentHistory.this, Login.class);
+                        Intent i = new Intent(BookingCompleted.this, Login.class);
                         i.putExtra("reached_dest","false");
                         startActivity(i);
                         finish();
@@ -247,13 +241,23 @@ public class PaymentHistory extends AppCompatActivity
                         PaymentList.setStatus(Payment_jObj.getString("status"));
                         PaymentList.setBooked_on(Payment_jObj.getString("booked_on"));
                         PaymentList.setAddress(Payment_jObj.getString("address"));
+                        if(Payment_jObj.has("vendor_name")) {
+                            PaymentList.setVendor_name(Payment_jObj.getString("vendor_name"));
+                        } else {
+                            PaymentList.setVendor_name("");
+                        }
+                        if(Payment_jObj.has("mobile_no")) {
+                            PaymentList.setVendor_nuber(Payment_jObj.getString("mobile_no"));
+                        } else {
+                            PaymentList.setVendor_name("");
+                        }
                         PaymentList_l.add(PaymentList);
                     }
                     if (jsonObject.has("totalCount")) {
                         total_count = Integer.parseInt(jsonObject.getString("totalCount"));
                     }
                     if (PaymentList_l.size() != 0) {
-                        mAdapter = new PaymentHistory.PaymentHistoryRecyclerView();
+                        mAdapter = new BookingCompleted.PaymentHistoryRecyclerView(BookingCompleted.this);
                         recyclerView.setAdapter(mAdapter);
                         if (jsonObject.has("bookinglist")) {
                             final JSONObject finalJsonObject = jsonObject;
@@ -335,6 +339,16 @@ public class PaymentHistory extends AppCompatActivity
                     PaymentList.setStatus(Payment_jObj.getString("status"));
                     PaymentList.setBooked_on(Payment_jObj.getString("booked_on"));
                     PaymentList.setAddress(Payment_jObj.getString("address"));
+                    if(Payment_jObj.has("vendor_name")) {
+                        PaymentList.setVendor_name(Payment_jObj.getString("vendor_name"));
+                    } else {
+                        PaymentList.setVendor_name("");
+                    }
+                    if(Payment_jObj.has("mobile_no")) {
+                        PaymentList.setVendor_nuber(Payment_jObj.getString("mobile_no"));
+                    } else {
+                        PaymentList.setVendor_name("");
+                    }
                     PaymentList_l.add(PaymentList);
                 }
                 mAdapter.notifyDataSetChanged();
@@ -381,15 +395,15 @@ public class PaymentHistory extends AppCompatActivity
 
     static  class PaymentHistoryRecyclerViewHolder extends RecyclerView.ViewHolder {
         private final Button payNow;
-        TextView Payment_id, vendor_name, vendor_number, amount, status;
+        TextView booking_id, vendor_name, vendor_number, vehicle_no, status;
 
         public PaymentHistoryRecyclerViewHolder(View itemView) {
             super(itemView);
-            Payment_id = (TextView) itemView.findViewById(R.id.Payment_id);
+            booking_id = (TextView) itemView.findViewById(R.id.booking_id);
             payNow = (Button) itemView.findViewById(R.id.payNow);
             vendor_name = (TextView) itemView.findViewById(R.id.vendor_name);
             vendor_number = (TextView) itemView.findViewById(R.id.vendor_number);
-            amount = (TextView) itemView.findViewById(R.id.amount);
+            vehicle_no = (TextView) itemView.findViewById(R.id.vehicle_no);
             status = (TextView) itemView.findViewById(R.id.status);
         }
     }
@@ -406,13 +420,15 @@ public class PaymentHistory extends AppCompatActivity
     class PaymentHistoryRecyclerView extends RecyclerView.Adapter < RecyclerView.ViewHolder > {
         private final int VIEW_TYPE_ITEM = 0;
         private final int VIEW_TYPE_LOADING = 1;
+        private final Context context;
         private OnLoadMoreListener mOnLoadMoreListener;
         private boolean isLoading=false;
         private int visibleThreshold = 4;
         private int lastVisibleItem,
                 totalItemCount;
 
-        public PaymentHistoryRecyclerView() {
+        public PaymentHistoryRecyclerView(Context context) {
+            this.context=context;
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -459,24 +475,26 @@ public class PaymentHistory extends AppCompatActivity
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if (viewType == VIEW_TYPE_ITEM) {
                 View view = LayoutInflater.from(
-                        PaymentHistory.this).inflate(R.layout.payment_history_content, parent, false);
-                return new PaymentHistory.PaymentHistoryRecyclerViewHolder(view);
+                        BookingCompleted.this).inflate(R.layout.payment_history_content, parent, false);
+                return new BookingCompleted.PaymentHistoryRecyclerViewHolder(view);
             } else if (viewType == VIEW_TYPE_LOADING) {
-                View view = LayoutInflater.from(PaymentHistory.this).inflate(R.layout.spinner, parent, false);
-                return new PaymentHistory.LoadingViewHolder(view);
+                View view = LayoutInflater.from(BookingCompleted.this).inflate(R.layout.spinner, parent, false);
+                return new BookingCompleted.LoadingViewHolder(view);
             }
             return null;
         }
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            if (holder instanceof PaymentHistory.PaymentHistoryRecyclerViewHolder) {
+            if (holder instanceof BookingCompleted.PaymentHistoryRecyclerViewHolder) {
                 BookingList Payments = PaymentList_l.get(position);
-                PaymentHistory.PaymentHistoryRecyclerViewHolder userViewHolder =
-                        (PaymentHistory.PaymentHistoryRecyclerViewHolder) holder;
-                userViewHolder.Payment_id.setText(Payments.getBooking_no());
-                userViewHolder.vendor_name.setText(Payments.getEmail_id());
+                BookingCompleted.PaymentHistoryRecyclerViewHolder userViewHolder =
+                        (BookingCompleted.PaymentHistoryRecyclerViewHolder) holder;
+                userViewHolder.booking_id.setText(Payments.getBooking_no());
+                userViewHolder.vendor_name.setText(Payments.getVendor_name());
                 userViewHolder.vendor_number.setText(Payments.getVendor_nuber());
+                userViewHolder.vehicle_no.setText(Payments.getVehicle_no());
+                userViewHolder.status.setText(Payments.getStatus());
                 userViewHolder.payNow.setTag(position);
                 userViewHolder.payNow.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -484,26 +502,19 @@ public class PaymentHistory extends AppCompatActivity
                         final int itemPosition = (Integer) view.getTag();
                         final BookingList bookin = PaymentList_l.get(itemPosition);
 
-                        final Dialog mBottomSheetDialog = new Dialog(PaymentHistory.this);
+                        final Dialog mBottomSheetDialog = new Dialog(context);
                         mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         mBottomSheetDialog.setContentView(R.layout.pay_now);
                         mBottomSheetDialog.setCancelable(true);
                         mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
                                 LinearLayout.LayoutParams.WRAP_CONTENT);
                         mBottomSheetDialog.show();
-                        Button ok = (Button) mBottomSheetDialog.findViewById(R.id.ok);
-                        ok.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                mBottomSheetDialog.dismiss();
-                            }
-                        });
 
                     }
                 });
                // userViewHolder.status.setText(Payments.getStatus());
-            } else if (holder instanceof PaymentHistory.LoadingViewHolder) {
-                PaymentHistory.LoadingViewHolder loadingViewHolder = (PaymentHistory.LoadingViewHolder) holder;
+            } else if (holder instanceof BookingCompleted.LoadingViewHolder) {
+                BookingCompleted.LoadingViewHolder loadingViewHolder = (BookingCompleted.LoadingViewHolder) holder;
                 loadingViewHolder.progressBar.setIndeterminate(true);
             }
         }

@@ -1,7 +1,6 @@
 package com.biker;
 
 import android.app.Dialog;
-import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -192,7 +191,7 @@ public class BookingDetails extends AppCompatActivity
                 }
                 // Handle the camera action
             } else if (id == R.id.payment_history) {
-                Intent i = new Intent(this, PaymentHistory.class);
+                Intent i = new Intent(this, BookingCompleted.class);
                 startActivity(i);
             } /*else if (id == R.id.setting) {
                 Intent i = new Intent(this, Setting.class);
@@ -515,15 +514,7 @@ public class BookingDetails extends AppCompatActivity
                 userViewHolder.vendor_number.setText(bookings.getVendor_nuber());
                 userViewHolder.payNow.setTag(position);
                 userViewHolder.status.setText(bookings.getStatus());
-                if(bookings.getStatus().equalsIgnoreCase("Picked")) {
-                    userViewHolder.status.setTextColor(getResources().getColor(R.color.light_red2));
-                } else if(bookings.getStatus().equalsIgnoreCase("InProcess")) {
-                    userViewHolder.status.setTextColor(getResources().getColor(R.color.yellow));
-                } else if(bookings.getStatus().equalsIgnoreCase("Completed")) {
-                    userViewHolder.status.setTextColor(getResources().getColor(R.color.blue));
-                } else if(bookings.getStatus().equalsIgnoreCase("Delivered")) {
-                    userViewHolder.status.setTextColor(getResources().getColor(R.color.green));
-                }
+
                 userViewHolder.payNow.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

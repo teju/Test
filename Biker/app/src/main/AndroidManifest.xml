@@ -65,7 +65,7 @@
             android:name=".Setting"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".PaymentHistory"
+            android:name=".BookingCompleted"
             android:screenOrientation="portrait">
         <intent-filter>
             <action android:name="com.biker.PaymentHistory" />

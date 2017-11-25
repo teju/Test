@@ -9,14 +9,11 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -43,7 +40,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.android.volley.Request;
@@ -56,11 +52,6 @@ import com.biker.Utils.IsNetworkConnection;
 import com.biker.Utils.PrintClass;
 import com.biker.Utils.post_async;
 import com.biker.model.PlaceJSONParser;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -928,7 +919,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent i=new Intent(this,BookingDetails.class);
             startActivity(i);
         } else if (id == R.id.payment_history) {
-            Intent i=new Intent(this,PaymentHistory.class);
+            Intent i=new Intent(this,BookingCompleted.class);
             startActivity(i);
         }/* else if (id == R.id.setting) {
             Intent i=new Intent(this,Setting.class);

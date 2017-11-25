@@ -7,5 +7,6 @@
 
     <string name="fcm_pref">com.biker.pref</string>
     <string name="fcm_token">com.biker.token</string>
+    <string name="terms"> Agree to terms and conditions </string>
 
 </resources>

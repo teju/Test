@@ -19,7 +19,7 @@ import com.android.volley.toolbox.Volley;
 import com.biker.BookingDetails;
 import com.biker.Login;
 import com.biker.MainActivity;
-import com.biker.PaymentHistory;
+import com.biker.BookingCompleted;
 import com.biker.R;
 import com.biker.ReachedDestination;
 import com.biker.ServerError;
@@ -34,7 +34,7 @@ import java.io.UnsupportedEncodingException;
 public class post_async extends AsyncTask<String, Integer, String> {
     static String action = "", resultString = "";
     private ReachedDestination reachedDestination;
-    private PaymentHistory paymentHistory;
+    private BookingCompleted bookingCompleted;
     private BookingDetails bookingDetails;
     private MainActivity mainActivity;
     private UserRegister userRegister;
@@ -58,10 +58,10 @@ public class post_async extends AsyncTask<String, Integer, String> {
         this.context=reachedDestination;
         this.reachedDestination = reachedDestination;
     }
-    public post_async(PaymentHistory paymentHistory, String action) {
+    public post_async(BookingCompleted bookingCompleted, String action) {
         this.action = action;
-        this.context=paymentHistory;
-        this.paymentHistory = paymentHistory;
+        this.context= bookingCompleted;
+        this.bookingCompleted = bookingCompleted;
     }
     public post_async(Login login, String action) {
         this.action = action;
@@ -172,12 +172,12 @@ public class post_async extends AsyncTask<String, Integer, String> {
                 this.bookingDetails.ResponseOfBookingList(resultString);
             } else  if (this.bookingDetails != null && action.equalsIgnoreCase("BookingDetailsReload")) {
                 this.bookingDetails.ResponseOfBookingListReload(resultString);
-            } else  if (this.paymentHistory != null &&
-                    (action.equalsIgnoreCase("PaymentHistory")
+            } else  if (this.bookingCompleted != null &&
+                    (action.equalsIgnoreCase("BookingCompleted")
                             || action.equals("PaymentHistoryRefresh"))) {
-                this.paymentHistory.ResponseOfPaymentList(resultString);
-            } else  if (this.paymentHistory != null && action.equalsIgnoreCase("PaymentHistoryReload")) {
-                this.paymentHistory.ResponseOfPaymentListReload(resultString);
+                this.bookingCompleted.ResponseOfPaymentList(resultString);
+            } else  if (this.bookingCompleted != null && action.equalsIgnoreCase("PaymentHistoryReload")) {
+                this.bookingCompleted.ResponseOfPaymentListReload(resultString);
             }else  if (this.reachedDestination != null && action.equalsIgnoreCase("ReachedDestination")) {
                 this.reachedDestination.ResponseOfReachedDestination(resultString);
             }

@@ -2,28 +2,16 @@ package com.biker.Utils;
 
 import android.annotation.TargetApi;
 
-import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.media.MediaPlayer;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
 
-import com.biker.BookingDetails;
-import com.biker.PaymentHistory;
 import com.biker.R;
-import com.biker.ReachedDestination;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 

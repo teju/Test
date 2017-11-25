@@ -194,6 +194,7 @@ public class UserRegister extends AppCompatActivity {
                     queue.add(stringRequest);
 
                 } else {
+                    dialog.dismiss();
                     new CustomToast().Show_Toast(getApplicationContext(), rootView,
                             "No Internet Connection");
                 }
@@ -201,6 +202,7 @@ public class UserRegister extends AppCompatActivity {
         });
 
     }
+
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     public boolean checkLocationPermission() {

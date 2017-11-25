@@ -163,7 +163,7 @@
             android:layout_height="40dp"
             android:id="@+id/payNow"
             android:text="Pay Now"
-            android:visibility="visible"
+            android:visibility="gone"
             android:textColor="@color/white"
             android:background="@drawable/bg_green"
             android:layout_alignParentRight="true" />

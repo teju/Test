@@ -60,6 +60,7 @@ public class UserRegister extends AppCompatActivity {
         setContentView(R.layout.register);
         agreed=false;
         Typeface typeface_luci = Typeface.createFromAsset(getAssets(), "fonts/luci.ttf");
+        final Typeface italic = Typeface.createFromAsset(getAssets(), "fonts/italic.ttf");
 
         prefrence = getSharedPreferences("My_Pref", 0);
         editor = prefrence.edit();
@@ -69,6 +70,7 @@ public class UserRegister extends AppCompatActivity {
         Button click=(Button)findViewById(R.id.buttonclick);
         phone=(EditText)findViewById(R.id.phone);
         LinearLayout terms_conditions = (LinearLayout) findViewById(R.id.terms_conditions);
+        final TextView terms_condi_text = (TextView) findViewById(R.id.terms);
         email=(EditText)findViewById(R.id.email);
         name.setTypeface(typeface_luci);
         phone.setTypeface(typeface_luci);
@@ -77,27 +79,19 @@ public class UserRegister extends AppCompatActivity {
 
         type=getIntent().getStringExtra("type");
         PrintClass.printValue("UserRegisterPrint type ",type);
-        final CheckBox agree = (CheckBox)findViewById(R.id.agree);
+        final CheckBox agree_main = (CheckBox)findViewById(R.id.agree);
 
         if(type.equals("edit")) {
             getProfileInfo();
             click.setText("UPDATE");
-            agree.setVisibility(View.GONE);
+            agree_main.setVisibility(View.GONE);
         } else {
             name.setText("");
             email.setText("");
             phone.setText("");
         }
-        agree.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(agree.isChecked()){
-                    agreed = true;
-                }else  {
-                    agreed=false;
-                }
-            }
-        });
+        agree_main.setChecked(agreed);
+        terms_condi_text.setTypeface(italic);
         terms_conditions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,20 +126,23 @@ public class UserRegister extends AppCompatActivity {
                                                 @Override
                                                 public void onClick(View view) {
                                                     mBottomSheetDialog.dismiss();
+                                                    agree_main.setChecked(agreed);
                                                 }
                                             });
                                             final CheckBox agree = (CheckBox) mBottomSheetDialog.findViewById(R.id.agree);
+                                            agree.setTypeface(italic);
+                                            agree.setChecked(agreed);
                                             agree.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     if(agree.isChecked()){
                                                         agreed = true;
-
                                                     }else  {
                                                         agreed=false;
                                                     }
                                                 }
                                             });
+
                                             HtmlTextView termCon = (HtmlTextView) mBottomSheetDialog.findViewById(R.id.terms_conditions);
                                             // Spanned result = Html.fromHtml(childText);
                                             // txtListChild.setText(result);

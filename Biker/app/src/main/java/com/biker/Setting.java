@@ -112,7 +112,7 @@ public class Setting extends AppCompatActivity  implements
             Intent i=new Intent(this,BookingDetails.class);
             startActivity(i);
         } else if (id == R.id.payment_history) {
-            Intent i=new Intent(this,PaymentHistory.class);
+            Intent i=new Intent(this,BookingCompleted.class);
             startActivity(i);
         } else if (id == R.id.logout) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);

@@ -53,13 +53,16 @@ public class UserRegister extends AppCompatActivity {
     String type="";
     boolean isUpdate=false;
     private boolean agreed=false;
+    private EditText referral_id;
+    String getReferralIdValue;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
         agreed=false;
-        Typeface typeface_luci = Typeface.createFromAsset(getAssets(), "fonts/luci.ttf");
+        final Typeface typeface_luci = Typeface.createFromAsset(getAssets(), "fonts/luci.ttf");
         final Typeface italic = Typeface.createFromAsset(getAssets(), "fonts/italic.ttf");
 
         prefrence = getSharedPreferences("My_Pref", 0);
@@ -67,7 +70,8 @@ public class UserRegister extends AppCompatActivity {
         isUpdate=false;
         rootView=findViewById(android.R.id.content);
         name=(EditText)findViewById(R.id.name);
-        Button click=(Button)findViewById(R.id.buttonclick);
+        referral_id=(EditText)findViewById(R.id.referral_id);
+        final Button click=(Button)findViewById(R.id.buttonclick);
         phone=(EditText)findViewById(R.id.phone);
         LinearLayout terms_conditions = (LinearLayout) findViewById(R.id.terms_conditions);
         final TextView terms_condi_text = (TextView) findViewById(R.id.terms);
@@ -76,6 +80,7 @@ public class UserRegister extends AppCompatActivity {
         phone.setTypeface(typeface_luci);
         email.setTypeface(typeface_luci);
         click.setTypeface(typeface_luci);
+        referral_id.setTypeface(typeface_luci);
 
         type=getIntent().getStringExtra("type");
         PrintClass.printValue("UserRegisterPrint type ",type);
@@ -122,6 +127,8 @@ public class UserRegister extends AppCompatActivity {
                                                     LinearLayout.LayoutParams.WRAP_CONTENT);
                                             mBottomSheetDialog.show();
                                             Button ok = (Button) mBottomSheetDialog.findViewById(R.id.ok);
+                                            ok.setTypeface(typeface_luci);
+
                                             ok.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
@@ -146,6 +153,8 @@ public class UserRegister extends AppCompatActivity {
                                             HtmlTextView termCon = (HtmlTextView) mBottomSheetDialog.findViewById(R.id.terms_conditions);
                                             // Spanned result = Html.fromHtml(childText);
                                             // txtListChild.setText(result);
+                                            termCon.setTypeface(typeface_luci);
+
                                             termCon.setHtml(jsonObject.getString("terms"), new HtmlHttpImageGetter(termCon));
 
                                             // Display the first 500 characters of the response string.
@@ -216,6 +225,10 @@ public class UserRegister extends AppCompatActivity {
                     params.put("email", email.getText().toString());
                     params.put("mobile_no",phone.getText().toString());
                     params.put("user_type", "customer");
+                    if(referral_id.getText().toString().trim().length() != 0) {
+                        getReferralIdValue = referral_id.getText().toString();
+                    }
+                    params.put("referel_id", getReferralIdValue);
                     jsonBody.put("ApiSignupForm", params);
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -919,6 +919,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent i=new Intent(this,BookingDetails.class);
             startActivity(i);
         } else if (id == R.id.payment_history) {
+            Intent i=new Intent(this,PaymentHistory.class);
+            startActivity(i);
+        } else if (id == R.id.booking_completed) {
             Intent i=new Intent(this,BookingCompleted.class);
             startActivity(i);
         }/* else if (id == R.id.setting) {

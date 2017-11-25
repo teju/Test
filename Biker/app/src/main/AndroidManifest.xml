@@ -68,9 +68,17 @@
             android:name=".BookingCompleted"
             android:screenOrientation="portrait">
         <intent-filter>
-            <action android:name="com.biker.PaymentHistory" />
+            <action android:name="com.biker.BookingCompleted" />
             <category android:name="android.intent.category.DEFAULT" />
         </intent-filter>
+        </activity>
+        <activity
+            android:name=".PaymentHistory"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.biker.PaymentHistory" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
 
         <service android:name=".Utils.FireBaseMessagingService">

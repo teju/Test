@@ -191,9 +191,12 @@ public class BookingDetails extends AppCompatActivity
                 }
                 // Handle the camera action
             } else if (id == R.id.payment_history) {
-                Intent i = new Intent(this, BookingCompleted.class);
+                Intent i=new Intent(this,PaymentHistory.class);
                 startActivity(i);
-            } /*else if (id == R.id.setting) {
+            } else if (id == R.id.booking_completed) {
+                Intent i=new Intent(this,BookingCompleted.class);
+                startActivity(i);
+            }/*else if (id == R.id.setting) {
                 Intent i = new Intent(this, Setting.class);
                 startActivity(i);
             } */else if (id == R.id.logout) {
@@ -515,77 +518,12 @@ public class BookingDetails extends AppCompatActivity
                 userViewHolder.payNow.setTag(position);
                 userViewHolder.status.setText(bookings.getStatus());
 
-                userViewHolder.payNow.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        final int itemPosition = (Integer) view.getTag();
-                        final BookingList bookin = bookingList_l.get(itemPosition);
-
-                        final Dialog mBottomSheetDialog = new Dialog(context);
-                        mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        mBottomSheetDialog.setContentView(R.layout.rating_feedback);
-                        mBottomSheetDialog.setCancelable(true);
-                        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT);
-                        mBottomSheetDialog.show();
-                        Button submit = (Button) mBottomSheetDialog.findViewById(R.id.submit);
-                        final RatingBar ratings = (RatingBar) mBottomSheetDialog.findViewById(R.id.ratings);
-                        final EditText feedback = (EditText) mBottomSheetDialog.findViewById(R.id.feedback);
-                        ratings.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-                            @Override
-                            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-
-                                String rateValue = String.valueOf(ratingBar.getRating());
-                                System.out.println("Rate for Module is"+rateValue);
-                            }
-                        });
-                        submit.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                if(ratings.getRating() == 0) {
-                                    new CustomToast().Show_Toast(getApplicationContext(), rootView,
-                                            "Please Provide your rating");
-                                } else if(feedback.getText().toString().trim().length() == 0 ) {
-                                    new CustomToast().Show_Toast(getApplicationContext(), rootView,
-                                            "Please Provide your feedback");
-                                } else {
-                                    giveFeedback(bookin.getBooking_id(), bookin.getVendor_nuber(),
-                                            String.valueOf(ratings.getRating()), feedback.getText().toString());
-                                }
-                                mBottomSheetDialog.dismiss();
-                            }
-                        });
-                    }
-                });
             } else if (holder instanceof BookingDetails.LoadingViewHolder) {
                 BookingDetails.LoadingViewHolder loadingViewHolder = (BookingDetails.LoadingViewHolder) holder;
                 loadingViewHolder.progressBar.setIndeterminate(true);
             }
         }
 
-        public void giveFeedback(String booking_id,String vendor_id,String rating,String comment) {
-            if (IsNetworkConnection.checkNetworkConnection(context)) {
-
-                String url = Constants.SERVER_URL + "booking/booking-rating";
-                JSONObject params = new JSONObject();
-                try {
-                    params.put("user_id",prefrence.getString("user_id", "") );
-                    params.put("access_token",prefrence.getString("access_token", ""));
-                    params.put("booking_id",booking_id);
-                    params.put("vendor_id",vendor_id);
-                    params.put("rating",rating);
-                    params.put("comment",comment);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
-                }
-                PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
-                new post_async(BookingDetails.this,"RateFeedBAck").execute(url, params.toString());
-            } else {
-                new CustomToast().Show_Toast(getApplicationContext(), rootView,
-                        "No Internet Connection");
-            }
-        }
 
         @Override
         public int getItemCount() {

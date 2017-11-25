@@ -26,12 +26,13 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.RatingBar;
 import android.widget.TextView;
-
 
 import com.biker.Utils.Constants;
 import com.biker.Utils.CustomToast;
@@ -49,7 +50,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class BookingCompleted extends AppCompatActivity
+public class PaymentHistory extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,SwipeRefreshLayout.OnRefreshListener{
     private RecyclerView recyclerView;
     private LinearLayoutManager mLayoutManager;
@@ -60,7 +61,7 @@ public class BookingCompleted extends AppCompatActivity
     private View rootView;
     int offset=0;
     int limit=5;
-    BookingCompleted.PaymentHistoryRecyclerView mAdapter ;
+    PaymentHistory.PaymentHistoryRecyclerView mAdapter ;
     private int total_count=0;
     private TextView no_records;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -98,7 +99,7 @@ public class BookingCompleted extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         TextView title = (TextView) findViewById(R.id.title_val);
-        title.setText("Booking Completed");
+        title.setText("Payment Details");
         View header = navigationView.getHeaderView(0);
 
         profile_name=(TextView)header.findViewById(R.id.profile_name);
@@ -114,7 +115,7 @@ public class BookingCompleted extends AppCompatActivity
         if(prefrence.getString("isLoggedIn", "").equals("true")) {
 
             // Constants.statusColor(this);
-            getPaymentList("BookingCompleted");
+            getPaymentList("PaymentHistoryCompleted");
         }else {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.setTitle("Confirm Login");
@@ -123,7 +124,7 @@ public class BookingCompleted extends AppCompatActivity
                 public void onClick(DialogInterface dialog,int which) {
                     editor.putString("isLoggedIn","false");
                     editor.commit();
-                    Intent i=new Intent(BookingCompleted.this,Login.class);
+                    Intent i=new Intent(PaymentHistory.this,Login.class);
                     i.putExtra("reached_dest","false");
                     startActivity(i);
                 }
@@ -143,8 +144,8 @@ public class BookingCompleted extends AppCompatActivity
     }
 
     public void getPaymentList(String action){
-        if (IsNetworkConnection.checkNetworkConnection(BookingCompleted.this)) {
-            if(action.equals("BookingCompletedRefresh")) {
+        if (IsNetworkConnection.checkNetworkConnection(PaymentHistory.this)) {
+            if(action.equals("PaymentHistoryRefresh")) {
                 swipeRefreshLayout.setRefreshing(true);
             }
             String url = Constants.SERVER_URL + "booking/completed";
@@ -159,7 +160,7 @@ public class BookingCompleted extends AppCompatActivity
                 PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
             }
             PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
-            new post_async(BookingCompleted.this,action).execute(url, params.toString());
+            new post_async(PaymentHistory.this,action).execute(url, params.toString());
         } else {
             new CustomToast().Show_Toast(getApplicationContext(), rootView,
                     "No Internet Connection");
@@ -178,7 +179,7 @@ public class BookingCompleted extends AppCompatActivity
                 startActivity(i);
                 // Handle the camera action
             } else if (id == R.id.profile) {
-                if (IsNetworkConnection.checkNetworkConnection(BookingCompleted.this)) {
+                if (IsNetworkConnection.checkNetworkConnection(PaymentHistory.this)) {
                     Intent i = new Intent(this, UserRegister.class);
                     i.putExtra("type", "edit");
                     startActivity(i);
@@ -190,10 +191,10 @@ public class BookingCompleted extends AppCompatActivity
             } else if (id == R.id.booking_details) {
                 Intent i = new Intent(this, BookingDetails.class);
                 startActivity(i);
-            } else if (id == R.id.payment_history) {
-                Intent i=new Intent(this,PaymentHistory.class);
+            }  else if (id == R.id.booking_completed) {
+                Intent i=new Intent(this,BookingCompleted.class);
                 startActivity(i);
-            }/*else if (id == R.id.setting) {
+            } /*else if (id == R.id.setting) {
                 Intent i = new Intent(this, Setting.class);
                 startActivity(i);
             } */else if (id == R.id.logout) {
@@ -205,7 +206,7 @@ public class BookingCompleted extends AppCompatActivity
                         editor.putString("isLoggedIn", "false");
                         editor.putString("access_token","1234");
                         editor.commit();
-                        Intent i = new Intent(BookingCompleted.this, Login.class);
+                        Intent i = new Intent(PaymentHistory.this, Login.class);
                         i.putExtra("reached_dest","false");
                         startActivity(i);
                         finish();
@@ -264,7 +265,7 @@ public class BookingCompleted extends AppCompatActivity
                         total_count = Integer.parseInt(jsonObject.getString("totalCount"));
                     }
                     if (PaymentList_l.size() != 0) {
-                        mAdapter = new BookingCompleted.PaymentHistoryRecyclerView(BookingCompleted.this);
+                        mAdapter = new PaymentHistory.PaymentHistoryRecyclerView(PaymentHistory.this);
                         recyclerView.setAdapter(mAdapter);
                         if (jsonObject.has("bookinglist")) {
                             final JSONObject finalJsonObject = jsonObject;
@@ -287,7 +288,7 @@ public class BookingCompleted extends AppCompatActivity
                                                   mAdapter.notifyItemRemoved(PaymentList_l.size());
                                                   //Load data
                                                   offset = offset + limit;
-                                                  getPaymentList("BookingCompleteReload");
+                                                  getPaymentList("PaymentHistoryReload");
                                               }
                                           }
                                       },
@@ -399,7 +400,7 @@ public class BookingCompleted extends AppCompatActivity
     public void onRefresh() {
         offset=0;
         PaymentList_l.clear();
-        getPaymentList("BookingCompletedRefresh");
+        getPaymentList("PaymentHistoryRefresh");
     }
 
     static  class PaymentHistoryRecyclerViewHolder extends RecyclerView.ViewHolder {
@@ -484,21 +485,21 @@ public class BookingCompleted extends AppCompatActivity
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if (viewType == VIEW_TYPE_ITEM) {
                 View view = LayoutInflater.from(
-                        BookingCompleted.this).inflate(R.layout.bookingcompleted_content, parent, false);
-                return new BookingCompleted.PaymentHistoryRecyclerViewHolder(view);
+                        PaymentHistory.this).inflate(R.layout.bookingcompleted_content, parent, false);
+                return new PaymentHistory.PaymentHistoryRecyclerViewHolder(view);
             } else if (viewType == VIEW_TYPE_LOADING) {
-                View view = LayoutInflater.from(BookingCompleted.this).inflate(R.layout.spinner, parent, false);
-                return new BookingCompleted.LoadingViewHolder(view);
+                View view = LayoutInflater.from(PaymentHistory.this).inflate(R.layout.spinner, parent, false);
+                return new PaymentHistory.LoadingViewHolder(view);
             }
             return null;
         }
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            if (holder instanceof BookingCompleted.PaymentHistoryRecyclerViewHolder) {
+            if (holder instanceof PaymentHistory.PaymentHistoryRecyclerViewHolder) {
                 BookingList Payments = PaymentList_l.get(position);
-                BookingCompleted.PaymentHistoryRecyclerViewHolder userViewHolder =
-                        (BookingCompleted.PaymentHistoryRecyclerViewHolder) holder;
+                PaymentHistory.PaymentHistoryRecyclerViewHolder userViewHolder =
+                        (PaymentHistory.PaymentHistoryRecyclerViewHolder) holder;
                 userViewHolder.booking_id.setText(Payments.getBooking_no());
                 userViewHolder.vendor_name.setText(Payments.getVendor_name());
                 userViewHolder.vendor_number.setText(Payments.getVendor_nuber());
@@ -513,89 +514,65 @@ public class BookingCompleted extends AppCompatActivity
 
                         final Dialog mBottomSheetDialog = new Dialog(context);
                         mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        mBottomSheetDialog.setContentView(R.layout.pay_now);
+                        mBottomSheetDialog.setContentView(R.layout.rating_feedback);
                         mBottomSheetDialog.setCancelable(true);
                         mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
                                 LinearLayout.LayoutParams.WRAP_CONTENT);
                         mBottomSheetDialog.show();
-                        final RadioButton cashonDelivery =(RadioButton)mBottomSheetDialog.findViewById(R.id.cashonDelivery);
-                        final RadioButton online =(RadioButton)mBottomSheetDialog.findViewById(R.id.online);
-                        final Button pay_now =(Button)mBottomSheetDialog.findViewById(R.id.pay_now);
-
-                        cashonDelivery.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        Button submit = (Button) mBottomSheetDialog.findViewById(R.id.submit);
+                        final RatingBar ratings = (RatingBar) mBottomSheetDialog.findViewById(R.id.ratings);
+                        final EditText feedback = (EditText) mBottomSheetDialog.findViewById(R.id.feedback);
+                        ratings.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                             @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                if(online.isChecked()) {
-                                    online.setChecked(false);
-                                    cashonDelivery.setChecked(true);
-                                }
+                            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+
+                                String rateValue = String.valueOf(ratingBar.getRating());
+                                System.out.println("Rate for Module is"+rateValue);
                             }
                         });
-
-                        online.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                if(cashonDelivery.isChecked()) {
-                                    cashonDelivery.setChecked(false);
-                                    online.setChecked(true);
-                                }
-                            }
-                        });
-
-                        pay_now.setOnClickListener(new View.OnClickListener() {
+                        submit.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if(!online.isChecked() && !cashonDelivery.isChecked()) {
+                                if(ratings.getRating() == 0) {
                                     new CustomToast().Show_Toast(getApplicationContext(), rootView,
-                                            "Please select the payment mode");
-                                    return;
-                                }
-                                String paymentMode="";
-                                if(online.isChecked()) {
-                                    paymentMode="online";
+                                            "Please Provide your rating");
+                                } else if(feedback.getText().toString().trim().length() == 0 ) {
+                                    new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                                            "Please Provide your feedback");
                                 } else {
-                                    paymentMode="cash";
+                                    giveFeedback(bookin.getBooking_id(), bookin.getVendor_id(),
+                                            String.valueOf((int)ratings.getRating()), feedback.getText().toString());
                                 }
-                                payNow(bookin.getBooking_id(),bookin.getVendor_id(),paymentMode);
-
+                                mBottomSheetDialog.dismiss();
                             }
                         });
                     }
                 });
                // userViewHolder.status.setText(Payments.getStatus());
-            } else if (holder instanceof BookingCompleted.LoadingViewHolder) {
-                BookingCompleted.LoadingViewHolder loadingViewHolder = (BookingCompleted.LoadingViewHolder) holder;
+            } else if (holder instanceof PaymentHistory.LoadingViewHolder) {
+                PaymentHistory.LoadingViewHolder loadingViewHolder = (PaymentHistory.LoadingViewHolder) holder;
                 loadingViewHolder.progressBar.setIndeterminate(true);
             }
         }
 
-        public void payNow(String booking_id,String vendor_id,String payment_mode){
-            if (IsNetworkConnection.checkNetworkConnection(BookingCompleted.this)) {
+        public void giveFeedback(String booking_id,String vendor_id,String rating,String comment) {
+            if (IsNetworkConnection.checkNetworkConnection(context)) {
 
-                String url = Constants.SERVER_URL + "booking/payments";
+                String url = Constants.SERVER_URL + "booking/booking-rating";
                 JSONObject params = new JSONObject();
-                JSONObject payment = new JSONObject();
                 try {
-                    payment.put("booking_id",booking_id);
-                    payment.put("invoice","123456789");
-                    payment.put("customer_id",prefrence.getString("user_id", ""));
-                    payment.put("vendor_id",vendor_id);
-                    payment.put("payment_mode",payment_mode);
-                    payment.put("amount","750");
-                    payment.put("service_tax","0");
-                    payment.put("vat","0");
-                    payment.put("total_amount","750");
-                    payment.put("status","success");
-                    payment.put("description","");
                     params.put("user_id",prefrence.getString("user_id", "") );
-                    params.put("payment",payment.toString());
                     params.put("access_token",prefrence.getString("access_token", ""));
+                    params.put("booking_id",booking_id);
+                    params.put("vendor_id",vendor_id);
+                    params.put("rating",rating);
+                    params.put("comment",comment);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
                 }
                 PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
-                new post_async(BookingCompleted.this,"BookingCompleted").execute(url, params.toString());
+                new post_async(PaymentHistory.this,"RateFeedBAck").execute(url, params.toString());
             } else {
                 new CustomToast().Show_Toast(getApplicationContext(), rootView,
                         "No Internet Connection");

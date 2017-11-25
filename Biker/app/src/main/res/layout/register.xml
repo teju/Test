@@ -16,7 +16,7 @@
         android:layout_height="160dp"
         android:id="@+id/logo"
         android:src="@drawable/bierlogo"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="40dp"
         android:layout_gravity="center_horizontal"/>
         <TextView
             android:layout_width="wrap_content"
@@ -73,6 +73,20 @@
         android:drawableLeft="@drawable/email"
         android:drawablePadding="6dp"
         android:textColor="@color/black" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/editbox_background_normal"
+            android:id="@+id/referral_id"
+            android:padding="12dp"
+            android:hint="Referral Id"
+            android:textSize="@dimen/normal"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:layout_marginTop="10dp"
+            android:drawableLeft="@drawable/account_edit"
+            android:drawablePadding="6dp"
+            android:textColor="@color/black" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

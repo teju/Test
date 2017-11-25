@@ -15,16 +15,16 @@
             android:id="@+id/booking_details"
             android:icon="@drawable/message_bulleted"
             android:title="Booking Details" />
+
+        <item
+            android:id="@+id/booking_completed"
+            android:icon="@drawable/settings"
+            android:title="Booking Completed" />
         <item
             android:id="@+id/payment_history"
             android:icon="@drawable/coin"
             android:title="Payment History" />
-<!--
-        <item
-            android:id="@+id/setting"
-            android:icon="@drawable/settings"
-            android:title="Settings" />
--->
+
         <item
             android:id="@+id/logout"
             android:icon="@drawable/logout"

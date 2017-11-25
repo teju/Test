@@ -20,6 +20,7 @@ import com.biker.BookingDetails;
 import com.biker.Login;
 import com.biker.MainActivity;
 import com.biker.BookingCompleted;
+import com.biker.PaymentHistory;
 import com.biker.R;
 import com.biker.ReachedDestination;
 import com.biker.ServerError;
@@ -33,6 +34,7 @@ import java.io.UnsupportedEncodingException;
  */
 public class post_async extends AsyncTask<String, Integer, String> {
     static String action = "", resultString = "";
+    private PaymentHistory paymentHistory;
     private ReachedDestination reachedDestination;
     private BookingCompleted bookingCompleted;
     private BookingDetails bookingDetails;
@@ -47,7 +49,11 @@ public class post_async extends AsyncTask<String, Integer, String> {
         this.context=userRegister;
         this.userRegister = userRegister;
     }
-
+    public post_async(PaymentHistory paymentHistory, String action) {
+        this.action = action;
+        this.context=paymentHistory;
+        this.paymentHistory = paymentHistory;
+    }
     public post_async(BookingDetails bookingDetails, String action) {
         this.action = action;
         this.context=bookingDetails;
@@ -174,10 +180,16 @@ public class post_async extends AsyncTask<String, Integer, String> {
                 this.bookingDetails.ResponseOfBookingListReload(resultString);
             } else  if (this.bookingCompleted != null &&
                     (action.equalsIgnoreCase("BookingCompleted")
-                            || action.equals("PaymentHistoryRefresh"))) {
+                            || action.equals("BookingCompletedRefresh"))) {
                 this.bookingCompleted.ResponseOfPaymentList(resultString);
-            } else  if (this.bookingCompleted != null && action.equalsIgnoreCase("PaymentHistoryReload")) {
+            } else  if (this.bookingCompleted != null && action.equalsIgnoreCase("BookingCompleteReload")) {
                 this.bookingCompleted.ResponseOfPaymentListReload(resultString);
+            }else  if (this.paymentHistory != null &&
+                    (action.equalsIgnoreCase("PaymentHistoryCompleted")
+                            || action.equals("PaymentHistoryRefresh"))) {
+                this.paymentHistory.ResponseOfPaymentList(resultString);
+            } else  if (this.paymentHistory != null && action.equalsIgnoreCase("PaymentHistoryReload")) {
+                this.paymentHistory.ResponseOfPaymentListReload(resultString);
             }else  if (this.reachedDestination != null && action.equalsIgnoreCase("ReachedDestination")) {
                 this.reachedDestination.ResponseOfReachedDestination(resultString);
             }
@@ -196,8 +208,8 @@ public class post_async extends AsyncTask<String, Integer, String> {
         dialog.setContentView(R.layout.spinner);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         if(!action.equals("BookingDetailsReload") &&
-                !action.equals("BookingDetailsRefresh") && !action.equals("PaymentHistoryReload") &&
-                !action.equals("PaymentHistoryRefresh") ) {
+                !action.equals("BookingDetailsRefresh") && !action.equals("BookingCompleteReload") &&
+                !action.equals("BookingCompletedRefresh") && !action.equals("PaymentHistoryReload") && !action.equals("PaymentHistoryRefresh")) {
                 dialog.show();
         }
     }

@@ -3,9 +3,14 @@ package com.biker.Utils;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -26,6 +31,8 @@ import com.biker.ReachedDestination;
 import com.biker.ServerError;
 import com.biker.UserRegister;
 
+
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
@@ -184,12 +191,18 @@ public class post_async extends AsyncTask<String, Integer, String> {
                 this.bookingCompleted.ResponseOfPaymentList(resultString);
             } else  if (this.bookingCompleted != null && action.equalsIgnoreCase("BookingCompleteReload")) {
                 this.bookingCompleted.ResponseOfPaymentListReload(resultString);
+            } else  if (this.bookingCompleted != null && action.equalsIgnoreCase("Payment")) {
+                ResponseOfRating(resultString,"Your payment is successful ",
+                        "Payment could not be completed.Please try again  ! ");
             }else  if (this.paymentHistory != null &&
                     (action.equalsIgnoreCase("PaymentHistoryCompleted")
                             || action.equals("PaymentHistoryRefresh"))) {
                 this.paymentHistory.ResponseOfPaymentList(resultString);
             } else  if (this.paymentHistory != null && action.equalsIgnoreCase("PaymentHistoryReload")) {
                 this.paymentHistory.ResponseOfPaymentListReload(resultString);
+            }else  if (this.paymentHistory != null && action.equalsIgnoreCase("RateFeedBAck")) {
+                ResponseOfRating(resultString,"Thank you so much for your valuable fedback",
+                        "Could not submit your ratings. Please try again  !!");
             }else  if (this.reachedDestination != null && action.equalsIgnoreCase("ReachedDestination")) {
                 this.reachedDestination.ResponseOfReachedDestination(resultString);
             }
@@ -198,6 +211,45 @@ public class post_async extends AsyncTask<String, Integer, String> {
             dialog.cancel();
         }
     }
+
+    public void ResponseOfRating(String response,String responsemessage,String error){
+        JSONObject jsonObject = null;
+        final Dialog mBottomSheetDialog = new Dialog(context);
+
+        mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mBottomSheetDialog.setContentView(R.layout.success_message);
+        mBottomSheetDialog.setCancelable(true);
+        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        mBottomSheetDialog.show();
+        TextView message =(TextView)mBottomSheetDialog.findViewById(R.id.message) ;
+        try {
+
+            jsonObject = new JSONObject(response);
+            if(jsonObject.getString("status").equalsIgnoreCase("success")) {
+                message.setText(responsemessage);
+
+            } else {
+                message.setText(jsonObject.getString("message"));
+            }
+            Button ok =(Button) mBottomSheetDialog.findViewById(R.id.ok) ;
+            Typeface typeface_luci = Typeface.createFromAsset(context.getAssets(), "fonts/luci.ttf");
+
+            message.setTypeface(typeface_luci);
+            ok.setTypeface(typeface_luci);
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mBottomSheetDialog.dismiss();
+                }
+            });
+            PrintClass.printValue("ResponseOfPaymentList resultString ", " has data " + jsonObject.toString());
+        } catch (Exception e) {
+            message.setText(error);
+        }
+
+    }
+
 
     @Override
     protected void onPreExecute() {

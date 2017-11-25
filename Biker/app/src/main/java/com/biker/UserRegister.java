@@ -75,6 +75,7 @@ public class UserRegister extends AppCompatActivity {
         phone=(EditText)findViewById(R.id.phone);
         LinearLayout terms_conditions = (LinearLayout) findViewById(R.id.terms_conditions);
         final TextView terms_condi_text = (TextView) findViewById(R.id.terms);
+        final TextView title = (TextView) findViewById(R.id.title);
         email=(EditText)findViewById(R.id.email);
         name.setTypeface(typeface_luci);
         phone.setTypeface(typeface_luci);
@@ -89,7 +90,9 @@ public class UserRegister extends AppCompatActivity {
         if(type.equals("edit")) {
             getProfileInfo();
             click.setText("UPDATE");
-            agree_main.setVisibility(View.GONE);
+            terms_conditions.setVisibility(View.GONE);
+            title.setText("Update your account info");
+            referral_id.setVisibility(View.GONE);
         } else {
             name.setText("");
             email.setText("");

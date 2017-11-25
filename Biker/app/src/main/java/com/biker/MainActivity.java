@@ -230,13 +230,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
 
-                if (s.toString().length() <= 3) {
+                if (s.toString().length() != 0) {
                     names = new ArrayList<String>();
                     PlacesTask placesTask = new PlacesTask(dialog);
                     placesTask.execute(s.toString());
                     //dialog.show();
                 }
-
             }
         });
         if (map != null) {

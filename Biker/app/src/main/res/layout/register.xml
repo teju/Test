@@ -25,6 +25,7 @@
             android:textStyle="bold|italic"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
+            android:id="@+id/title"
             android:textAllCaps="true"
             android:textSize="@dimen/normal"
             android:textColor="@color/black" />

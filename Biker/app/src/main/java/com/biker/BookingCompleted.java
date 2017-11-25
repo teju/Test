@@ -402,18 +402,39 @@ public class BookingCompleted extends AppCompatActivity
         getPaymentList("BookingCompletedRefresh");
     }
 
-    static  class PaymentHistoryRecyclerViewHolder extends RecyclerView.ViewHolder {
+    class PaymentHistoryRecyclerViewHolder extends RecyclerView.ViewHolder {
         private final Button payNow;
-        TextView booking_id, vendor_name, vendor_number, vehicle_no, status;
+        private  Typeface typeface_luci;
+        TextView booking_id, vendor_name, vendor_number, vehicle_no, status,booking_id_text,
+                vendor_name_text,vendor_number_text,vehicle_no_text,status_text;
 
         public PaymentHistoryRecyclerViewHolder(View itemView) {
             super(itemView);
+            typeface_luci = Typeface.createFromAsset(getAssets(), "fonts/luci.ttf");
+
             booking_id = (TextView) itemView.findViewById(R.id.booking_id);
             payNow = (Button) itemView.findViewById(R.id.payNow);
             vendor_name = (TextView) itemView.findViewById(R.id.vendor_name);
             vendor_number = (TextView) itemView.findViewById(R.id.vendor_number);
             vehicle_no = (TextView) itemView.findViewById(R.id.vehicle_no);
             status = (TextView) itemView.findViewById(R.id.status);
+            booking_id_text=(TextView)itemView.findViewById(R.id.booking_id_text);
+            booking_id_text.setTypeface(typeface_luci);
+            vendor_name_text=(TextView)itemView.findViewById(R.id.vendor_name_text);
+            vendor_name_text.setTypeface(typeface_luci);
+            vendor_number_text=(TextView)itemView.findViewById(R.id.vendor_number_text);
+            vendor_number_text.setTypeface(typeface_luci);
+            vehicle_no_text=(TextView)itemView.findViewById(R.id.vehicle_no_text);
+            vehicle_no_text.setTypeface(typeface_luci);
+            status_text=(TextView)itemView.findViewById(R.id.status_text);
+            status_text.setTypeface(typeface_luci);
+            payNow.setTypeface(typeface_luci);
+            status_text.setTypeface(typeface_luci);
+            booking_id.setTypeface(typeface_luci);
+            vendor_name.setTypeface(typeface_luci);
+            vehicle_no.setTypeface(typeface_luci);
+            vendor_number.setTypeface(typeface_luci);
+            status.setTypeface(typeface_luci);
         }
     }
 
@@ -438,6 +459,7 @@ public class BookingCompleted extends AppCompatActivity
 
         public PaymentHistoryRecyclerView(Context context) {
             this.context=context;
+
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -518,30 +540,36 @@ public class BookingCompleted extends AppCompatActivity
                         mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
                                 LinearLayout.LayoutParams.WRAP_CONTENT);
                         mBottomSheetDialog.show();
+                        Typeface typeface_luci = Typeface.createFromAsset(getAssets(), "fonts/luci.ttf");
+
                         final RadioButton cashonDelivery =(RadioButton)mBottomSheetDialog.findViewById(R.id.cashonDelivery);
+                        final TextView title =(TextView) mBottomSheetDialog.findViewById(R.id.title);
                         final RadioButton online =(RadioButton)mBottomSheetDialog.findViewById(R.id.online);
                         final Button pay_now =(Button)mBottomSheetDialog.findViewById(R.id.pay_now);
-
+                        pay_now.setTypeface(typeface_luci);
                         cashonDelivery.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                if(online.isChecked()) {
+                                if(online.isChecked() && b) {
                                     online.setChecked(false);
                                     cashonDelivery.setChecked(true);
                                 }
                             }
                         });
 
+                        title.setTypeface(typeface_luci);
+                        cashonDelivery.setTypeface(typeface_luci);
                         online.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                if(cashonDelivery.isChecked()) {
+                                if(cashonDelivery.isChecked() && b) {
                                     cashonDelivery.setChecked(false);
-                                    online.setChecked(true);
                                 }
                             }
                         });
 
+                        online.setTypeface(typeface_luci);
+                        pay_now.setTypeface(typeface_luci);
                         pay_now.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -557,7 +585,7 @@ public class BookingCompleted extends AppCompatActivity
                                     paymentMode="cash";
                                 }
                                 payNow(bookin.getBooking_id(),bookin.getVendor_id(),paymentMode);
-
+                                mBottomSheetDialog.dismiss();
                             }
                         });
                     }
@@ -588,14 +616,14 @@ public class BookingCompleted extends AppCompatActivity
                     payment.put("status","success");
                     payment.put("description","");
                     params.put("user_id",prefrence.getString("user_id", "") );
-                    params.put("payment",payment.toString());
+                    params.put("payment",payment);
                     params.put("access_token",prefrence.getString("access_token", ""));
                 } catch (JSONException e) {
                     e.printStackTrace();
                     PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
                 }
                 PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
-                new post_async(BookingCompleted.this,"BookingCompleted").execute(url, params.toString());
+                new post_async(BookingCompleted.this,"Payment").execute(url, params.toString());
             } else {
                 new CustomToast().Show_Toast(getApplicationContext(), rootView,
                         "No Internet Connection");

@@ -425,6 +425,7 @@ public class BookingDetails extends AppCompatActivity
             vehicle_no_text.setTypeface(typeface_luci);
             status_text=(TextView)itemView.findViewById(R.id.status_text);
             status_text.setTypeface(typeface_luci);
+            payNow.setTypeface(typeface_luci);
             status_text.setTypeface(typeface_luci);
         }
     }

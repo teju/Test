@@ -403,18 +403,39 @@ public class PaymentHistory extends AppCompatActivity
         getPaymentList("PaymentHistoryRefresh");
     }
 
-    static  class PaymentHistoryRecyclerViewHolder extends RecyclerView.ViewHolder {
+    class PaymentHistoryRecyclerViewHolder extends RecyclerView.ViewHolder {
         private final Button payNow;
-        TextView booking_id, vendor_name, vendor_number, vehicle_no, status;
+        private final Typeface typeface_luci;
+        TextView booking_id, vendor_name, vendor_number, vehicle_no, status,booking_id_text,
+                vendor_name_text,vendor_number_text,vehicle_no_text,status_text;
 
         public PaymentHistoryRecyclerViewHolder(View itemView) {
             super(itemView);
+            typeface_luci = Typeface.createFromAsset(getAssets(), "fonts/luci.ttf");
+
             booking_id = (TextView) itemView.findViewById(R.id.booking_id);
             payNow = (Button) itemView.findViewById(R.id.payNow);
             vendor_name = (TextView) itemView.findViewById(R.id.vendor_name);
             vendor_number = (TextView) itemView.findViewById(R.id.vendor_number);
             vehicle_no = (TextView) itemView.findViewById(R.id.vehicle_no);
             status = (TextView) itemView.findViewById(R.id.status);
+            booking_id_text=(TextView)itemView.findViewById(R.id.booking_id_text);
+            booking_id_text.setTypeface(typeface_luci);
+            vendor_name_text=(TextView)itemView.findViewById(R.id.vendor_name_text);
+            vendor_name_text.setTypeface(typeface_luci);
+            vendor_number_text=(TextView)itemView.findViewById(R.id.vendor_number_text);
+            vendor_number_text.setTypeface(typeface_luci);
+            vehicle_no_text=(TextView)itemView.findViewById(R.id.vehicle_no_text);
+            vehicle_no_text.setTypeface(typeface_luci);
+            status_text=(TextView)itemView.findViewById(R.id.status_text);
+            status_text.setTypeface(typeface_luci);
+            payNow.setTypeface(typeface_luci);
+            status_text.setTypeface(typeface_luci);
+            booking_id.setTypeface(typeface_luci);
+            vendor_name.setTypeface(typeface_luci);
+            vehicle_no.setTypeface(typeface_luci);
+            vendor_number.setTypeface(typeface_luci);
+            status.setTypeface(typeface_luci);
         }
     }
 
@@ -506,6 +527,7 @@ public class PaymentHistory extends AppCompatActivity
                 userViewHolder.vehicle_no.setText(Payments.getVehicle_no());
                 userViewHolder.status.setText(Payments.getStatus());
                 userViewHolder.payNow.setTag(position);
+                userViewHolder.payNow.setText("RATE NOW");
                 userViewHolder.payNow.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -519,9 +541,12 @@ public class PaymentHistory extends AppCompatActivity
                         mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
                                 LinearLayout.LayoutParams.WRAP_CONTENT);
                         mBottomSheetDialog.show();
+                        Typeface typeface_luci = Typeface.createFromAsset(getAssets(), "fonts/luci.ttf");
+
                         Button submit = (Button) mBottomSheetDialog.findViewById(R.id.submit);
                         final RatingBar ratings = (RatingBar) mBottomSheetDialog.findViewById(R.id.ratings);
                         final EditText feedback = (EditText) mBottomSheetDialog.findViewById(R.id.feedback);
+                        final TextView feedback_title = (TextView) mBottomSheetDialog.findViewById(R.id.feedback_title);
                         ratings.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                             @Override
                             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
@@ -530,6 +555,9 @@ public class PaymentHistory extends AppCompatActivity
                                 System.out.println("Rate for Module is"+rateValue);
                             }
                         });
+                        submit.setTypeface(typeface_luci);
+                        feedback_title.setTypeface(typeface_luci);
+                        feedback.setTypeface(typeface_luci);
                         submit.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {

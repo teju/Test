@@ -269,6 +269,16 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 editor.putString("user_id", jsonObject.getString("user_id"));
                 editor.putString("name", jsonObject.getString("name"));
                 editor.putString("access_token", jsonObject.getString("access_token"));
+                if(jsonObject.has("avg_rating")) {
+                    editor.putString("avg_rating", jsonObject.getString("avg_rating"));
+                }
+                if(jsonObject.has("referel_code")) {
+                    editor.putString("referel_code", jsonObject.getString("referel_code"));
+                }
+                if(jsonObject.has("total_amount")) {
+                    editor.putString("amount", jsonObject.getString("total_amount"));
+
+                }
                 editor.commit();
                 notificationService();
                 Intent i = new Intent(Login.this, MainActivity.class);
@@ -289,6 +299,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         } catch (Exception e){
             System.out.println("SYSTEMPRINT error UserRegister "+e.toString());
         }
+    }
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        startActivity(getIntent());
+
     }
     @Override
     protected void onStop() {

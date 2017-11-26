@@ -31,6 +31,15 @@ public class JobListModel {
 
     String booking_no;
     String vehicle_no;
+    public String getIs_paid() {
+        return is_paid;
+    }
+
+    public void setIs_paid(String is_paid) {
+        this.is_paid = is_paid;
+    }
+
+    String is_paid;
 
     public String getMobile_no() {
         return mobile_no;

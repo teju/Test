@@ -4,6 +4,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Telephony;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,10 +16,15 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.vendor.biker.Utils.Constants;
+import com.vendor.biker.Utils.CustomToast;
 import com.vendor.biker.Utils.IsNetworkConnection;
 
 public class ReferUser extends AppCompatActivity implements
@@ -25,6 +34,9 @@ public class ReferUser extends AppCompatActivity implements
     private SharedPreferences.Editor editor;
     private View rootView;
     TextView profile_name;
+    private Button refer;
+    private TextView phone_no;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +47,7 @@ public class ReferUser extends AppCompatActivity implements
         rootView=findViewById(android.R.id.content);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        refer=(Button)findViewById(R.id.refer);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -45,15 +57,52 @@ public class ReferUser extends AppCompatActivity implements
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
-
+        phone_no=(TextView)findViewById(R.id.phone_no);
         profile_name=(TextView)header.findViewById(R.id.profile_name);
         profile_name.setText(prefrence.getString("name", ""));
         Typeface typeface = Typeface.createFromAsset(getAssets(),
                 "fonts/name_font.ttf");
         profile_name.setTypeface(typeface);
+        refer.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @Override
+            public void onClick(View view) {
+                if (!phone_no.getText().toString().matches(Constants.regexStr) || phone_no.getText().toString().length() != 10) {
+                    new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                            "Invalid phone number");
+                }
+                 else {
+                    refer();
+
+                }
+            }
+        });
+    }
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void refer(){
+        Intent smsIntent = new Intent(Intent.ACTION_VIEW);
+
+        smsIntent.setData(Uri.parse("smsto:"));
+        smsIntent.setType("vnd.android-dir/mms-sms");
+        smsIntent.putExtra("address"  , new String (phone_no.getText().toString()));
+        smsIntent.putExtra("sms_body"  , prefrence.getString("referel_code",""));
+
+        try {
+            startActivity(smsIntent);
+            finish();
+            Log.i("Finished sending SMS...", "");
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(ReferUser.this,
+                    "SMS faild, please try again later.", Toast.LENGTH_SHORT).show();
+        }
 
     }
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        startActivity(getIntent());
 
+    }
     @Override
     protected void onResume() {
         super.onResume();

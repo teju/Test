@@ -3,9 +3,14 @@ package com.vendor.biker;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -28,6 +33,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vendor.biker.Utils.Constants;
 import com.vendor.biker.Utils.CustomToast;
@@ -47,6 +53,7 @@ import java.util.Set;
 
 public class JobList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener ,
         SwipeRefreshLayout.OnRefreshListener{
+    private static final int MAKE_CALL_PERMISSION_REQUEST_CODE = 1;
 
     private RecyclerView mRecyclerView;
     private jobAdapter mjobAdapter;
@@ -157,7 +164,12 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
             }
         }
     }
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        startActivity(getIntent());
 
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -459,7 +471,16 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar1);
         }
     }
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch(requestCode) {
+            case MAKE_CALL_PERMISSION_REQUEST_CODE :
+                if (grantResults.length > 0 && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    Toast.makeText(JobList.this, "You can call the number by clicking on the button", Toast.LENGTH_SHORT).show();
+                }
+                return;
+        }
+    }
     class jobAdapter extends RecyclerView.Adapter < RecyclerView.ViewHolder > {
         private final int VIEW_TYPE_ITEM = 0;
         private final int VIEW_TYPE_LOADING = 1;
@@ -550,6 +571,27 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
                     jobViewHolder.status.setVisibility(View.VISIBLE);
                     jobViewHolder.status.setBackgroundColor(getResources().getColor(R.color.green));
                 }
+                jobViewHolder.customer_number.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if (checkPermission(android.Manifest.permission.CALL_PHONE)) {
+                            String dial = "tel:" + bookings.getMobile_no();
+                            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+                        } else {
+                            Toast.makeText(JobList.this, "Permission Call Phone denied", Toast.LENGTH_SHORT).show();
+                        }
+                        if (checkPermission(android.Manifest.permission.CALL_PHONE)) {
+                            jobViewHolder.customer_number.setEnabled(true);
+                        } else {
+                            jobViewHolder.customer_number.setEnabled(false);
+                            ActivityCompat.requestPermissions(JobList.this, new String[]
+                                    {android.Manifest.permission.CALL_PHONE}, MAKE_CALL_PERMISSION_REQUEST_CODE);
+                        }
+
+
+                    }
+                });
 
                 jobViewHolder.status.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -601,7 +643,9 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
                 loadingViewHolder.progressBar.setIndeterminate(true);
             }
         }
-
+        private boolean checkPermission(String permission) {
+            return ContextCompat.checkSelfPermission(JobList.this, permission) == PackageManager.PERMISSION_GRANTED;
+        }
         @Override
         public int getItemCount() {
             return jobList_l == null ? 0 : jobList_l.size();

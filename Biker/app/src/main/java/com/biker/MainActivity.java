@@ -108,7 +108,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String browserKey = "AIzaSyDQqHe9i8DSWl7vGtJixki8KftHUuUDChM";
     private Dialog dialog;
     private String vehicle_no_str;
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        startActivity(getIntent());
 
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

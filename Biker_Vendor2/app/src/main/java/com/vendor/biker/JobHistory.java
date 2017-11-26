@@ -3,10 +3,15 @@ package com.vendor.biker;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -32,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vendor.biker.Utils.Constants;
 import com.vendor.biker.Utils.CustomToast;
@@ -47,8 +53,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.vendor.biker.R.id.textView;
+
 public class JobHistory extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener{
+        NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {
+    private static final int MAKE_CALL_PERMISSION_REQUEST_CODE = 1;
 
     private ArrayAdapter aa;
     private RecyclerView mRecyclerView;
@@ -58,11 +67,11 @@ public class JobHistory extends AppCompatActivity implements
     private SharedPreferences.Editor editor;
     private View rootView;
     private SwipeRefreshLayout swipeRefreshLayout;
-    int offset=0;
-    int limit=5;
-    List<JobListModel> jobList_l=new ArrayList<>();
+    int offset = 0;
+    int limit = 5;
+    List<JobListModel> jobList_l = new ArrayList<>();
     private TextView no_records;
-    private int total_count=0;
+    private int total_count = 0;
     private ImageView no_records_img;
 
     @Override
@@ -72,11 +81,11 @@ public class JobHistory extends AppCompatActivity implements
         prefrence = getSharedPreferences("My_Pref", 0);
         editor = prefrence.edit();
         //  Constants.statusColor(this);
-        rootView=findViewById(android.R.id.content);
+        rootView = findViewById(android.R.id.content);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
-        no_records =(TextView) findViewById(R.id.no_records);
-        no_records_img =(ImageView) findViewById(R.id.no_records_img);
+        no_records = (TextView) findViewById(R.id.no_records);
+        no_records_img = (ImageView) findViewById(R.id.no_records_img);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -90,7 +99,7 @@ public class JobHistory extends AppCompatActivity implements
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
 
-        profile_name=(TextView)header.findViewById(R.id.profile_name);
+        profile_name = (TextView) header.findViewById(R.id.profile_name);
         profile_name.setText(prefrence.getString("name", ""));
         Typeface typeface = Typeface.createFromAsset(getAssets(),
                 "fonts/name_font.ttf");
@@ -105,11 +114,11 @@ public class JobHistory extends AppCompatActivity implements
             alertDialog.setTitle("Confirm Login");
             alertDialog.setMessage("You are not logged in !! Would Youlike to login ??");
             alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog,int which) {
-                    editor.putString("isLoggedIn","false");
-                    editor.putString("access_token","1234");
+                public void onClick(DialogInterface dialog, int which) {
+                    editor.putString("isLoggedIn", "false");
+                    editor.putString("access_token", "1234");
                     editor.commit();
-                    Intent i=new Intent(JobHistory.this,Login.class);
+                    Intent i = new Intent(JobHistory.this, Login.class);
                     startActivity(i);
                     finish();
                 }
@@ -129,24 +138,62 @@ public class JobHistory extends AppCompatActivity implements
 
     }
 
-    public void getJobList(String action){
+    public void ResponseOfChangeStatus(String resultString) {
+        try {
+            JSONObject jsonObject = new JSONObject(resultString);
+            PrintClass.printValue("ResponseOfChangeStatus resultString ", " has data "
+                    + jsonObject.toString());
+            if (jsonObject.getString("status").equalsIgnoreCase("success")) {
+                new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                        "Status Changes Successfully");
+                offset = 0;
+                jobList_l.clear();
+                if (prefrence.getString("isLoggedIn", "").equals("true")) {
+                    getJobList("jobHistoryDetails");
+                } else {
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+                    alertDialog.setTitle("Confirm Login");
+                    alertDialog.setMessage("You are not logged in !! Would Youlike to login ??");
+                    alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            editor.putString("isLoggedIn", "false");
+                            editor.commit();
+                            Intent i = new Intent(JobHistory.this, Login.class);
+                            startActivity(i);
+                            finish();
+                        }
+                    });
+                    alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    alertDialog.show();
+                }
+            }
+        } catch (Exception e) {
+            PrintClass.printValue("ResponseOfChangeStatus Exception ", e.toString());
+        }
+    }
+
+    public void getJobList(String action) {
         if (IsNetworkConnection.checkNetworkConnection(JobHistory.this)) {
-            if(action.equals("JobListDetailsRefresh")) {
+            if (action.equals("JobListDetailsRefresh")) {
                 swipeRefreshLayout.setRefreshing(true);
             }
             String url = Constants.SERVER_URL + "vendor/completed-requests";
             JSONObject params = new JSONObject();
             try {
-                params.put("user_id",prefrence.getString("user_id", "") );
-                params.put("access_token",prefrence.getString("access_token", ""));
-                params.put("offset",String.valueOf(offset));
-                params.put("limit",String.valueOf(limit));
+                params.put("user_id", prefrence.getString("user_id", ""));
+                params.put("access_token", prefrence.getString("access_token", ""));
+                params.put("offset", String.valueOf(offset));
+                params.put("limit", String.valueOf(limit));
             } catch (JSONException e) {
                 e.printStackTrace();
                 PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
             }
             PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
-            new post_async(JobHistory.this,action).execute(url, params.toString());
+            new post_async(JobHistory.this, action).execute(url, params.toString());
         } else {
             new CustomToast().Show_Toast(getApplicationContext(), rootView,
                     "No Internet Connection");
@@ -157,19 +204,20 @@ public class JobHistory extends AppCompatActivity implements
         JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(resultString);
-            PrintClass.printValue("ResponseOfBookingList resultString "," has data "+jsonObject.toString());
-            if(jsonObject.getString("status").equalsIgnoreCase("success")) {
-                if(jsonObject.has("bookinglist")) {
+            PrintClass.printValue("ResponseOfBookingList resultString ", " has data " + jsonObject.toString());
+            if (jsonObject.getString("status").equalsIgnoreCase("success")) {
+                if (jsonObject.has("bookinglist")) {
                     mRecyclerView.setVisibility(View.VISIBLE);
                     no_records.setVisibility(View.GONE);
                     no_records_img.setVisibility(View.GONE);
-                    JSONArray jsonarr_joblist=jsonObject.getJSONArray("bookinglist");
+                    JSONArray jsonarr_joblist = jsonObject.getJSONArray("bookinglist");
 
-                    PrintClass.printValue("ResponseOfBookingList bookingList ",jsonarr_joblist.toString());
-                    for (int i=0;i<jsonarr_joblist.length();i++){
-                        JSONObject booking_jObj=jsonarr_joblist.getJSONObject(i);
-                        JobListModel jobList =new JobListModel();
+                    PrintClass.printValue("ResponseOfBookingList bookingList ", jsonarr_joblist.toString());
+                    for (int i = 0; i < jsonarr_joblist.length(); i++) {
+                        JSONObject booking_jObj = jsonarr_joblist.getJSONObject(i);
+                        JobListModel jobList = new JobListModel();
                         jobList.setBooking_no(booking_jObj.getString("booking_no"));
+                        jobList.setIs_paid(booking_jObj.getString("is_paid"));
                         jobList.setMobile_no(booking_jObj.getString("mobile_no"));
                         jobList.setVehicle_no(booking_jObj.getString("vehicle_no"));
                         jobList.setAddress(booking_jObj.getString("address"));
@@ -179,37 +227,36 @@ public class JobHistory extends AppCompatActivity implements
                         jobList.setStatus(booking_jObj.getString("status"));
                         jobList_l.add(jobList);
                     }
-                    if(jsonObject.has("totalCount")) {
+                    if (jsonObject.has("totalCount")) {
                         total_count = Integer.parseInt(jsonObject.getString("totalCount"));
                     }
                     mjobAdapter = new jobAdapter();
                     mRecyclerView.setAdapter(mjobAdapter);
-                        final JSONObject finalJsonObject = jsonObject;
-                        mjobAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
-                            @Override
-                            public void onLoadMore() {
-                                Log.e("haint", "Load More");
-                                jobList_l.add(null);
-                                mjobAdapter.notifyItemInserted(jobList_l.size() - 1);
-                                //Load more data for reyclerview
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Log.e("haint", "Load More 2");
-                                            PrintClass.printValue("ResponseOfjobList onLoadMore "
-                                                    , "LOOPED");
-                                            //Remove loading item
-                                            jobList_l.remove(jobList_l.size() - 1);
-                                            mjobAdapter.notifyItemRemoved(jobList_l.size());
-                                            //Load data
-                                            offset = offset + limit;
-                                            getJobList("jobHistoryDetailsReload");
+                    final JSONObject finalJsonObject = jsonObject;
+                    mjobAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+                        @Override
+                        public void onLoadMore() {
+                            Log.e("haint", "Load More");
+                            jobList_l.add(null);
+                            mjobAdapter.notifyItemInserted(jobList_l.size() - 1);
+                            //Load more data for reyclerview
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Log.e("haint", "Load More 2");
+                                    PrintClass.printValue("ResponseOfjobList onLoadMore "
+                                            , "LOOPED");
+                                    //Remove loading item
+                                    jobList_l.remove(jobList_l.size() - 1);
+                                    mjobAdapter.notifyItemRemoved(jobList_l.size());
+                                    //Load data
+                                    offset = offset + limit;
+                                    getJobList("jobHistoryDetailsReload");
 
-                                    }
-                                }, 1000);
-                            }
-                        });
-
+                                }
+                            }, 1000);
+                        }
+                    });
                 } else {
                     mRecyclerView.setVisibility(View.GONE);
                     no_records.setVisibility(View.VISIBLE);
@@ -224,9 +271,9 @@ public class JobHistory extends AppCompatActivity implements
             }
             swipeRefreshLayout.setRefreshing(false);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             swipeRefreshLayout.setRefreshing(false);
-            PrintClass.printValue("ResponseOfjobList Exception ",e.toString());
+            PrintClass.printValue("ResponseOfjobList Exception ", e.toString());
             no_records.setVisibility(View.VISIBLE);
             no_records_img.setVisibility(View.VISIBLE);
             try {
@@ -238,32 +285,42 @@ public class JobHistory extends AppCompatActivity implements
     }
 
     @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        startActivity(getIntent());
+
+    }
+
+    @Override
     public void onRefresh() {
-        offset=0;
+        offset = 0;
         jobList_l.clear();
         getJobList("jobHistoryDetailsRefresh");
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         profile_name.setText(prefrence.getString("name", ""));
 
     }
+
     public void ResponseOfjobListReload(String resultString) {
         try {
             JSONObject jsonObject = new JSONObject(resultString);
             PrintClass.printValue("ResponseOfjobListReload resultString ", " has data "
                     + jsonObject.toString());
-            if(jsonObject.getString("status").equalsIgnoreCase("success")) {
-                JSONArray jsonarr_joblist=jsonObject.getJSONArray("bookinglist");
-                PrintClass.printValue("ResponseOfjobListReload jobList ",jsonarr_joblist.toString());
-                for (int i=0;i<jsonarr_joblist.length();i++){
-                    JSONObject booking_jObj=jsonarr_joblist.getJSONObject(i);
-                    JobListModel jobList =new JobListModel();
+            if (jsonObject.getString("status").equalsIgnoreCase("success")) {
+                JSONArray jsonarr_joblist = jsonObject.getJSONArray("bookinglist");
+                PrintClass.printValue("ResponseOfjobListReload jobList ", jsonarr_joblist.toString());
+                for (int i = 0; i < jsonarr_joblist.length(); i++) {
+                    JSONObject booking_jObj = jsonarr_joblist.getJSONObject(i);
+                    JobListModel jobList = new JobListModel();
                     jobList.setBooking_no(booking_jObj.getString("booking_no"));
                     jobList.setMobile_no(booking_jObj.getString("mobile_no"));
                     jobList.setVehicle_no(booking_jObj.getString("vehicle_no"));
                     jobList.setAddress(booking_jObj.getString("address"));
+                    jobList.setIs_paid(booking_jObj.getString("is_paid"));
                     jobList.setCustomer_name(booking_jObj.getString("customer_name"));
                     jobList.setCustomer_number(booking_jObj.getString("customer_name"));
                     jobList.setBooking_id(booking_jObj.getString("booking_id"));
@@ -273,7 +330,7 @@ public class JobHistory extends AppCompatActivity implements
                 mjobAdapter.notifyDataSetChanged();
                 mjobAdapter.setLoaded();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             PrintClass.printValue("ResponseOfBookingListReload Exception ", e.toString());
 
         }
@@ -283,7 +340,7 @@ public class JobHistory extends AppCompatActivity implements
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-         int id = item.getItemId();
+        int id = item.getItemId();
 
         if (id == R.id.profile) {
             if (IsNetworkConnection.checkNetworkConnection(JobHistory.this)) {
@@ -291,30 +348,30 @@ public class JobHistory extends AppCompatActivity implements
                 i.putExtra("type", "edit");
                 startActivity(i);
             } else {
-                Intent i=new Intent(this,ServerError.class);
+                Intent i = new Intent(this, ServerError.class);
                 startActivity(i);
             }
             // Handle the camera action
-        }  else if (id == R.id.job_list) {
-            Intent i=new Intent(this,JobList.class);
-            i.putExtra("booking_id","");
+        } else if (id == R.id.job_list) {
+            Intent i = new Intent(this, JobList.class);
+            i.putExtra("booking_id", "");
             startActivity(i);
         } else if (id == R.id.home) {
-            Intent i=new Intent(this,MainActivity.class);
+            Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
         } else if (id == R.id.refer) {
-            Intent i=new Intent(this,ReferUser.class);
+            Intent i = new Intent(this, ReferUser.class);
             startActivity(i);
         } else if (id == R.id.logout) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.setTitle("Confirm Logout");
             alertDialog.setMessage("Are you sure you want to Logout ?");
             alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog,int which) {
-                    editor.putString("isLoggedIn","false");
-                    editor.putString("access_token","1234");
+                public void onClick(DialogInterface dialog, int which) {
+                    editor.putString("isLoggedIn", "false");
+                    editor.putString("access_token", "1234");
                     editor.commit();
-                    Intent i=new Intent(JobHistory.this,Login.class);
+                    Intent i = new Intent(JobHistory.this, Login.class);
                     startActivity(i);
                     finish();
                 }
@@ -333,32 +390,47 @@ public class JobHistory extends AppCompatActivity implements
         return true;
     }
 
-
-
-    static class jobViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch(requestCode) {
+            case MAKE_CALL_PERMISSION_REQUEST_CODE :
+                if (grantResults.length > 0 && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    Toast.makeText(JobHistory.this, "You can call the number by clicking on the button", Toast.LENGTH_SHORT).show();
+                }
+                return;
+        }
+    }
+    class jobViewHolder extends RecyclerView.ViewHolder {
         private final TextView status;
-        TextView vendor_name,vendor_number,vehicle_no,booking_no;
-        Button map;
+        TextView vendor_name, vendor_number, vehicle_no, booking_no;
+
+        Button map, submit_button;
+
         public jobViewHolder(View itemView) {
             super(itemView);
+            final Typeface typeface_luci = Typeface.createFromAsset(getAssets(), "fonts/luci.ttf");
+
             map = (Button) itemView.findViewById(R.id.map);
             vendor_name = (TextView) itemView.findViewById(R.id.vendor_name);
             booking_no = (TextView) itemView.findViewById(R.id.Payment_id);
             vendor_number = (TextView) itemView.findViewById(R.id.vendor_number);
             vehicle_no = (TextView) itemView.findViewById(R.id.vehicle_no);
             status = (TextView) itemView.findViewById(R.id.status);
+            submit_button = (Button) itemView.findViewById(R.id.submit_button);
+            submit_button.setTypeface(typeface_luci);
         }
     }
 
     static class LoadingViewHolder extends RecyclerView.ViewHolder {
         public ProgressBar progressBar;
+
         public LoadingViewHolder(View itemView) {
             super(itemView);
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar1);
         }
     }
 
-    class jobAdapter extends RecyclerView.Adapter < RecyclerView.ViewHolder >{
+    class jobAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private final int VIEW_TYPE_ITEM = 0;
         private final int VIEW_TYPE_LOADING = 1;
         private OnLoadMoreListener mOnLoadMoreListener;
@@ -375,8 +447,7 @@ public class JobHistory extends AppCompatActivity implements
                 }
 
                 @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy)
-                {
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                     if (dy > 0 && jobList_l.size() < total_count) //check for scroll down
                     {
@@ -428,12 +499,66 @@ public class JobHistory extends AppCompatActivity implements
                 //jobViewHolder.vendor_number.setText(bookings.getCustomer_number());
                 jobViewHolder.vehicle_no.setText(bookings.getVehicle_no());
                 jobViewHolder.status.setText(bookings.getStatus());
+                jobViewHolder.submit_button.setTag(position);
+
+                jobViewHolder.vendor_number.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int checkPermission = ContextCompat.checkSelfPermission(JobHistory.this, android.Manifest.permission.CALL_PHONE);
+
+                        if (checkPermission(android.Manifest.permission.CALL_PHONE)) {
+                            String dial = "tel:" + bookings.getMobile_no();
+                            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+                        } else {
+                            Toast.makeText(JobHistory.this, "Permission Call Phone denied", Toast.LENGTH_SHORT).show();
+                        }
+                        if (checkPermission(android.Manifest.permission.CALL_PHONE)) {
+                            jobViewHolder.vendor_number.setEnabled(true);
+                        } else {
+                            jobViewHolder.vendor_number.setEnabled(false);
+                            ActivityCompat.requestPermissions(JobHistory.this, new String[]
+                                    {android.Manifest.permission.CALL_PHONE}, MAKE_CALL_PERMISSION_REQUEST_CODE);
+                        }
+
+
+                    }
+                });
+                if(bookings.getIs_paid().equals("paid")) {
+                    jobViewHolder.submit_button.setVisibility(View.GONE);
+
+                } else {
+                    jobViewHolder.submit_button.setVisibility(View.VISIBLE);
+                    if (bookings.getStatus().equalsIgnoreCase("Delivered")) {
+                        jobViewHolder.submit_button.setText("CONFIRM PAYMENT");
+                    } else {
+                        jobViewHolder.submit_button.setText("DELIVER");
+                    }
+                }
+                jobViewHolder.submit_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final int itemPosition = (Integer) view.getTag();
+                        final JobListModel bookin = jobList_l.get(itemPosition);
+
+                        if(bookin.getStatus().equalsIgnoreCase("Delivered")) {
+                            confirmPayment(bookin.getBooking_id());
+                        } else {
+                            changeStatus("Delivered",bookin.getBooking_id());
+                        }
+                    }
+                });
 
             } else if (holder instanceof LoadingViewHolder) {
                 LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
                 loadingViewHolder.progressBar.setIndeterminate(true);
             }
         }
+
+        private boolean checkPermission(String permission) {
+            return ContextCompat.checkSelfPermission(JobHistory.this, permission) == PackageManager.PERMISSION_GRANTED;
+        }
+
+
 
         @Override
         public int getItemCount() {
@@ -465,5 +590,27 @@ public class JobHistory extends AppCompatActivity implements
                         "No Internet Connection");
             }
         }
+        public void confirmPayment(String booking_id){
+            if (IsNetworkConnection.checkNetworkConnection(JobHistory.this)) {
+
+                String url = Constants.SERVER_URL + "vendor/confirm-payment";
+                JSONObject params = new JSONObject();
+                try {
+                    params.put("user_id",prefrence.getString("user_id", "") );
+                    params.put("access_token",prefrence.getString("access_token", ""));
+                    params.put("booking_id",booking_id);
+                    params.put("confirm_payment","Y");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
+                }
+                PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
+                new post_async(JobHistory.this,"confirmpayment").execute(url, params.toString());
+            } else {
+                new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                        "No Internet Connection");
+            }
+        }
+
     }
 }

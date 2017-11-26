@@ -5,9 +5,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -31,6 +36,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.biker.Utils.Constants;
@@ -66,7 +72,13 @@ public class BookingDetails extends AppCompatActivity
     private SwipeRefreshLayout swipeRefreshLayout;
     private ImageView no_records_img;
     private Typeface typeface_luci;
+    private static final int MAKE_CALL_PERMISSION_REQUEST_CODE = 1;
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        startActivity(getIntent());
 
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -438,7 +450,16 @@ public class BookingDetails extends AppCompatActivity
 
         }
     }
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch(requestCode) {
+            case MAKE_CALL_PERMISSION_REQUEST_CODE :
+                if (grantResults.length > 0 && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    Toast.makeText(BookingDetails.this, "You can call the number by clicking on the button", Toast.LENGTH_SHORT).show();
+                }
+                return;
+        }
+    }
     class BookingDetailsRecyclerView extends RecyclerView.Adapter < RecyclerView.ViewHolder > {
         private final int VIEW_TYPE_ITEM = 0;
         private final int VIEW_TYPE_LOADING = 1;
@@ -509,8 +530,8 @@ public class BookingDetails extends AppCompatActivity
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof BookingDetails.BookingDetailsRecyclerViewHolder) {
-                BookingList bookings = bookingList_l.get(position);
-                BookingDetails.BookingDetailsRecyclerViewHolder userViewHolder =
+                final BookingList bookings = bookingList_l.get(position);
+                final BookingDetails.BookingDetailsRecyclerViewHolder userViewHolder =
                         (BookingDetails.BookingDetailsRecyclerViewHolder) holder;
                 userViewHolder.booking_id.setText(bookings.getBooking_no());
                 userViewHolder.vendor_name.setText(bookings.getVendor_name());
@@ -518,6 +539,27 @@ public class BookingDetails extends AppCompatActivity
                 userViewHolder.vendor_number.setText(bookings.getVendor_nuber());
                 userViewHolder.payNow.setTag(position);
                 userViewHolder.status.setText(bookings.getStatus());
+                userViewHolder.vendor_number.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if (checkPermission(android.Manifest.permission.CALL_PHONE)) {
+                            String dial = "tel:" + bookings.getVehicle_no();
+                            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+                        } else {
+                            Toast.makeText(BookingDetails.this, "Permission Call Phone denied", Toast.LENGTH_SHORT).show();
+                        }
+                        if (checkPermission(android.Manifest.permission.CALL_PHONE)) {
+                            userViewHolder.vendor_number.setEnabled(true);
+                        } else {
+                            userViewHolder.vendor_number.setEnabled(false);
+                            ActivityCompat.requestPermissions(BookingDetails.this, new String[]
+                                    {android.Manifest.permission.CALL_PHONE}, MAKE_CALL_PERMISSION_REQUEST_CODE);
+                        }
+
+
+                    }
+                });
 
             } else if (holder instanceof BookingDetails.LoadingViewHolder) {
                 BookingDetails.LoadingViewHolder loadingViewHolder = (BookingDetails.LoadingViewHolder) holder;
@@ -525,7 +567,9 @@ public class BookingDetails extends AppCompatActivity
             }
         }
 
-
+        private boolean checkPermission(String permission) {
+            return ContextCompat.checkSelfPermission(BookingDetails.this, permission) == PackageManager.PERMISSION_GRANTED;
+        }
         @Override
         public int getItemCount() {
             return bookingList_l == null ? 0 : bookingList_l.size();

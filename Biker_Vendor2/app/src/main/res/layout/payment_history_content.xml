@@ -157,9 +157,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="27dp"
                 android:padding="5dp"
+                android:clickable="true"
+                android:autoLink = "phone"
                 android:background="@color/white"
                 android:textSize="@dimen/normal"
-                android:textColor="@color/black"
+                android:textColor="@color/blue"
                 android:id="@+id/vendor_number"/>
             <com.vendor.biker.Utils.MyTextView
                 android:layout_width="wrap_content"
@@ -181,5 +183,18 @@
         </LinearLayout>
     </LinearLayout>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:id="@+id/submit_button"
+        android:text="DELIVER"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:visibility="visible"
+        android:layout_marginTop="12dp"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_green"
+        android:layout_below="@+id/main"
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

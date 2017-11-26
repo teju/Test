@@ -6,9 +6,11 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <uses-feature android:name="android.hardware.location.gps" />
 
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
@@ -41,6 +43,7 @@
 
         <activity
             android:name=".SplashScreen"
+            android:launchMode="singleTop"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,12 +53,15 @@
         </activity>
         <activity
             android:name=".Login"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".UserRegister"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.vendor.biker.MainActivity" />
@@ -65,12 +71,15 @@
         </activity>
         <activity
             android:name=".ServerError"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".PathGoogleMapActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".JobList"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.vendor.biker.JobList" />
@@ -80,6 +89,7 @@
         </activity>
         <activity
             android:name=".JobHistory"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.vendor.biker.JobHistory" />
@@ -99,7 +109,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ReferUser"></activity>
+        <activity android:name=".ReferUser"
+            android:launchMode="singleTop"></activity>
     </application>
 
 </manifest>

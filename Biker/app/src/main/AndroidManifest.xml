@@ -6,9 +6,11 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <uses-feature android:name="android.hardware.location.gps" />
 
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
@@ -43,6 +45,7 @@
         <activity
             android:name=".SplashScreen"
             android:label="@string/app_name"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,21 +54,27 @@
         </activity>
         <activity
             android:name=".UserRegister"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ServerError"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".BookingSuccessful"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Setting"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".BookingCompleted"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait">
         <intent-filter>
             <action android:name="com.biker.BookingCompleted" />
@@ -74,6 +83,7 @@
         </activity>
         <activity
             android:name=".PaymentHistory"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.biker.PaymentHistory" />
@@ -92,16 +102,21 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Login" />
+        <activity android:name=".Login"
+            android:launchMode="singleTop"
+            />
         <activity
             android:name=".BookingDetails"
+            android:launchMode="singleTop"
+
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.biker.BookingDetails" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ReachedDestination">
+        <activity android:name=".ReachedDestination"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="com.biker.ReachedDestination" />
                 <category android:name="android.intent.category.DEFAULT" />

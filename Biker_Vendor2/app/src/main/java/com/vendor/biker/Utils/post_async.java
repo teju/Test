@@ -184,6 +184,10 @@ public class post_async extends AsyncTask<String, Integer, String> {
                 this.jobHistory.ResponseOfjobListReload(resultString);
             } else  if (this.jobList != null && action.equalsIgnoreCase("changeStatus")) {
                 this.jobList.ResponseOfChangeStatus(resultString);
+            }else  if (this.jobHistory != null && action.equalsIgnoreCase("changeStatus")) {
+                this.jobHistory.ResponseOfChangeStatus(resultString);
+            }else  if (this.jobHistory != null && action.equalsIgnoreCase("confirmpayment")) {
+                this.jobHistory.ResponseOfChangeStatus(resultString);
             }else  if (this.pathGoogleMapActivity != null && action.equalsIgnoreCase("Deliver")) {
                 this.pathGoogleMapActivity.ResponseOfDestinationReached(resultString);
             }

@@ -56,7 +56,12 @@ public class UserRegister extends AppCompatActivity {
     private EditText referral_id;
     String getReferralIdValue;
 
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        startActivity(getIntent());
 
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

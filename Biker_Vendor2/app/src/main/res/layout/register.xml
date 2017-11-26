@@ -19,6 +19,58 @@
             android:src="@drawable/bierlogo"
             android:layout_marginTop="40dp"
             android:layout_gravity="center_horizontal"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:visibility="gone"
+            android:id="@+id/myProfile"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical">
+            <com.vendor.biker.Utils.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MY PROFILE"
+                android:textSize="25dp"
+                android:textColor="@color/black"
+                android:layout_gravity="center_horizontal"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_height="wrap_content">
+                <com.vendor.biker.Utils.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total \nEarnings" />
+                <com.vendor.biker.Utils.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 150"
+                    android:id="@+id/earnings"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+            <com.vendor.biker.Utils.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Overall Ratings"
+                android:layout_marginTop="15dp"
+                android:textSize="25dp"
+                android:textColor="@color/purple"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"/>
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:isIndicator="true"
+                android:numStars="5"
+                style= "@style/CustomRatingBar"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/ratings" />
+
+        </LinearLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,6 +78,7 @@
             android:textStyle="bold|italic"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
+            android:id="@+id/sign_up_text"
             android:textAllCaps="true"
             android:textSize="@dimen/normal"
             android:textColor="@color/black" />
@@ -35,6 +88,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/name"
             android:textSize="@dimen/normal"
+            android:inputType="text"
             android:layout_marginLeft="60dp"
             android:drawableLeft="@drawable/account"
             android:drawablePadding="6dp"
@@ -65,6 +119,7 @@
             android:background="@android:drawable/editbox_background_normal"
             android:hint="Service Centre Name"
             android:padding="12dp"
+            android:inputType="text"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
             android:drawableLeft="@drawable/account_multiple"
@@ -87,23 +142,30 @@
             android:drawablePadding="6dp"
             android:textColor="@color/black" />
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/terms_conditions"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal"
             android:layout_gravity="center_horizontal">
             <CheckBox
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/agree"/>
+                android:id="@+id/agree"
+                android:clickable="false"
+                android:layout_height="wrap_content" />
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Terms and Conditions"
+                android:layout_height="match_parent"
+                android:paddingTop="8dp"
+                android:id="@+id/terms"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="5dp"
+                android:text="Accept Terms &amp; Conditions"
                 android:textColor="@color/blue"
-                android:layout_gravity="center_horizontal"
-                android:textAlignment="center"
-                android:layout_marginTop="10dp"/>
+                android:textAlignment="center" />
         </LinearLayout>
 
         <Button

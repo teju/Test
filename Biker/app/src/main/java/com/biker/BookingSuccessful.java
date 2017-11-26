@@ -19,7 +19,12 @@ public class BookingSuccessful extends AppCompatActivity{
       //  Constants.statusColor(this);
 
     }
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        startActivity(getIntent());
 
+    }
     public void home(View view){
         Intent i =new Intent(this,MainActivity.class);
         startActivity(i);

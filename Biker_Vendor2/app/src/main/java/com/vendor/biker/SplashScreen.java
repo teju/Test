@@ -11,7 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 public class SplashScreen extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     private SharedPreferences prefrence;
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        startActivity(getIntent());
 
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -279,7 +279,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
             System.out.println("SYSTEMPRINT error UserRegister "+e.toString());
         }
     }
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        startActivity(getIntent());
 
+    }
     public void ResponseOfLoginOtp(String response){
         try {
             final JSONObject jsonObject = new JSONObject(response);

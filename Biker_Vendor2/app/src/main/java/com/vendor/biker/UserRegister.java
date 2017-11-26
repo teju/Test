@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -21,7 +22,10 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -66,7 +70,12 @@ public class UserRegister extends AppCompatActivity {
     private String getAddress="";
     boolean isUpdate=false;
     private boolean agreed = false;
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        startActivity(getIntent());
 
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,18 +89,30 @@ public class UserRegister extends AppCompatActivity {
         Button click=(Button)findViewById(R.id.buttonclick);
         phone=(EditText)findViewById(R.id.phone);
         email=(EditText)findViewById(R.id.email);
+        ImageView logo = (ImageView) findViewById(R.id.logo);
+        TextView sign_up_text = (TextView) findViewById(R.id.sign_up_text);
+        TextView earnings = (TextView) findViewById(R.id.earnings);
         service_center_name=(EditText)findViewById(R.id.service_center_name);
         LinearLayout terms_conditions = (LinearLayout) findViewById(R.id.terms_conditions);
-        final CheckBox agree = (CheckBox)findViewById(R.id.agree);
+        LinearLayout myProfile = (LinearLayout) findViewById(R.id.myProfile);
+        final CheckBox agree_main = (CheckBox)findViewById(R.id.agree);
+        final TextView terms_condi_text = (TextView) findViewById(R.id.terms);
+        final Typeface typeface_luci = Typeface.createFromAsset(getAssets(), "fonts/luci.ttf");
+        final Typeface italic = Typeface.createFromAsset(getAssets(), "fonts/italic.ttf");
 
+        RatingBar ratings=(RatingBar)findViewById(R.id.ratings) ;
         type=getIntent().getStringExtra("type");
         PrintClass.printValue("UserRegisterPrint type ",type);
 
         if(type.equals("edit")) {
             getProfileInfo();
             click.setText("UPDATE");
-            agree.setVisibility(View.GONE);
-
+            terms_conditions.setVisibility(View.GONE);
+            sign_up_text.setVisibility(View.GONE);
+            logo.setVisibility(View.GONE);
+            earnings.setText("\u20B9 "+prefrence.getString("amount",""));
+            myProfile.setVisibility(View.VISIBLE);
+            ratings.setRating(Float.parseFloat(prefrence.getString("avg_rating","")));
         } else {
             name.setText("");
             email.setText("");
@@ -110,16 +131,8 @@ public class UserRegister extends AppCompatActivity {
         } catch (Exception e){
             PrintClass.printValue("PathGoogleMapActivity Exception ",e.toString());
         }
-        agree.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(agree.isChecked()){
-                    agreed = true;
-                } else  {
-                    agreed=false;
-                }
-            }
-        });
+        agree_main.setChecked(agreed);
+        terms_condi_text.setTypeface(italic);
         terms_conditions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,7 +145,7 @@ public class UserRegister extends AppCompatActivity {
                 if (IsNetworkConnection.checkNetworkConnection(UserRegister.this)) {
 
                     RequestQueue queue = Volley.newRequestQueue(UserRegister.this);
-                    String url = "http://chouguleeducation.in/biker/api/web/user/vendor-terms-condition";
+                    String url = "http://chouguleeducation.in/biker/api/web/user/customer-terms-condition";
 
 // Request a string response from the provided URL.
                     StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -150,27 +163,34 @@ public class UserRegister extends AppCompatActivity {
                                                     LinearLayout.LayoutParams.WRAP_CONTENT);
                                             mBottomSheetDialog.show();
                                             Button ok = (Button) mBottomSheetDialog.findViewById(R.id.ok);
+                                            ok.setTypeface(typeface_luci);
+
+                                            ok.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    mBottomSheetDialog.dismiss();
+                                                    agree_main.setChecked(agreed);
+                                                }
+                                            });
                                             final CheckBox agree = (CheckBox) mBottomSheetDialog.findViewById(R.id.agree);
+                                            agree.setTypeface(italic);
+                                            agree.setChecked(agreed);
                                             agree.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     if(agree.isChecked()){
                                                         agreed = true;
-
-                                                    } else  {
+                                                    }else  {
                                                         agreed=false;
                                                     }
                                                 }
                                             });
-                                            ok.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    mBottomSheetDialog.dismiss();
-                                                }
-                                            });
+
                                             HtmlTextView termCon = (HtmlTextView) mBottomSheetDialog.findViewById(R.id.terms_conditions);
                                             // Spanned result = Html.fromHtml(childText);
                                             // txtListChild.setText(result);
+                                            termCon.setTypeface(typeface_luci);
+
                                             termCon.setHtml(jsonObject.getString("terms"), new HtmlHttpImageGetter(termCon));
 
                                             // Display the first 500 characters of the response string.
@@ -194,7 +214,6 @@ public class UserRegister extends AppCompatActivity {
                     queue.add(stringRequest);
 
                 } else {
-                    dialog.dismiss();
                     new CustomToast().Show_Toast(getApplicationContext(), rootView,
                             "No Internet Connection");
                 }

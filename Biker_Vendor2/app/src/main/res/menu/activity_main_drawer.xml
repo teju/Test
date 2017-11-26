@@ -19,7 +19,7 @@
             android:title="Job History" />
         <item
             android:id="@+id/refer"
-            android:icon="@drawable/logout"
+            android:icon="@drawable/account_multiple"
             android:title="Refer User" />
 
         <item

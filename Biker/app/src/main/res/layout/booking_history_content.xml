@@ -142,7 +142,9 @@
             android:layout_height="27dp"
             android:padding="5dp"
             android:textSize="@dimen/normal"
-            android:textColor="@color/black"
+            android:textColor="@color/blue"
+            android:clickable="true"
+            android:autoLink = "phone"
             android:id="@+id/vendor_number"/>
         <TextView
             android:layout_width="wrap_content"

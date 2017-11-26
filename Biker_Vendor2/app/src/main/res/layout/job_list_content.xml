@@ -160,9 +160,11 @@
             android:layout_width="wrap_content"
             android:layout_height="27dp"
             android:padding="5dp"
-            android:background="@color/white"
             android:textSize="@dimen/normal"
-            android:textColor="@color/black"
+            android:clickable="true"
+            android:autoLink = "phone"
+            android:textColor="@color/blue"
+            android:background="@color/white"
             android:id="@+id/vendor_number"/>
         <com.vendor.biker.Utils.MyTextView
             android:layout_width="wrap_content"

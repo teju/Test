@@ -5,10 +5,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -31,6 +36,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.biker.Utils.Constants;
@@ -65,13 +71,19 @@ public class BookingCompleted extends AppCompatActivity
     private TextView no_records;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ImageView no_records_img;
+    private static final int MAKE_CALL_PERMISSION_REQUEST_CODE = 1;
 
     @Override
     protected void onResume() {
         super.onResume();
         profile_name.setText(prefrence.getString("name", ""));
     }
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        startActivity(getIntent());
 
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,7 +171,7 @@ public class BookingCompleted extends AppCompatActivity
                 PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
             }
             PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
-            new post_async(BookingCompleted.this,action).execute(url, params.toString());
+            new post_async(BookingCompleted.this,action, null).execute(url, params.toString());
         } else {
             new CustomToast().Show_Toast(getApplicationContext(), rootView,
                     "No Internet Connection");
@@ -246,6 +258,7 @@ public class BookingCompleted extends AppCompatActivity
                         PaymentList.setEmail_id(Payment_jObj.getString("email_id"));
                         PaymentList.setVehicle_no(Payment_jObj.getString("vehicle_no"));
                         PaymentList.setStatus(Payment_jObj.getString("status"));
+                        PaymentList.setIs_paid(Payment_jObj.getString("is_paid"));
                         PaymentList.setBooked_on(Payment_jObj.getString("booked_on"));
                         PaymentList.setAddress(Payment_jObj.getString("address"));
                         if(Payment_jObj.has("vendor_name")) {
@@ -347,6 +360,7 @@ public class BookingCompleted extends AppCompatActivity
                     PaymentList.setVehicle_no(Payment_jObj.getString("vehicle_no"));
                     PaymentList.setStatus(Payment_jObj.getString("status"));
                     PaymentList.setBooked_on(Payment_jObj.getString("booked_on"));
+                    PaymentList.setIs_paid(Payment_jObj.getString("is_paid"));
                     PaymentList.setAddress(Payment_jObj.getString("address"));
                     if(Payment_jObj.has("vendor_name")) {
                         PaymentList.setVendor_name(Payment_jObj.getString("vendor_name"));
@@ -401,6 +415,16 @@ public class BookingCompleted extends AppCompatActivity
         PaymentList_l.clear();
         getPaymentList("BookingCompletedRefresh");
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch(requestCode) {
+            case MAKE_CALL_PERMISSION_REQUEST_CODE :
+                if (grantResults.length > 0 && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    Toast.makeText(BookingCompleted.this, "You can call the number by clicking on the button", Toast.LENGTH_SHORT).show();
+                }
+                return;
+        }
+    }
 
     class PaymentHistoryRecyclerViewHolder extends RecyclerView.ViewHolder {
         private final Button payNow;
@@ -444,6 +468,29 @@ public class BookingCompleted extends AppCompatActivity
             super(itemView);
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar1);
 
+        }
+    }
+    public void giveFeedback(String booking_id,String vendor_id,String rating,String comment) {
+        if (IsNetworkConnection.checkNetworkConnection(this)) {
+
+            String url = Constants.SERVER_URL + "booking/booking-rating";
+            JSONObject params = new JSONObject();
+            try {
+                params.put("user_id",prefrence.getString("user_id", "") );
+                params.put("access_token",prefrence.getString("access_token", ""));
+                params.put("booking_id",booking_id);
+                params.put("vendor_id",vendor_id);
+                params.put("rating",rating);
+                params.put("comment",comment);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
+            }
+            PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
+            new post_async(BookingCompleted.this,"RateFeedBAck", null).execute(url, params.toString());
+        } else {
+            new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                    "No Internet Connection");
         }
     }
 
@@ -518,21 +565,44 @@ public class BookingCompleted extends AppCompatActivity
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof BookingCompleted.PaymentHistoryRecyclerViewHolder) {
-                BookingList Payments = PaymentList_l.get(position);
-                BookingCompleted.PaymentHistoryRecyclerViewHolder userViewHolder =
+                final BookingList Payments = PaymentList_l.get(position);
+                final BookingCompleted.PaymentHistoryRecyclerViewHolder userViewHolder =
                         (BookingCompleted.PaymentHistoryRecyclerViewHolder) holder;
                 userViewHolder.booking_id.setText(Payments.getBooking_no());
                 userViewHolder.vendor_name.setText(Payments.getVendor_name());
                 userViewHolder.vendor_number.setText(Payments.getVendor_nuber());
                 userViewHolder.vehicle_no.setText(Payments.getVehicle_no());
                 userViewHolder.status.setText(Payments.getStatus());
+                userViewHolder.vendor_number.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (checkPermission(android.Manifest.permission.CALL_PHONE)) {
+                            String dial = "tel:" + Payments.getVehicle_no();
+                            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+                        } else {
+                            Toast.makeText(BookingCompleted.this, "Permission Call Phone denied", Toast.LENGTH_SHORT).show();
+                        }
+                        if (checkPermission(android.Manifest.permission.CALL_PHONE)) {
+                            userViewHolder.vendor_number.setEnabled(true);
+                        } else {
+                            userViewHolder.vendor_number.setEnabled(false);
+                            ActivityCompat.requestPermissions(BookingCompleted.this, new String[]
+                                    {android.Manifest.permission.CALL_PHONE}, MAKE_CALL_PERMISSION_REQUEST_CODE);
+                        }
+                    }
+                });
+
+                if(Payments.getIs_paid().equals("paid") || Payments.getStatus().equalsIgnoreCase("completed") ){
+                    userViewHolder.payNow.setVisibility(View.GONE);
+                } else {
+                    userViewHolder.payNow.setVisibility(View.VISIBLE);
+                }
                 userViewHolder.payNow.setTag(position);
                 userViewHolder.payNow.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         final int itemPosition = (Integer) view.getTag();
                         final BookingList bookin = PaymentList_l.get(itemPosition);
-
                         final Dialog mBottomSheetDialog = new Dialog(context);
                         mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         mBottomSheetDialog.setContentView(R.layout.pay_now);
@@ -584,7 +654,7 @@ public class BookingCompleted extends AppCompatActivity
                                 } else {
                                     paymentMode="cash";
                                 }
-                                payNow(bookin.getBooking_id(),bookin.getVendor_id(),paymentMode);
+                                payNow(bookin.getBooking_id(),bookin.getVendor_id(),paymentMode,bookin);
                                 mBottomSheetDialog.dismiss();
                             }
                         });
@@ -596,8 +666,10 @@ public class BookingCompleted extends AppCompatActivity
                 loadingViewHolder.progressBar.setIndeterminate(true);
             }
         }
-
-        public void payNow(String booking_id,String vendor_id,String payment_mode){
+        private boolean checkPermission(String permission) {
+            return ContextCompat.checkSelfPermission(BookingCompleted.this, permission) == PackageManager.PERMISSION_GRANTED;
+        }
+        public void payNow(String booking_id, String vendor_id, String payment_mode, BookingList bookingList){
             if (IsNetworkConnection.checkNetworkConnection(BookingCompleted.this)) {
 
                 String url = Constants.SERVER_URL + "booking/payments";
@@ -623,7 +695,7 @@ public class BookingCompleted extends AppCompatActivity
                     PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
                 }
                 PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
-                new post_async(BookingCompleted.this,"Payment").execute(url, params.toString());
+                new post_async(BookingCompleted.this,"Payment",bookingList).execute(url, params.toString());
             } else {
                 new CustomToast().Show_Toast(getApplicationContext(), rootView,
                         "No Internet Connection");

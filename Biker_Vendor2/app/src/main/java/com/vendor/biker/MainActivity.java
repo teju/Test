@@ -64,7 +64,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int total_count=0;
     private BookingDetailsRecyclerView mAdapter;
     private BroadcastReceiver receiver;
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        startActivity(getIntent());
 
+    }
     @Override
     protected void onResume() {
         super.onResume();

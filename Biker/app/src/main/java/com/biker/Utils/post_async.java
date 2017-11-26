@@ -9,8 +9,11 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -30,6 +33,7 @@ import com.biker.R;
 import com.biker.ReachedDestination;
 import com.biker.ServerError;
 import com.biker.UserRegister;
+import com.biker.model.BookingList;
 
 
 import org.json.JSONObject;
@@ -41,6 +45,7 @@ import java.io.UnsupportedEncodingException;
  */
 public class post_async extends AsyncTask<String, Integer, String> {
     static String action = "", resultString = "";
+    private BookingList bookingList;
     private PaymentHistory paymentHistory;
     private ReachedDestination reachedDestination;
     private BookingCompleted bookingCompleted;
@@ -71,9 +76,10 @@ public class post_async extends AsyncTask<String, Integer, String> {
         this.context=reachedDestination;
         this.reachedDestination = reachedDestination;
     }
-    public post_async(BookingCompleted bookingCompleted, String action) {
+    public post_async(BookingCompleted bookingCompleted, String action, BookingList bookingList) {
         this.action = action;
         this.context= bookingCompleted;
+        this.bookingList= bookingList;
         this.bookingCompleted = bookingCompleted;
     }
     public post_async(Login login, String action) {
@@ -227,6 +233,7 @@ public class post_async extends AsyncTask<String, Integer, String> {
 
             jsonObject = new JSONObject(response);
             if(jsonObject.getString("status").equalsIgnoreCase("success")) {
+
                 message.setText(responsemessage);
 
             } else {
@@ -240,6 +247,64 @@ public class post_async extends AsyncTask<String, Integer, String> {
             ok.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if(action.equals("Payment")) {
+                        final BookingList bookin = bookingList;
+
+                        final Dialog mBottomSheetDialog = new Dialog(context);
+                        mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        mBottomSheetDialog.setContentView(R.layout.rating_feedback);
+                        mBottomSheetDialog.setCancelable(true);
+                        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT);
+                        mBottomSheetDialog.show();
+                        Typeface typeface_luci = Typeface.createFromAsset(context.getAssets(), "fonts/luci.ttf");
+
+                        Button submit = (Button) mBottomSheetDialog.findViewById(R.id.submit);
+                        Button not_now = (Button) mBottomSheetDialog.findViewById(R.id.not_now);
+                        final RatingBar ratings = (RatingBar) mBottomSheetDialog.findViewById(R.id.ratings);
+                        final EditText feedback = (EditText) mBottomSheetDialog.findViewById(R.id.feedback);
+                        final TextView feedback_title = (TextView) mBottomSheetDialog.findViewById(R.id.feedback_title);
+                        ratings.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                            @Override
+                            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+
+                                String rateValue = String.valueOf(ratingBar.getRating());
+                                System.out.println("Rate for Module is"+rateValue);
+                            }
+                        });
+                        not_now.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                mBottomSheetDialog.dismiss();
+                                bookingCompleted.getPaymentList("BookingCompleted");
+
+                            }
+                        });
+
+                        submit.setTypeface(typeface_luci);
+                        feedback_title.setTypeface(typeface_luci);
+                        feedback.setTypeface(typeface_luci);
+                        submit.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if(ratings.getRating() == 0) {
+                                    bookingCompleted.getPaymentList("BookingCompleted");
+                                    Toast.makeText(context,"Please Provide your rating",Toast.LENGTH_LONG).show();
+
+                                } else if(feedback.getText().toString().trim().length() == 0 ) {
+                                    Toast.makeText(context,"Please Provide your feedback",Toast.LENGTH_LONG).show();
+
+
+                                } else {
+                                    bookingCompleted.giveFeedback(bookin.getBooking_id(), bookin.getVendor_id(),
+                                            String.valueOf((int)ratings.getRating()), feedback.getText().toString());
+                                }
+                                mBottomSheetDialog.dismiss();
+                            }
+                        });
+                    } else {
+                        paymentHistory.getPaymentList("PaymentHistoryCompleted");
+                    }
                     mBottomSheetDialog.dismiss();
                 }
             });
@@ -247,7 +312,6 @@ public class post_async extends AsyncTask<String, Integer, String> {
         } catch (Exception e) {
             message.setText(error);
         }
-
     }
 
 

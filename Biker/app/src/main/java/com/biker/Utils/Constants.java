@@ -12,4 +12,8 @@ public class Constants {
     public static String regEx = "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}\\b";
     public static String SERVER_URL="http://chouguleeducation.in/biker/api/web/";
 
+    public void rateNow() {
+
+    }
+
 }

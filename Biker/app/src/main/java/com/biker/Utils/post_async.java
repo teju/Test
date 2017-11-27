@@ -247,6 +247,7 @@ public class post_async extends AsyncTask<String, Integer, String> {
             ok.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    mBottomSheetDialog.dismiss();
                     if(action.equals("Payment")) {
                         final BookingList bookin = bookingList;
 
@@ -296,16 +297,16 @@ public class post_async extends AsyncTask<String, Integer, String> {
 
 
                                 } else {
+                                    mBottomSheetDialog.dismiss();
+
                                     bookingCompleted.giveFeedback(bookin.getBooking_id(), bookin.getVendor_id(),
                                             String.valueOf((int)ratings.getRating()), feedback.getText().toString());
                                 }
-                                mBottomSheetDialog.dismiss();
                             }
                         });
                     } else {
                         paymentHistory.getPaymentList("PaymentHistoryCompleted");
                     }
-                    mBottomSheetDialog.dismiss();
                 }
             });
             PrintClass.printValue("ResponseOfPaymentList resultString ", " has data " + jsonObject.toString());

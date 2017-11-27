@@ -583,10 +583,11 @@ public class PaymentHistory extends AppCompatActivity
                                     new CustomToast().Show_Toast(getApplicationContext(), rootView,
                                             "Please Provide your feedback");
                                 } else {
+                                    mBottomSheetDialog.dismiss();
+
                                     giveFeedback(bookin.getBooking_id(), bookin.getVendor_id(),
                                             String.valueOf((int)ratings.getRating()), feedback.getText().toString());
                                 }
-                                mBottomSheetDialog.dismiss();
                             }
                         });
                     }

@@ -11,7 +11,15 @@
         android:background="@android:color/transparent"
         android:layout_marginTop="40dp"
         android:layout_gravity="center_horizontal"/>
-
+    <com.vendor.biker.Utils.MyTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="hsafa12"
+        android:id="@+id/referral_code"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bg"
+        android:textColor="@color/white"
+        android:padding="10dp"/>
     <com.vendor.biker.Utils.MyEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

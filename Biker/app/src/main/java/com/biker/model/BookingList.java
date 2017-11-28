@@ -58,6 +58,16 @@ public class BookingList {
     String status;
     String email_id;
 
+    public String getConfirm_payment() {
+        return confirm_payment;
+    }
+
+    public void setConfirm_payment(String confirm_payment) {
+        this.confirm_payment = confirm_payment;
+    }
+
+    String confirm_payment;
+
     public String getRating() {
         return rating;
     }

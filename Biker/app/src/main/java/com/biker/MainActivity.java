@@ -439,8 +439,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), result, android.R.layout.simple_list_item_1, from, to);
             PrintClass.printValue("jsonObjReqMAinactivity from ", to+" result "+result.size());
             if(result.size() == 0) {
-                new CustomToast().Show_Toast(getApplicationContext(), rootView,
-                        "Address Not Found");
+
                 dialog.cancel();
                 return;
             }
@@ -768,119 +767,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
-    /*private void search() {
-        try {
-            Intent intent =
-                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                            .build(this);
-            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
-        } catch (GooglePlayServicesRepairableException e) {
-            new CustomToast().Show_Toast(getApplicationContext(), rootView,
-                    "Service Not Available");
-            PrintClass.printValue("SEARCHAUTOCOMPLETE GooglePlayServicesRepairableException" +
-                    " ", "" + e.toString());
-
-            // TODO: Handle the error.
-        } catch (GooglePlayServicesNotAvailableException e) {
-            new CustomToast().Show_Toast(getApplicationContext(), rootView,
-                    "Service Not Available");
-            PrintClass.printValue("SEARCHAUTOCOMPLETE GooglePlayServicesNotAvailableException" +
-                    " ", e.toString() );
-
-            // TODO: Handle the error.
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        PrintClass.printValue("SEARCHAUTOCOMPLETE requestCode ","" +requestCode);
-
-        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
-            PrintClass.printValue("SEARCHAUTOCOMPLETE requestCode", " ok ");
-
-            if (resultCode == RESULT_OK) {
-                final Place place = PlaceAutocomplete.getPlace(this, data);
-                PrintClass.printValue("SEARCHAUTOCOMPLETE ","" +place.getAddress());
-                Geocoder coder = new Geocoder(this);
-                List<Address> address;
-                editText.setText(place.getAddress());
-                getAddress =place.getAddress().toString();
-                Thread t =new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        JSONObject ret = getLocationInfo(0,0, (String) place.getAddress().toString());
-                        try {
-                            try {
-
-                                final double longitute = ((JSONArray) ret.get("results")).getJSONObject(0)
-                                        .getJSONObject("geometry").getJSONObject("location")
-                                        .getDouble("lng");
-
-                                final double latitude = ((JSONArray)ret.get("results")).getJSONObject(0)
-                                        .getJSONObject("geometry").getJSONObject("location")
-                                        .getDouble("lat");
-
-                                getLatitude=latitude;
-                                getLongitude=longitute;
-                                PrintClass.printValue("SEARCHAUTOCOMPLETE "," getAddress " +getAddress
-                                        +" latitude "+getLatitude+" longitude "+getLongitude);
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if(marker != null){
-                                            marker.remove();
-                                        }
-                                        showMap(latitude,longitute,15);
-
-                                    }
-                                });
-
-                            } catch (JSONException e) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        new CustomToast().Show_Toast(getApplicationContext(), rootView,
-                                                "Address Not Found");
-                                        getLatLong(zoom_val);
-
-                                    }
-                                });
-
-                                PrintClass.printValue("SEARCHAUTOCOMPLETE ","JSONException"  +e.toString());
-                            }
-                        } catch (Exception e1) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    new CustomToast().Show_Toast(getApplicationContext(), rootView,
-                                            "Address Not Found");
-                                    getLatLong(zoom_val);
-                                }
-                            });
-                            e1.printStackTrace();
-                            PrintClass.printValue("SEARCHAUTOCOMPLETE ","Exception " +e1.toString());
-                        }
-                    }
-                });t.start();
-
-            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-                Status status = PlaceAutocomplete.getStatus(this, data);
-                // TODO: Handle the error.
-                PrintClass.printValue("SEARCHAUTOCOMPLETE ","" +status.getStatusMessage());
-                new CustomToast().Show_Toast(getApplicationContext(), rootView,
-                        "Address Not Found");
-                getLatLong(zoom_val);
-
-            } else if (resultCode == RESULT_CANCELED) {
-                new CustomToast().Show_Toast(getApplicationContext(), rootView,
-                        "Address Not Found");
-                getLatLong(zoom_val);
-            }
-        }
-    }
-*/
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -992,6 +879,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             try {
                                 vehicle_no_str = vehicle_no.getText().toString();
                                 params.put("email_id", email.getText().toString());
+                                editor.putString("email",email.getText().toString());
+                                editor.commit();
                                 params.put("vehicle_no", vehicle_no.getText().toString());
                                 params2.put("address", getAddress);
                                 params2.put("lattitude", String.valueOf(getLatitude));

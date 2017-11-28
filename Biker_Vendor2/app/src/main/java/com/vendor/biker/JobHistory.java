@@ -362,6 +362,9 @@ public class JobHistory extends AppCompatActivity implements
         } else if (id == R.id.refer) {
             Intent i = new Intent(this, ReferUser.class);
             startActivity(i);
+        }  else if(id == R.id.payment_history) {
+            Intent i=new Intent(this,PaymentHistory.class);
+            startActivity(i);
         } else if (id == R.id.logout) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.setTitle("Confirm Logout");
@@ -528,10 +531,12 @@ public class JobHistory extends AppCompatActivity implements
 
                 } else {
                     jobViewHolder.submit_button.setVisibility(View.VISIBLE);
-                    if (bookings.getStatus().equalsIgnoreCase("Delivered")) {
-                        jobViewHolder.submit_button.setText("CONFIRM PAYMENT");
-                    } else {
+                    if (bookings.getStatus().equalsIgnoreCase("completed")) {
                         jobViewHolder.submit_button.setText("DELIVER");
+
+                    } else {
+                        jobViewHolder.submit_button.setVisibility(View.GONE);
+
                     }
                 }
                 jobViewHolder.submit_button.setOnClickListener(new View.OnClickListener() {
@@ -541,7 +546,6 @@ public class JobHistory extends AppCompatActivity implements
                         final JobListModel bookin = jobList_l.get(itemPosition);
 
                         if(bookin.getStatus().equalsIgnoreCase("Delivered")) {
-                            confirmPayment(bookin.getBooking_id());
                         } else {
                             changeStatus("Delivered",bookin.getBooking_id());
                         }
@@ -585,27 +589,6 @@ public class JobHistory extends AppCompatActivity implements
                 }
                 PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
                 new post_async(JobHistory.this,"changeStatus").execute(url, params.toString());
-            } else {
-                new CustomToast().Show_Toast(getApplicationContext(), rootView,
-                        "No Internet Connection");
-            }
-        }
-        public void confirmPayment(String booking_id){
-            if (IsNetworkConnection.checkNetworkConnection(JobHistory.this)) {
-
-                String url = Constants.SERVER_URL + "vendor/confirm-payment";
-                JSONObject params = new JSONObject();
-                try {
-                    params.put("user_id",prefrence.getString("user_id", "") );
-                    params.put("access_token",prefrence.getString("access_token", ""));
-                    params.put("booking_id",booking_id);
-                    params.put("confirm_payment","Y");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
-                }
-                PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
-                new post_async(JobHistory.this,"confirmpayment").execute(url, params.toString());
             } else {
                 new CustomToast().Show_Toast(getApplicationContext(), rootView,
                         "No Internet Connection");

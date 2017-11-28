@@ -70,6 +70,13 @@ public class UserRegister extends AppCompatActivity {
     private String getAddress="";
     boolean isUpdate=false;
     private boolean agreed = false;
+    LinearLayout terms_conditions,myProfile;
+    TextView sign_up_text,earnings;
+    private ImageView logo;
+    private CheckBox agree_main;
+    RatingBar ratings;
+    private Button click;
+
     @Override
     public void onLowMemory() {
         super.onLowMemory();
@@ -86,24 +93,35 @@ public class UserRegister extends AppCompatActivity {
         isUpdate=false;
         rootView=findViewById(android.R.id.content);
         name=(EditText)findViewById(R.id.name);
-        Button click=(Button)findViewById(R.id.buttonclick);
+        click=(Button)findViewById(R.id.buttonclick);
         phone=(EditText)findViewById(R.id.phone);
         email=(EditText)findViewById(R.id.email);
-        ImageView logo = (ImageView) findViewById(R.id.logo);
-        TextView sign_up_text = (TextView) findViewById(R.id.sign_up_text);
-        TextView earnings = (TextView) findViewById(R.id.earnings);
+        logo = (ImageView) findViewById(R.id.logo);
+        ImageView menu = (ImageView) findViewById(R.id.menu);
+        sign_up_text = (TextView) findViewById(R.id.sign_up_text);
+        earnings = (TextView) findViewById(R.id.earnings);
         service_center_name=(EditText)findViewById(R.id.service_center_name);
-        LinearLayout terms_conditions = (LinearLayout) findViewById(R.id.terms_conditions);
-        LinearLayout myProfile = (LinearLayout) findViewById(R.id.myProfile);
-        final CheckBox agree_main = (CheckBox)findViewById(R.id.agree);
+        terms_conditions = (LinearLayout) findViewById(R.id.terms_conditions);
+        myProfile = (LinearLayout) findViewById(R.id.myProfile);
+         agree_main = (CheckBox)findViewById(R.id.agree);
         final TextView terms_condi_text = (TextView) findViewById(R.id.terms);
         final Typeface typeface_luci = Typeface.createFromAsset(getAssets(), "fonts/luci.ttf");
         final Typeface italic = Typeface.createFromAsset(getAssets(), "fonts/italic.ttf");
-
-        RatingBar ratings=(RatingBar)findViewById(R.id.ratings) ;
+        agree_main.setChecked(agreed);
+        agree_main.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(agree_main.isChecked()){
+                    agreed= true;
+                } else  {
+                    agreed = false;
+                }
+            }
+        });
+        ratings=(RatingBar)findViewById(R.id.ratings) ;
         type=getIntent().getStringExtra("type");
         PrintClass.printValue("UserRegisterPrint type ",type);
-
+        menu.setVisibility(View.GONE);
         if(type.equals("edit")) {
             getProfileInfo();
             click.setText("UPDATE");
@@ -168,21 +186,9 @@ public class UserRegister extends AppCompatActivity {
                                             ok.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
+                                                    agreed = true;
                                                     mBottomSheetDialog.dismiss();
                                                     agree_main.setChecked(agreed);
-                                                }
-                                            });
-                                            final CheckBox agree = (CheckBox) mBottomSheetDialog.findViewById(R.id.agree);
-                                            agree.setTypeface(italic);
-                                            agree.setChecked(agreed);
-                                            agree.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    if(agree.isChecked()){
-                                                        agreed = true;
-                                                    }else  {
-                                                        agreed=false;
-                                                    }
                                                 }
                                             });
 
@@ -190,8 +196,10 @@ public class UserRegister extends AppCompatActivity {
                                             // Spanned result = Html.fromHtml(childText);
                                             // txtListChild.setText(result);
                                             termCon.setTypeface(typeface_luci);
+                                            String text= jsonObject.getJSONArray("terms").toString().replace("\\r\\n", "<p>");
 
-                                            termCon.setHtml(jsonObject.getString("terms"), new HtmlHttpImageGetter(termCon));
+                                            termCon.setHtml(text, new HtmlHttpImageGetter(termCon));
+
 
                                             // Display the first 500 characters of the response string.
                                         } else {
@@ -491,6 +499,14 @@ public class UserRegister extends AppCompatActivity {
                 phone.setText(userInfo.getString("mobile_no"));
                 service_center_name.setText(userInfo.getString("service_center_name"));
                 editor.putString("name",userInfo.getString("first_name"));
+                if(jsonObject.has("avg_rating")) {
+                    editor.putString("avg_rating", jsonObject.getString("avg_rating"));
+                    ratings.setRating(Float.parseFloat(prefrence.getString("avg_rating","")));
+                }
+                if(jsonObject.has("total_amount")) {
+                    editor.putString("amount", jsonObject.getString("total_amount"));
+                    earnings.setText("\u20B9 "+prefrence.getString("amount",""));
+                }
                 editor.commit();
                 if(isUpdate){
                     Intent i = new Intent(UserRegister.this, MainActivity.class);
@@ -564,8 +580,19 @@ public class UserRegister extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        name.setText("");
-        phone.setText("");
-        email.setText("");
+        if(type.equals("edit")) {
+            getProfileInfo();
+            click.setText("UPDATE");
+            terms_conditions.setVisibility(View.GONE);
+            sign_up_text.setVisibility(View.GONE);
+            logo.setVisibility(View.GONE);
+            earnings.setText("\u20B9 "+prefrence.getString("amount",""));
+            myProfile.setVisibility(View.VISIBLE);
+            ratings.setRating(Float.parseFloat(prefrence.getString("avg_rating","")));
+        } else {
+            name.setText("");
+            email.setText("");
+            phone.setText("");
+        }
     }
 }

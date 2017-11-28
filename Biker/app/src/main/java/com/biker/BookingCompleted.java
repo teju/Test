@@ -77,6 +77,7 @@ public class BookingCompleted extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         profile_name.setText(prefrence.getString("name", ""));
+
     }
     @Override
     public void onLowMemory() {
@@ -158,6 +159,9 @@ public class BookingCompleted extends AppCompatActivity
         if (IsNetworkConnection.checkNetworkConnection(BookingCompleted.this)) {
             if(action.equals("BookingCompletedRefresh")) {
                 swipeRefreshLayout.setRefreshing(true);
+            }
+            if(action.equals("BookingCompleted")) {
+                PaymentList_l.clear();
             }
             String url = Constants.SERVER_URL + "booking/completed";
             JSONObject params = new JSONObject();
@@ -487,10 +491,42 @@ public class BookingCompleted extends AppCompatActivity
                 PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
             }
             PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
-            new post_async(BookingCompleted.this,"RateFeedBAck", null).execute(url, params.toString());
+            new post_async(BookingCompleted.this,"BookingCompletedRateFeedBAck", null).execute(url, params.toString());
         } else {
             new CustomToast().Show_Toast(getApplicationContext(), rootView,
                     "No Internet Connection");
+        }
+    }
+    public void ResponseOfRating(String response) {
+        JSONObject jsonObject = null;
+        final Dialog mBottomSheetDialog = new Dialog(this);
+
+        mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mBottomSheetDialog.setContentView(R.layout.success_message);
+        mBottomSheetDialog.setCancelable(true);
+        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        mBottomSheetDialog.show();
+        TextView message = (TextView) mBottomSheetDialog.findViewById(R.id.message);
+        Button ok =(Button) mBottomSheetDialog.findViewById(R.id.ok) ;
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getPaymentList("BookingCompleted");
+                mBottomSheetDialog.cancel();
+            }
+        });
+        try {
+
+            jsonObject = new JSONObject(response);
+            if (jsonObject.getString("status").equalsIgnoreCase("success")) {
+                message.setText("Thank you so much for your valuable fedback");
+
+            } else {
+                message.setText(jsonObject.getString("message"));
+            }
+        } catch (Exception e) {
+
         }
     }
 

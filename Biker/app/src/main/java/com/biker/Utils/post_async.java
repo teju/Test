@@ -200,6 +200,8 @@ public class post_async extends AsyncTask<String, Integer, String> {
             } else  if (this.bookingCompleted != null && action.equalsIgnoreCase("Payment")) {
                 ResponseOfRating(resultString,"Your payment is successful ",
                         "Payment could not be completed.Please try again  ! ");
+            } else  if (this.bookingCompleted != null && action.equalsIgnoreCase("BookingCompletedRateFeedBAck")) {
+                this.bookingCompleted.ResponseOfRating(resultString);
             }else  if (this.paymentHistory != null &&
                     (action.equalsIgnoreCase("PaymentHistoryCompleted")
                             || action.equals("PaymentHistoryRefresh"))) {
@@ -209,7 +211,7 @@ public class post_async extends AsyncTask<String, Integer, String> {
             }else  if (this.paymentHistory != null && action.equalsIgnoreCase("RateFeedBAck")) {
                 ResponseOfRating(resultString,"Thank you so much for your valuable fedback",
                         "Could not submit your ratings. Please try again  !!");
-            }else  if (this.reachedDestination != null && action.equalsIgnoreCase("ReachedDestination")) {
+            } else  if (this.reachedDestination != null && action.equalsIgnoreCase("ReachedDestination")) {
                 this.reachedDestination.ResponseOfReachedDestination(resultString);
             }
 
@@ -241,6 +243,10 @@ public class post_async extends AsyncTask<String, Integer, String> {
             }
             Button ok =(Button) mBottomSheetDialog.findViewById(R.id.ok) ;
             Typeface typeface_luci = Typeface.createFromAsset(context.getAssets(), "fonts/luci.ttf");
+
+            if(action.equals("Payment")) {
+                ok.setText("REVIEW NOW");
+            }
 
             message.setTypeface(typeface_luci);
             ok.setTypeface(typeface_luci);
@@ -278,7 +284,6 @@ public class post_async extends AsyncTask<String, Integer, String> {
                             public void onClick(View view) {
                                 mBottomSheetDialog.dismiss();
                                 bookingCompleted.getPaymentList("BookingCompleted");
-
                             }
                         });
 
@@ -289,22 +294,19 @@ public class post_async extends AsyncTask<String, Integer, String> {
                             @Override
                             public void onClick(View view) {
                                 if(ratings.getRating() == 0) {
-                                    bookingCompleted.getPaymentList("BookingCompleted");
                                     Toast.makeText(context,"Please Provide your rating",Toast.LENGTH_LONG).show();
 
                                 } else if(feedback.getText().toString().trim().length() == 0 ) {
                                     Toast.makeText(context,"Please Provide your feedback",Toast.LENGTH_LONG).show();
 
-
                                 } else {
                                     mBottomSheetDialog.dismiss();
-
                                     bookingCompleted.giveFeedback(bookin.getBooking_id(), bookin.getVendor_id(),
                                             String.valueOf((int)ratings.getRating()), feedback.getText().toString());
                                 }
                             }
                         });
-                    } else {
+                    }  else {
                         paymentHistory.getPaymentList("PaymentHistoryCompleted");
                     }
                 }

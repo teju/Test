@@ -56,6 +56,16 @@ public class BookingList {
     String booking_no;
     String vehicle_no;
 
+    public String getVendor_id() {
+        return vendor_id;
+    }
+
+    public void setVendor_id(String vendor_id) {
+        this.vendor_id = vendor_id;
+    }
+
+    String vendor_id;
+
     public String getMobile_no() {
         return mobile_no;
     }
@@ -69,6 +79,15 @@ public class BookingList {
     String email_id;
     String booked_on;
     String address;
+    String confirm_payment;
+
+    public String getConfirm_payment() {
+        return confirm_payment;
+    }
+
+    public void setConfirm_payment(String confirm_payment) {
+        this.confirm_payment = confirm_payment;
+    }
 
     public String getBooking_id() {
         return booking_id;

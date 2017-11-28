@@ -45,7 +45,6 @@
         <activity
             android:name=".SplashScreen"
             android:label="@string/app_name"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,39 +53,32 @@
         </activity>
         <activity
             android:name=".UserRegister"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ServerError"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".BookingSuccessful"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Setting"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".BookingCompleted"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait">
         <intent-filter>
-            <action android:name="com.biker.BookingCompleted" />
+            <action android:name="com.biker.PaymentHistory" />
             <category android:name="android.intent.category.DEFAULT" />
         </intent-filter>
         </activity>
         <activity
             android:name=".PaymentHistory"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="com.biker.PaymentHistory" />
+                <action android:name="com.biker.BookingCompleted" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -103,11 +95,9 @@
         </service>
 
         <activity android:name=".Login"
-            android:launchMode="singleTop"
             />
         <activity
             android:name=".BookingDetails"
-            android:launchMode="singleTop"
 
             android:screenOrientation="portrait">
             <intent-filter>
@@ -115,8 +105,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ReachedDestination"
-            android:launchMode="singleTop">
+        <activity android:name=".ReachedDestination">
             <intent-filter>
                 <action android:name="com.biker.ReachedDestination" />
                 <category android:name="android.intent.category.DEFAULT" />

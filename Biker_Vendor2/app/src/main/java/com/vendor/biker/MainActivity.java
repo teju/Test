@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         profile_name.setText(prefrence.getString("name", ""));
+
     }
 
     @Override
@@ -544,7 +545,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.refer) {
             Intent i=new Intent(this,ReferUser.class);
             startActivity(i);
-        } else if (id == R.id.logout) {
+        }  else if(id == R.id.payment_history) {
+            Intent i=new Intent(this,PaymentHistory.class);
+            startActivity(i);
+        }else if (id == R.id.logout) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.setTitle("Confirm Logout");
             alertDialog.setMessage("Are you sure you want to Logout ?");

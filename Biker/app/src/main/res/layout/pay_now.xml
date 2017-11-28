@@ -14,21 +14,22 @@
             android:textSize="20dp"
             android:id="@+id/title"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:textAlignment="center"
             android:text="Choose a Payment Method" />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
             android:layout_height="wrap_content">
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:layout_gravity="center_horizontal"
-                android:text="Cash on Delivery"
+                android:text="Pay cash"
                 android:buttonTint="@color/white"
                 android:textColor="@color/white"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="20dp"
                 android:layout_marginTop="12dp"
                 android:id="@+id/cashonDelivery"/>
             <RadioButton
@@ -45,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:id="@+id/pay_now"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="20dp"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/bg"
             android:text="PAY NOW"

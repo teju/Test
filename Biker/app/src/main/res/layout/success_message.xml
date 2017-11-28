@@ -23,6 +23,8 @@
         android:layout_gravity="center_horizontal"
         android:background="@drawable/bg"
         android:text="CLOSE"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
         android:textColor="@color/white" />
 
 </LinearLayout>

@@ -64,7 +64,7 @@
             android:textSize="14dp"
             android:textStyle="italic"
             android:id="@+id/sign_up"
-            android:layout_marginTop="10dp"
+            android:padding="15dp"
             android:textColor="@color/blue"/>
     </LinearLayout>
 

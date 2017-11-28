@@ -20,6 +20,7 @@ import com.vendor.biker.JobList;
 import com.vendor.biker.Login;
 import com.vendor.biker.MainActivity;
 import com.vendor.biker.PathGoogleMapActivity;
+import com.vendor.biker.PaymentHistory;
 import com.vendor.biker.R;
 import com.vendor.biker.UserRegister;
 
@@ -31,6 +32,7 @@ import java.io.UnsupportedEncodingException;
  */
 public class post_async extends AsyncTask<String, Integer, String> {
     static String action = "", resultString = "";
+    private PaymentHistory paymentHistory;
     private PathGoogleMapActivity pathGoogleMapActivity;
     private JobHistory jobHistory;
     private JobList jobList;
@@ -50,6 +52,11 @@ public class post_async extends AsyncTask<String, Integer, String> {
         this.action = action;
         this.context=pathGoogleMapActivity;
         this.pathGoogleMapActivity = pathGoogleMapActivity;
+    }
+    public post_async(PaymentHistory paymentHistory, String action) {
+        this.action = action;
+        this.context=paymentHistory;
+        this.paymentHistory = paymentHistory;
     }
     public post_async(JobHistory jobHistory, String action) {
         this.action = action;
@@ -190,6 +197,14 @@ public class post_async extends AsyncTask<String, Integer, String> {
                 this.jobHistory.ResponseOfChangeStatus(resultString);
             }else  if (this.pathGoogleMapActivity != null && action.equalsIgnoreCase("Deliver")) {
                 this.pathGoogleMapActivity.ResponseOfDestinationReached(resultString);
+            }else  if (this.paymentHistory != null &&
+                    (action.equalsIgnoreCase("PaymentHistoryCompleted")
+                            || action.equals("PaymentHistoryRefresh"))) {
+                this.paymentHistory.ResponseOfPaymentList(resultString);
+            } else  if (this.paymentHistory != null && action.equalsIgnoreCase("PaymentHistoryReload")) {
+                this.paymentHistory.ResponseOfPaymentListReload(resultString);
+            } else  if (this.paymentHistory != null && action.equalsIgnoreCase("ConfirmPayment")) {
+                this.paymentHistory.ResponseOfChangeStatus(resultString);
             }
         } catch (Exception e) {
             dialog.cancel();
@@ -212,6 +227,9 @@ public class post_async extends AsyncTask<String, Integer, String> {
 
         }  else   if(action.equals("jobHistoryDetailsReload") ||
                 action.equals("jobHistoryDetailsRefresh")  ) {
+
+        }  else   if(action.equals("PaymentHistoryReload") ||
+                action.equals("PaymentHistoryRefresh")  ) {
 
         }  else {
             dialog.show();

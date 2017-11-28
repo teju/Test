@@ -27,7 +27,7 @@ public class FireBaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        PrintClass.printValue("FireBaseMessagingService RESPONSE ",""+remoteMessage.getData().get("action"));
+        PrintClass.printValue("FireBaseMessagingService RESPONSE ",""+remoteMessage.getData().get("booking_id"));
         Intent i=new Intent(remoteMessage.getNotification().getClickAction());
         i.putExtra("booking_id", remoteMessage.getData().get("booking_id"));
 

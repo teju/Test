@@ -60,10 +60,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="New here? Sign Up"
+        android:padding="15dp"
         android:textSize="14dp"
         android:textStyle="italic"
         android:id="@+id/sign_up"
-        android:layout_marginTop="10dp"
         android:textColor="@color/blue"/>
 </LinearLayout>
 

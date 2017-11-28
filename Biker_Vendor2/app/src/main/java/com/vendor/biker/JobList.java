@@ -416,6 +416,9 @@ public class JobList extends AppCompatActivity implements NavigationView.OnNavig
         } else if (id == R.id.job_history) {
             Intent i=new Intent(this,JobHistory.class);
             startActivity(i);
+        } else if(id == R.id.payment_history) {
+            Intent i=new Intent(this,PaymentHistory.class);
+            startActivity(i);
         } else if (id == R.id.refer) {
             Intent i=new Intent(this,ReferUser.class);
             startActivity(i);

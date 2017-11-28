@@ -9,8 +9,10 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:text="Hello"
         android:textStyle="bold"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:textAlignment="center"
         android:id="@+id/profile_name"
         android:textColor="@color/white"
         android:textSize="25sp"/>

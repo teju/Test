@@ -83,6 +83,7 @@ public class BookingDetails extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         profile_name.setText(prefrence.getString("name", ""));
+
     }
 
     @Override
@@ -156,12 +157,15 @@ public class BookingDetails extends AppCompatActivity
         }
     }
 
+
     public void getBookingList(String action){
         if (IsNetworkConnection.checkNetworkConnection(BookingDetails.this)) {
             if(action.equals("BookingDetailsRefresh")) {
                 swipeRefreshLayout.setRefreshing(true);
             }
-
+            if(action.equals("BookingDetails")) {
+                bookingList_l.clear();
+            }
             String url = Constants.SERVER_URL + "booking/list";
             JSONObject params = new JSONObject();
             try {

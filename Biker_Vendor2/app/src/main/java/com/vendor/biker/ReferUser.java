@@ -3,12 +3,15 @@ package com.vendor.biker;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Telephony;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,6 +19,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +33,7 @@ import com.vendor.biker.Utils.IsNetworkConnection;
 
 public class ReferUser extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener{
+    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS =0 ;
 
     private SharedPreferences prefrence;
     private SharedPreferences.Editor editor;
@@ -36,6 +41,8 @@ public class ReferUser extends AppCompatActivity implements
     TextView profile_name;
     private Button refer;
     private TextView phone_no;
+    private String phoneNo;
+    private String message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +65,7 @@ public class ReferUser extends AppCompatActivity implements
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
         phone_no=(TextView)findViewById(R.id.phone_no);
+        TextView referral_code=(TextView)findViewById(R.id.referral_code);
         profile_name=(TextView)header.findViewById(R.id.profile_name);
         profile_name.setText(prefrence.getString("name", ""));
         Typeface typeface = Typeface.createFromAsset(getAssets(),
@@ -72,13 +80,69 @@ public class ReferUser extends AppCompatActivity implements
                             "Invalid phone number");
                 }
                  else {
-                    refer();
+                    sendSMSMessage();
 
                 }
             }
         });
+        referral_code.setText(prefrence.getString("referel_code",""));
+
     }
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    protected void sendSMSMessage() {
+        phoneNo = phone_no.getText().toString();
+        message = "Use my referral code "+prefrence.getString("referel_code","")+" to " +
+                "sign up and win upto Rs 100 Cashback on your first booking! Redeem it at " +
+                "http://chouguleeducation.in/biker/admin/booking";
+
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.SEND_SMS)) {
+                SmsManager smsManager = SmsManager.getDefault();
+                smsManager.sendTextMessage(phoneNo, null, message, null, null);
+                new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                        "Successfully referred the user !! ");
+                Intent i=new Intent(this,MainActivity.class);
+                startActivity(i);
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.SEND_SMS},
+                        MY_PERMISSIONS_REQUEST_SEND_SMS);
+            }
+        } else {
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNo, null, message, null, null);
+            new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                    "Successfully referred the user !! ");
+            Intent i=new Intent(this,MainActivity.class);
+            startActivity(i);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_SEND_SMS: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage(phoneNo, null, message, null, null);
+                    new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                            "Successfully referred the user !! ");
+                    Intent i=new Intent(this,MainActivity.class);
+                    startActivity(i);
+                } else {
+                    new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                            "SMS faild, please try again.");
+
+                    return;
+                }
+            }
+        }
+
+    }
+   /* @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void refer(){
         Intent smsIntent = new Intent(Intent.ACTION_VIEW);
 
@@ -97,7 +161,7 @@ public class ReferUser extends AppCompatActivity implements
         }
 
     }
-    @Override
+*/    @Override
     public void onLowMemory() {
         super.onLowMemory();
         startActivity(getIntent());
@@ -134,6 +198,9 @@ public class ReferUser extends AppCompatActivity implements
             startActivity(i);
         } else if (id == R.id.job_history) {
             Intent i=new Intent(this,JobHistory.class);
+            startActivity(i);
+        }  else if(id == R.id.payment_history) {
+            Intent i=new Intent(this,PaymentHistory.class);
             startActivity(i);
         } else if (id == R.id.logout) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);

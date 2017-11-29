@@ -46,6 +46,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
     private BroadcastReceiver receiver;
     private SharedPreferences notiprefrence;
+    private String getPhoneNo;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -184,7 +185,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 JSONObject jsonBody = new JSONObject();
                 JSONObject params = new JSONObject();
             try {
-                params.put("username",phone.getText().toString() );
+                getPhoneNo=phone.getText().toString();
+                params.put("username", getPhoneNo);
                 params.put("user_type", "vendor");
                 jsonBody.put("LoginForm", params);
             } catch (JSONException e) {
@@ -232,7 +234,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                                 JSONObject userparams = new JSONObject();
                                 JSONObject otpparams = new JSONObject();
                                 try {
-                                    userparams.put("username",phone.getText().toString() );
+                                    userparams.put("username", getPhoneNo );
                                     userparams.put("user_type", "vendor");
                                     otpparams.put("otp_code", otp.getText().toString());
                                     jsonBody.put("LoginForm", userparams);
@@ -269,16 +271,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 editor.putString("user_id", jsonObject.getString("user_id"));
                 editor.putString("name", jsonObject.getString("name"));
                 editor.putString("access_token", jsonObject.getString("access_token"));
-                if(jsonObject.has("avg_rating")) {
-                    editor.putString("avg_rating", jsonObject.getString("avg_rating"));
-                }
+
                 if(jsonObject.has("referel_code")) {
                     editor.putString("referel_code", jsonObject.getString("referel_code"));
                 }
-                if(jsonObject.has("total_amount")) {
-                    editor.putString("amount", jsonObject.getString("total_amount"));
 
-                }
                 editor.commit();
                 notificationService();
                 Intent i = new Intent(Login.this, MainActivity.class);

@@ -501,15 +501,17 @@ public class UserRegister extends AppCompatActivity {
                 phone.setText(userInfo.getString("mobile_no"));
                 service_center_name.setText(userInfo.getString("service_center_name"));
                 editor.putString("name",userInfo.getString("first_name"));
-                if(jsonObject.has("avg_rating")) {
-                    editor.putString("avg_rating", jsonObject.getString("avg_rating"));
-                    ratings.setRating(Float.parseFloat(prefrence.getString("avg_rating","")));
+                if(userInfo.has("avg_rating")) {
+                    editor.putString("avg_rating", userInfo.getString("avg_rating"));
                 }
-                if(jsonObject.has("total_amount")) {
-                    editor.putString("amount", jsonObject.getString("total_amount"));
-                    earnings.setText("\u20B9 "+prefrence.getString("amount",""));
+                if(userInfo.has("total_amount")) {
+                    editor.putString("amount", userInfo.getString("total_amount"));
                 }
                 editor.commit();
+                System.out.println("ResponseOfUserInfo error UserRegister "+prefrence.getString("avg_rating",""));
+                Float rating = Float.parseFloat(prefrence.getString("avg_rating",""));
+                ratings.setRating(rating);
+                earnings.setText("\u20B9 "+prefrence.getString("amount",""));
                 if(isUpdate){
                     Intent i = new Intent(UserRegister.this, MainActivity.class);
                     startActivity(i);

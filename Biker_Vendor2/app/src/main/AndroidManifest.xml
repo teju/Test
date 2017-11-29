@@ -110,7 +110,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ReferUser"></activity>
+        <activity android:name=".ReferUser" />
+        <activity android:name=".WebLink"></activity>
     </application>
 
 </manifest>

@@ -23,7 +23,10 @@ import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,8 +89,20 @@ public class ReferUser extends AppCompatActivity implements
             }
         });
         referral_code.setText(prefrence.getString("referel_code",""));
+        ImageView reference_link=(ImageView)findViewById(R.id.reference_link);
+
+
+        reference_link.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(ReferUser.this,WebLink.class);
+                startActivity(i);
+            }
+        });
 
     }
+
+
     protected void sendSMSMessage() {
         phoneNo = phone_no.getText().toString();
         message = "Use my referral code "+prefrence.getString("referel_code","")+" to " +

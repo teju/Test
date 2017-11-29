@@ -11,11 +11,19 @@
         android:background="@android:color/transparent"
         android:layout_marginTop="40dp"
         android:layout_gravity="center_horizontal"/>
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:id="@+id/reference_link"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/images"/>
     <com.vendor.biker.Utils.MyTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="hsafa12"
         android:id="@+id/referral_code"
+        android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/bg"
         android:textColor="@color/white"
@@ -33,7 +41,7 @@
         android:layout_marginRight="60dp"
         android:drawableLeft="@drawable/account_multiple"
         android:drawablePadding="6dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:textColor="@color/black" />
     <Button
         android:layout_width="120dp"

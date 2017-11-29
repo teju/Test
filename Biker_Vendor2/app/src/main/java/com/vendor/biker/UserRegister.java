@@ -107,17 +107,7 @@ public class UserRegister extends AppCompatActivity {
         final TextView terms_condi_text = (TextView) findViewById(R.id.terms);
         final Typeface typeface_luci = Typeface.createFromAsset(getAssets(), "fonts/luci.ttf");
         final Typeface italic = Typeface.createFromAsset(getAssets(), "fonts/italic.ttf");
-        agree_main.setChecked(agreed);
-        agree_main.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(agree_main.isChecked()){
-                    agreed= true;
-                } else  {
-                    agreed = false;
-                }
-            }
-        });
+
         ratings=(RatingBar)findViewById(R.id.ratings) ;
         type=getIntent().getStringExtra("type");
         PrintClass.printValue("UserRegisterPrint type ",type);
@@ -130,7 +120,9 @@ public class UserRegister extends AppCompatActivity {
             logo.setVisibility(View.GONE);
             earnings.setText("\u20B9 "+prefrence.getString("amount",""));
             myProfile.setVisibility(View.VISIBLE);
-            ratings.setRating(Float.parseFloat(prefrence.getString("avg_rating","")));
+            if(prefrence.getString("avg_rating", "").length() != 0) {
+                ratings.setRating(Float.parseFloat(prefrence.getString("avg_rating", "")));
+            }
         } else {
             name.setText("");
             email.setText("");
@@ -149,7 +141,17 @@ public class UserRegister extends AppCompatActivity {
         } catch (Exception e){
             PrintClass.printValue("PathGoogleMapActivity Exception ",e.toString());
         }
-        agree_main.setChecked(agreed);
+        agree_main.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(agree_main.isChecked()){
+                    agreed= true;
+                } else  {
+                    agreed = false;
+                }
+            }
+        });
+
         terms_condi_text.setTypeface(italic);
         terms_conditions.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,7 +188,7 @@ public class UserRegister extends AppCompatActivity {
                                             ok.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
-                                                    agreed = true;
+                                                    agreed=true;
                                                     mBottomSheetDialog.dismiss();
                                                     agree_main.setChecked(agreed);
                                                 }
@@ -197,9 +199,9 @@ public class UserRegister extends AppCompatActivity {
                                             // txtListChild.setText(result);
                                             termCon.setTypeface(typeface_luci);
                                             String text= jsonObject.getJSONArray("terms").toString().replace("\\r\\n", "<p>");
-
+                                            text = text.replaceAll("\"", " ");
+                                            text = text.replaceAll("\\[", "").replaceAll("\\]","");
                                             termCon.setHtml(text, new HtmlHttpImageGetter(termCon));
-
 
                                             // Display the first 500 characters of the response string.
                                         } else {
@@ -588,7 +590,9 @@ public class UserRegister extends AppCompatActivity {
             logo.setVisibility(View.GONE);
             earnings.setText("\u20B9 "+prefrence.getString("amount",""));
             myProfile.setVisibility(View.VISIBLE);
-            ratings.setRating(Float.parseFloat(prefrence.getString("avg_rating","")));
+            if(prefrence.getString("avg_rating", "").length() != 0) {
+                ratings.setRating(Float.parseFloat(prefrence.getString("avg_rating", "")));
+            }
         } else {
             name.setText("");
             email.setText("");

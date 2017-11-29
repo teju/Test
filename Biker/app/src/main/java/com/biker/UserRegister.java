@@ -166,9 +166,9 @@ public class UserRegister extends AppCompatActivity {
                                             // txtListChild.setText(result);
                                             termCon.setTypeface(typeface_luci);
                                             String text= jsonObject.getJSONArray("terms").toString().replace("\\r\\n", "<p>");
-                                            /*text = text.replaceAll("\"", " ");
+                                            text = text.replaceAll("\"", " ");
                                             text = text.replaceAll("\\[", "").replaceAll("\\]","");
-*/
+
                                             termCon.setHtml(text, new HtmlHttpImageGetter(termCon));
 
                                             // Display the first 500 characters of the response string.

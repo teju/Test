@@ -10,7 +10,7 @@
         android:id="@+id/menu"
         android:layout_gravity="center_vertical"
         android:layout_margin="10dp"/>
-    <com.biker.Utils.MyTextView
+    <com.bikerservice.Utils.MyTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#F43C36"
@@ -21,13 +21,32 @@
         android:id="@+id/title_val"
         android:textStyle="bold"
         android:layout_centerVertical="true"/>
-    <ImageView
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:src="@drawable/bell"
-        android:visibility="gone"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="10dp"
         android:layout_alignParentRight="true"
-        android:id="@+id/noti"
-        android:layout_marginRight="30dp"/>
+        android:layout_marginRight="35dp"
+        android:layout_height="30dp">
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="30dp"
+            android:src="@drawable/bell"
+            android:visibility="visible"
+            android:layout_centerVertical="true"
+            android:tint="#ffffff"
+            android:id="@+id/noti" />
+
+        <TextView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:visibility="visible"
+            android:background="@drawable/circle"
+            android:textAlignment="center"
+            android:textSize="10dp"
+            android:textColor="#ffffff"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/noti_count" />
+
+    </RelativeLayout>
+
 </RelativeLayout>

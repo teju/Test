@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,15 +20,17 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.vendor.biker.Utils.Constants;
 import com.vendor.biker.Utils.CustomToast;
 import com.vendor.biker.Utils.IsNetworkConnection;
 import com.vendor.biker.Utils.PrintClass;
+import com.vendor.biker.Utils.SmsListener;
+import com.vendor.biker.Utils.SmsReceiver;
 import com.vendor.biker.Utils.post_async;
 
 import org.json.JSONArray;
@@ -47,6 +48,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     private BroadcastReceiver receiver;
     private SharedPreferences notiprefrence;
     private String getPhoneNo;
+    private ImageView noti;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -95,6 +97,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         } else {
             requestContactPermission();
         }
+
     }
 
     public void notificationService(){
@@ -220,15 +223,28 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 TextView textView=(TextView)mBottomSheetDialog.findViewById(R.id.txtview);
                 textView.setText(jsonObject.getString("message"));
                 otp = (EditText) mBottomSheetDialog.findViewById(R.id.otp);
+                SmsReceiver.bindListener(new SmsListener() {
+                    @Override
+                    public void messageReceived(String messageText) {
+                        String msgArr[] = messageText.split("\\s");
+                        messageText = msgArr[0];
+                       // Toast.makeText(Login.this, "Message: " + messageText, Toast.LENGTH_LONG).show();
+                        otp.setText(messageText);
+                    }
+                });
                 submit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         String getotp = otp.getText().toString();
+                        System.out.println("setOnClickListener otp "+getotp);
                         if (getotp.length() == 0) {
                             otp.setError("Enter Your Otp" );
                         } else {
                             otp.setError(null);
                             if (IsNetworkConnection.checkNetworkConnection(Login.this)) {
+                                System.out.println("setOnClickListener IsNetworkConnection ");
+
                                 String url = Constants.SERVER_URL + "user/otp";
                                 JSONObject jsonBody = new JSONObject();
                                 JSONObject userparams = new JSONObject();
@@ -245,6 +261,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                                 }
                                 PrintClass.printValue("SYSTEMPRINT PARAMS", jsonBody.toString());
                                 mBottomSheetDialog.dismiss();
+                                System.out.println("setOnClickListener mBottomSheetDialog ");
+
                                 new post_async(Login.this, "LoginOtp").execute(url, jsonBody.toString());
                             } else {
                                 new CustomToast().Show_Toast(getApplicationContext(), rootView,
@@ -271,6 +289,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 editor.putString("user_id", jsonObject.getString("user_id"));
                 editor.putString("name", jsonObject.getString("name"));
                 editor.putString("access_token", jsonObject.getString("access_token"));
+                if(jsonObject.has("profile_password")) {
+                    editor.putString("profile_password", jsonObject.getString("profile_password"));
+                }
 
                 if(jsonObject.has("referel_code")) {
                     editor.putString("referel_code", jsonObject.getString("referel_code"));

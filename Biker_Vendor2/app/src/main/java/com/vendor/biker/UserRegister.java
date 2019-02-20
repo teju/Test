@@ -12,11 +12,14 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -76,6 +79,13 @@ public class UserRegister extends AppCompatActivity {
     private CheckBox agree_main;
     RatingBar ratings;
     private Button click;
+    private EditText profilePassword;
+    private LinearLayout userDetails;
+    private LinearLayout voucherDetails;
+    private boolean show  = true;
+    private Button shButton;
+    private ImageView noti;
+    private TextView noti_indication;
 
     @Override
     public void onLowMemory() {
@@ -83,6 +93,7 @@ public class UserRegister extends AppCompatActivity {
         startActivity(getIntent());
 
     }
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,18 +101,24 @@ public class UserRegister extends AppCompatActivity {
         agreed = false;
         prefrence = getSharedPreferences("My_Pref", 0);
         editor = prefrence.edit();
+        show = prefrence.getBoolean("show", false);
+
         isUpdate=false;
         rootView=findViewById(android.R.id.content);
         name=(EditText)findViewById(R.id.name);
         click=(Button)findViewById(R.id.buttonclick);
+        shButton=(Button)findViewById(R.id.shButton);
         phone=(EditText)findViewById(R.id.phone);
         email=(EditText)findViewById(R.id.email);
+        profilePassword=(EditText)findViewById(R.id.profilePassword);
         logo = (ImageView) findViewById(R.id.logo);
         ImageView menu = (ImageView) findViewById(R.id.menu);
         sign_up_text = (TextView) findViewById(R.id.sign_up_text);
         earnings = (TextView) findViewById(R.id.earnings);
         service_center_name=(EditText)findViewById(R.id.service_center_name);
         terms_conditions = (LinearLayout) findViewById(R.id.terms_conditions);
+        voucherDetails = (LinearLayout) findViewById(R.id.voucherDetails);
+        userDetails = (LinearLayout) findViewById(R.id.userDetails);
         myProfile = (LinearLayout) findViewById(R.id.myProfile);
          agree_main = (CheckBox)findViewById(R.id.agree);
         final TextView terms_condi_text = (TextView) findViewById(R.id.terms);
@@ -112,18 +129,41 @@ public class UserRegister extends AppCompatActivity {
         type=getIntent().getStringExtra("type");
         PrintClass.printValue("UserRegisterPrint type ",type);
         menu.setVisibility(View.GONE);
+        noti = (ImageView)findViewById(R.id.noti);
+
         if(type.equals("edit")) {
+            noti.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i=new Intent(UserRegister.this, Notifications.class);
+                    startActivity(i);
+                }
+            });
             getProfileInfo();
             click.setText("UPDATE");
+            shButton.setVisibility(View.VISIBLE);
             terms_conditions.setVisibility(View.GONE);
             sign_up_text.setVisibility(View.GONE);
             logo.setVisibility(View.GONE);
             earnings.setText("\u20B9 "+prefrence.getString("amount",""));
             myProfile.setVisibility(View.VISIBLE);
+            profilePassword.setVisibility(View.GONE);
             if(prefrence.getString("avg_rating", "").length() != 0) {
                 ratings.setRating(Float.parseFloat(prefrence.getString("avg_rating", "")));
             }
+            if(show) {
+                shButton.setBackground(getResources().getDrawable(R.drawable.show));
+                userDetails.setVisibility(View.VISIBLE);
+                voucherDetails.setVisibility(View.VISIBLE);
+                click.setVisibility(View.VISIBLE);
+            } else {
+                shButton.setBackground(getResources().getDrawable(R.drawable.hide));
+                userDetails.setVisibility(View.GONE);
+                voucherDetails.setVisibility(View.GONE);
+                click.setVisibility(View.GONE);
+            }
         } else {
+            noti.setVisibility(View.GONE);
             name.setText("");
             email.setText("");
             phone.setText("");
@@ -165,7 +205,7 @@ public class UserRegister extends AppCompatActivity {
                 if (IsNetworkConnection.checkNetworkConnection(UserRegister.this)) {
 
                     RequestQueue queue = Volley.newRequestQueue(UserRegister.this);
-                    String url = "http://chouguleeducation.in/biker/api/web/user/customer-terms-condition";
+                    String url = "http://app.bikerservice.in/biker/api/web/user/customer-terms-condition";
 
 // Request a string response from the provided URL.
                     StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -229,7 +269,140 @@ public class UserRegister extends AppCompatActivity {
                 }
             }
         });
+        System.out.println("MYPROFILEPASSWORD showHideDetails "+show);
 
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    public void showHideDetails(View view) {
+        show = prefrence.getBoolean("show", false);
+        String profilePswd = prefrence.getString("profile_password","");;
+        System.out.println("MYPROFILEPASSWORD showHideDetails onclick " + profilePswd);
+
+        if(profilePswd.length() == 0) {
+            updatePassword();
+        } else {
+            if (show) {
+                shButton.setBackground(getResources().getDrawable(R.drawable.hide));
+                userDetails.setVisibility(View.GONE);
+                click.setVisibility(View.GONE);
+                voucherDetails.setVisibility(View.GONE);
+                editor.putBoolean("show", false);
+            } else {
+                verifyPassword();
+            }
+            editor.commit();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    public void ResponseOfUpdateProfilePassword(String resultString, String string) {
+        try {
+            JSONObject jsonObject = new JSONObject(resultString);
+            PrintClass.printValue("ResponseOfUpdateProfilePassword jsonObject ", " has data " + jsonObject.toString());
+            if (jsonObject.getString("status").equalsIgnoreCase("success")) {
+                new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                        jsonObject.getString("message"));
+                editor.putString("profile_password", string);
+                editor.putBoolean("show", false);
+                editor.commit();
+                userDetails.setVisibility(View.GONE);
+                click.setVisibility(View.GONE);
+                voucherDetails.setVisibility(View.GONE);
+                shButton.setBackground(getResources().getDrawable(R.drawable.hide));
+
+            } else {
+                new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                        jsonObject.getString("message"));
+            }
+
+        } catch (Exception e) {
+            System.out.println("SYSTEMPRINT ResponseOfUpdateProfilePassword error UserRegister " + e.toString());
+        }
+    }
+
+    public void updatePassword(){
+        final Dialog mBottomSheetDialog = new Dialog(this);
+        mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mBottomSheetDialog.setContentView(R.layout.activity_profile_password);
+        mBottomSheetDialog.setCancelable(true);
+        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        mBottomSheetDialog.setCanceledOnTouchOutside(false);
+        mBottomSheetDialog.show();
+        mBottomSheetDialog.getWindow().setGravity(Gravity.CENTER);
+        Button submit = (Button) mBottomSheetDialog.findViewById(R.id.submit);
+        final EditText otp = (EditText) mBottomSheetDialog.findViewById(R.id.otp);
+        System.out.println("MYPROFILEPASSWORD entered : "+otp.getText().toString()
+                + "saved "+prefrence.getString("profile_password",""));
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (otp.getText().toString().length() == 0) {
+                    otp.setError("Enter Your Password" );
+                } else if(otp.getText().toString().length() < 6 || otp.getText().toString().length() >10) {
+                    otp.setError("Invalid Password" );
+                } else {
+                    if (IsNetworkConnection.checkNetworkConnection(UserRegister.this)) {
+                        String url = Constants.SERVER_URL + "profile/update-profile-password";
+                        JSONObject params = new JSONObject();
+                        try {
+                            params.put("user_id", prefrence.getString("user_id", ""));
+                            params.put("access_token", prefrence.getString("access_token", ""));
+                            params.put("profile_password", otp.getText().toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            PrintClass.printValue("SYSTEMPRINT PARAMS", e.toString());
+                        }
+                        PrintClass.printValue("SYSTEMPRINT UserRegister  ", "LENGTH " + params.toString());
+                        new post_async(UserRegister.this, "UpdateProfilePassword",otp.getText().toString()).execute(url, params.toString());
+                        mBottomSheetDialog.cancel();
+                    } else {
+                        new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                                "No Internet Connection");
+                    }
+                }
+            }
+        });
+    }
+
+    public void  verifyPassword() {
+        final Dialog mBottomSheetDialog = new Dialog(this);
+        mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mBottomSheetDialog.setContentView(R.layout.activity_profile_password);
+        mBottomSheetDialog.setCancelable(true);
+        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        mBottomSheetDialog.setCanceledOnTouchOutside(false);
+        mBottomSheetDialog.show();
+        mBottomSheetDialog.getWindow().setGravity(Gravity.CENTER);
+        Button submit = (Button) mBottomSheetDialog.findViewById(R.id.submit);
+        final EditText otp = (EditText) mBottomSheetDialog.findViewById(R.id.otp);
+        System.out.println("MYPROFILEPASSWORD entered : "+otp.getText().toString()
+                + "saved "+prefrence.getString("profile_password",""));
+        submit.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void onClick(View view) {
+                if (otp.getText().toString().length() == 0) {
+                    otp.setError("Enter Your Password" );
+                } else {
+                    if (otp.getText().toString().equals(prefrence.getString("profile_password", ""))) {
+                        userDetails.setVisibility(View.VISIBLE);
+                        click.setVisibility(View.VISIBLE);
+                        voucherDetails.setVisibility(View.VISIBLE);
+                        editor.putBoolean("show", true);
+                        editor.commit();
+                        mBottomSheetDialog.cancel();
+                        shButton.setBackground(getResources().getDrawable(R.drawable.show));
+
+                    } else {
+                        new CustomToast().Show_Toast(UserRegister.this, rootView, "Invalid Profile Password");
+                    }
+                }
+            }
+        });
     }
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
@@ -323,6 +496,7 @@ public class UserRegister extends AppCompatActivity {
             }
         }
     }
+
     private Location getLastKnownLocation() {
         List<String> providers = locationManager.getProviders(true);
         Location bestLocation = null;
@@ -395,6 +569,7 @@ public class UserRegister extends AppCompatActivity {
                     params.put("user_type", "vendor");
                     params.put("service_center_name", service_center_name.getText().toString());
                     params2.put("address",getAddress);
+                    params.put("profile_password", profilePassword.getText().toString());
                     params2.put("lattitude", getLatitude);
                     params2.put("longitude", getLongitude);
                     jsonBody.put("ApiSignupForm", params);
@@ -425,6 +600,7 @@ public class UserRegister extends AppCompatActivity {
                     params.put("email", email.getText().toString());
                     params.put("mobile_no",phone.getText().toString());
                     params.put("service_center_name", service_center_name.getText().toString());
+                    params.put("profile_password", profilePassword.getText().toString());
                     params2.put("address",getAddress);
                     params2.put("lattitude", getLatitude);
                     params2.put("longitude", getLongitude);
@@ -533,6 +709,7 @@ public class UserRegister extends AppCompatActivity {
         String getName = name.getText().toString();
         String getEmail = email.getText().toString();
         String getPhone = phone.getText().toString();
+        String getProfilePswd = profilePassword.getText().toString();
         String getServiceCenterName = service_center_name.getText().toString();
 
         Pattern p = Pattern.compile(Constants.regEx);
@@ -564,7 +741,7 @@ public class UserRegister extends AppCompatActivity {
             } else {
                 return true;
             }
-        } else if(!type.equals("edit") && !agreed) {
+        }  else if(!type.equals("edit") && !agreed) {
             new CustomToast().Show_Toast(getApplicationContext(), rootView,
                     "Please accept to terms & conditions");
             return false;
@@ -595,7 +772,12 @@ public class UserRegister extends AppCompatActivity {
             if(prefrence.getString("avg_rating", "").length() != 0) {
                 ratings.setRating(Float.parseFloat(prefrence.getString("avg_rating", "")));
             }
+            TextView noti_count = (TextView) findViewById(R.id.noti_count);
+            Constants.noti_count(this,noti_count);
+
         } else {
+            noti_indication = (TextView)findViewById(R.id.noti_count);
+            noti_indication.setVisibility(View.GONE);
             name.setText("");
             email.setText("");
             phone.setText("");

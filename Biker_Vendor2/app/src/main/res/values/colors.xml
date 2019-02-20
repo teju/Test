@@ -18,5 +18,8 @@
     <color name="purple">#364ff4</color>
     <color name="dark_gray">#c1bfbf</color>
     <color name="light_color">#eaeaea</color>
+    <color name="gray">#af000000</color>
+    <color name="light_gray">#e1dede</color>
+    <color name="brown">#a98888</color>
 
 </resources>

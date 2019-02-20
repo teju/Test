@@ -5,8 +5,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="thanksmsg">Booking is successfully submitted</string>
 
-    <string name="fcm_pref">com.biker.pref</string>
-    <string name="fcm_token">com.biker.token</string>
+    <string name="fcm_pref">com.bikerservice.pref</string>
+    <string name="fcm_token">com.bikerservice.token</string>
     <string name="terms"> Agree to terms and conditions </string>
+    <string name="title_activity_notifications">Notifications</string>
 
 </resources>

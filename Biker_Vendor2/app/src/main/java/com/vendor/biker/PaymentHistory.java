@@ -1,6 +1,5 @@
 package com.vendor.biker;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -26,16 +24,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.vendor.biker.Utils.Constants;
 import com.vendor.biker.Utils.CustomToast;
@@ -43,7 +36,6 @@ import com.vendor.biker.Utils.IsNetworkConnection;
 import com.vendor.biker.Utils.PrintClass;
 import com.vendor.biker.Utils.post_async;
 import com.vendor.biker.model.BookingList;
-import com.vendor.biker.model.JobListModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -71,12 +63,15 @@ public class PaymentHistory extends AppCompatActivity
     private SwipeRefreshLayout swipeRefreshLayout;
     private ImageView no_records_img;
     private static final int MAKE_CALL_PERMISSION_REQUEST_CODE = 1;
+    private ImageView noti;
+    private ImageView noti_indication;
 
     @Override
     protected void onResume() {
         super.onResume();
         profile_name.setText(prefrence.getString("name", ""));
-
+        TextView noti_count = (TextView) findViewById(R.id.noti_count);
+        Constants.noti_count(this,noti_count);
     }
 
     @Override
@@ -146,6 +141,14 @@ public class PaymentHistory extends AppCompatActivity
             });
             alertDialog.show();
         }
+        noti = (ImageView)findViewById(R.id.noti);
+        noti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(PaymentHistory.this, Notifications.class);
+                startActivity(i);
+            }
+        });
         // Constants.statusColor(this);
     }
 
@@ -214,6 +217,7 @@ public class PaymentHistory extends AppCompatActivity
                 public void onClick(DialogInterface dialog, int which) {
                     editor.putString("isLoggedIn", "false");
                     editor.putString("access_token", "1234");
+                    editor.putBoolean("show", true);
                     editor.commit();
                     Intent i = new Intent(PaymentHistory.this, Login.class);
                     startActivity(i);

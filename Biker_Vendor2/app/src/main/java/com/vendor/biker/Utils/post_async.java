@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.view.Window;
 
 import com.android.volley.AuthFailureError;
@@ -19,11 +21,12 @@ import com.vendor.biker.JobHistory;
 import com.vendor.biker.JobList;
 import com.vendor.biker.Login;
 import com.vendor.biker.MainActivity;
+import com.vendor.biker.Notifications;
 import com.vendor.biker.PathGoogleMapActivity;
 import com.vendor.biker.PaymentHistory;
 import com.vendor.biker.R;
 import com.vendor.biker.UserRegister;
-
+import com.vendor.biker.model.NotificationModel;
 
 import java.io.UnsupportedEncodingException;
 
@@ -32,12 +35,17 @@ import java.io.UnsupportedEncodingException;
  */
 public class post_async extends AsyncTask<String, Integer, String> {
     static String action = "", resultString = "";
+    private  String new_action;
+    private  Notifications notifications;
+    private  String status;
+    private String profilePswd;
     private PaymentHistory paymentHistory;
     private PathGoogleMapActivity pathGoogleMapActivity;
     private JobHistory jobHistory;
     private JobList jobList;
     private MainActivity mainActivity;
     private UserRegister userRegister;
+    private NotificationModel notiList;
 
     private  Login login;
     private Dialog dialog;
@@ -73,11 +81,32 @@ public class post_async extends AsyncTask<String, Integer, String> {
         this.context=login;
         this.login = login;
     }
-    public post_async(JobList jobList, String action) {
+    public post_async(JobList jobList, String action,String status) {
         this.action = action;
         this.context=jobList;
         this.jobList = jobList;
+        this.status = status;
     }
+
+    public post_async(UserRegister userRegister, String action, String profilePswd) {
+        this.action = action;
+        this.context=userRegister;
+        this.userRegister = userRegister;
+        this.profilePswd = profilePswd;
+    }
+
+    public post_async(Notifications mainActivity, String action, NotificationModel notificationModel) {
+        this.action = action;
+        this.context=mainActivity;
+        this.notifications = mainActivity;
+        this.notiList= notificationModel;
+
+    }
+    public post_async(Context activity, String notificationcount) {
+        this.new_action = notificationcount;
+        this.context=activity;
+    }
+
     @Override
     protected String doInBackground(String... params) {
         PrintClass.printValue("SYSTEMPRINT POST SYNC  ", "LENGTH " + params.length);
@@ -96,6 +125,7 @@ public class post_async extends AsyncTask<String, Integer, String> {
 
         StringRequest strReq = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
+                    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
                     @Override
                     public void onResponse(String response) {
                         sendResult(response);
@@ -154,6 +184,7 @@ public class post_async extends AsyncTask<String, Integer, String> {
         queue.add(strReq);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void sendResult(String resultString) {
         PrintClass.printValue("SYSTEMPRINT postsync  if  ", "action " + action +
                 " resultString " + resultString);
@@ -190,7 +221,7 @@ public class post_async extends AsyncTask<String, Integer, String> {
             } else  if (this.jobHistory != null && action.equalsIgnoreCase("jobHistoryDetailsReload")) {
                 this.jobHistory.ResponseOfjobListReload(resultString);
             } else  if (this.jobList != null && action.equalsIgnoreCase("changeStatus")) {
-                this.jobList.ResponseOfChangeStatus(resultString);
+                this.jobList.ResponseOfChangeStatus(resultString,status);
             }else  if (this.jobHistory != null && action.equalsIgnoreCase("changeStatus")) {
                 this.jobHistory.ResponseOfChangeStatus(resultString);
             }else  if (this.jobHistory != null && action.equalsIgnoreCase("confirmpayment")) {
@@ -205,6 +236,19 @@ public class post_async extends AsyncTask<String, Integer, String> {
                 this.paymentHistory.ResponseOfPaymentListReload(resultString);
             } else  if (this.paymentHistory != null && action.equalsIgnoreCase("ConfirmPayment")) {
                 this.paymentHistory.ResponseOfChangeStatus(resultString);
+            } else  if (this.userRegister != null && action.equalsIgnoreCase("UpdateProfilePassword")) {
+                this.userRegister.ResponseOfUpdateProfilePassword(resultString,profilePswd);
+            }  else  if (this.notifications != null &&
+                    (action.equalsIgnoreCase("Notifications")
+                            || action.equals("NotificationRefresh"))) {
+                this.notifications.ResponseOfNotificationsList(resultString);
+            }  else  if (this.notifications != null && action.equalsIgnoreCase("NotificationRefresh")) {
+                this.notifications.ResponseOfNotitReload(resultString);
+            } else  if (this.notifications != null && action.equalsIgnoreCase("NOTIFICATION_READ")) {
+                this.notifications.ResponseOfReadNotification(resultString,notiList);
+            }
+            if(new_action != null && new_action.equals("NOTIFICATIONCOUNT")) {
+                Constants.ResponseOfNotiCount(resultString);
             }
         } catch (Exception e) {
             dialog.cancel();
@@ -230,6 +274,8 @@ public class post_async extends AsyncTask<String, Integer, String> {
 
         }  else   if(action.equals("PaymentHistoryReload") ||
                 action.equals("PaymentHistoryRefresh")  ) {
+
+        }   else   if(action.equals("NotificationRefresh") ) {
 
         }  else {
             dialog.show();

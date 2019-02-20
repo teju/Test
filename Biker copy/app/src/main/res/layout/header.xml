@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="#F43C36">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:src="@drawable/menu"
+        android:id="@+id/menu"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="10dp"/>
+    <com.bikerservice.biker.Utils.MyTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#F43C36"
+        android:text="BIKER"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:textSize="20dp"
+        android:id="@+id/title_val"
+        android:textStyle="bold"
+        android:layout_centerVertical="true"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="35dp"
+        android:layout_height="30dp">
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="30dp"
+            android:src="@drawable/bell"
+            android:visibility="visible"
+            android:layout_centerVertical="true"
+            android:tint="#ffffff"
+            android:id="@+id/noti" />
+
+        <TextView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:visibility="visible"
+            android:background="@drawable/circle"
+            android:textAlignment="center"
+            android:textSize="10dp"
+            android:textColor="#ffffff"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/noti_count" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

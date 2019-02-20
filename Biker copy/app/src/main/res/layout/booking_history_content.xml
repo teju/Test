@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:drawable/editbox_background_normal"
+    android:layout_marginTop="1dp"
+    android:layout_marginBottom="-5dp"
+    android:layout_marginLeft="1.5dp"
+    android:padding="10dp"
+    android:layout_marginRight="1.5dp">
+    <LinearLayout
+        android:layout_width="150dp"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="27dp">
+            <TextView
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:text="Booking No."
+                android:padding="5dp"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black"
+                android:id="@+id/booking_id_text"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":"
+                android:padding="5dp"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="27dp">
+            <TextView
+                android:layout_width="110dp"
+                android:layout_height="27dp"
+                android:text="Vendor Name"
+                android:padding="5dp"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black"
+                android:id="@+id/vendor_name_text" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":"
+                android:padding="5dp"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="27dp">
+            <TextView
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:text="Vendor No."
+                android:padding="5dp"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black"
+                android:id="@+id/vendor_number_text" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":"
+                android:padding="5dp"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="27dp">
+            <TextView
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:text="Vehicle No."
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black"
+                android:padding="5dp"
+                android:id="@+id/vehicle_no_text"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":"
+                android:padding="5dp"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="150dp"
+            android:orientation="horizontal"
+            android:layout_height="27dp">
+            <TextView
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:text="Status"
+                android:padding="5dp"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black"
+                android:id="@+id/status_text"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":"
+                android:padding="5dp"
+                android:textSize="@dimen/normal"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:textSize="@dimen/normal"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:id="@+id/booking_id"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:padding="5dp"
+            android:textSize="@dimen/normal"
+            android:textColor="@color/black"
+            android:id="@+id/vendor_name"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:padding="5dp"
+            android:textSize="@dimen/normal"
+            android:textColor="@color/blue"
+            android:clickable="true"
+            android:autoLink = "phone"
+            android:id="@+id/vendor_number"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:padding="5dp"
+            android:textSize="@dimen/normal"
+            android:id="@+id/vehicle_no"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:padding="5dp"
+            android:textSize="@dimen/normal"
+            android:textAllCaps="true"
+            android:textColor="@color/orange"
+            android:id="@+id/status"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:id="@+id/payNow"
+            android:text="Pay Now"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:background="@drawable/bg_green"
+            android:layout_alignParentRight="true" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

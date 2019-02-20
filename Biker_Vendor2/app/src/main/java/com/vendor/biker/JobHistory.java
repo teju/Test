@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -18,23 +18,17 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,8 +46,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.vendor.biker.R.id.textView;
 
 public class JobHistory extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {
@@ -73,6 +65,8 @@ public class JobHistory extends AppCompatActivity implements
     private TextView no_records;
     private int total_count = 0;
     private ImageView no_records_img;
+    private ImageView noti;
+    private ImageView noti_indication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +129,14 @@ public class JobHistory extends AppCompatActivity implements
             });
             alertDialog.show();
         }
+        noti = (ImageView)findViewById(R.id.noti);
+        noti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(JobHistory.this, Notifications.class);
+                startActivity(i);
+            }
+        });
 
     }
 
@@ -149,7 +151,9 @@ public class JobHistory extends AppCompatActivity implements
                 offset = 0;
                 jobList_l.clear();
                 if (prefrence.getString("isLoggedIn", "").equals("true")) {
-                    getJobList("jobHistoryDetails");
+                    //getJobList("jobHistoryDetails");
+                    Intent i = new Intent(this,PaymentHistory.class);
+                    startActivity(i);
                 } else {
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
                     alertDialog.setTitle("Confirm Login");
@@ -303,6 +307,8 @@ public class JobHistory extends AppCompatActivity implements
         super.onResume();
         profile_name.setText(prefrence.getString("name", ""));
 
+        TextView noti_count = (TextView) findViewById(R.id.noti_count);
+        Constants.noti_count(this,noti_count);
     }
 
     public void ResponseOfjobListReload(String resultString) {
@@ -373,6 +379,7 @@ public class JobHistory extends AppCompatActivity implements
                 public void onClick(DialogInterface dialog, int which) {
                     editor.putString("isLoggedIn", "false");
                     editor.putString("access_token", "1234");
+                    editor.putBoolean("show", true);
                     editor.commit();
                     Intent i = new Intent(JobHistory.this, Login.class);
                     startActivity(i);

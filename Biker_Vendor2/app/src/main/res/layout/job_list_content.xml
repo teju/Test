@@ -134,7 +134,6 @@
                 android:textColor="@color/black" />
         </LinearLayout>
 
-
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"

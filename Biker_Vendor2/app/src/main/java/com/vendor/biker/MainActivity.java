@@ -43,7 +43,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
@@ -64,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int total_count=0;
     private BookingDetailsRecyclerView mAdapter;
     private BroadcastReceiver receiver;
+    private ImageView noti;
+    private ImageView noti_indication;
+
     @Override
     public void onLowMemory() {
         super.onLowMemory();
@@ -74,7 +80,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         profile_name.setText(prefrence.getString("name", ""));
-
+        TextView noti_count = (TextView) findViewById(R.id.noti_count);
+        Constants.noti_count(this,noti_count);
     }
 
     @Override
@@ -172,7 +179,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
             alertDialog.show();
         }
+        noti = (ImageView)findViewById(R.id.noti);
+
+        noti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(MainActivity.this, Notifications.class);
+                startActivity(i);
+            }
+        });
+
     }
+
 
     public void getBookingList(String action){
         if (IsNetworkConnection.checkNetworkConnection(MainActivity.this)) {
@@ -243,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         bookingList.setMobile_no(booking_jObj.getString("mobile_no"));
                         bookingList.setVehicle_no(booking_jObj.getString("vehicle_no"));
                         bookingList.setStatus(booking_jObj.getString("status"));
-                        bookingList.setBooked_on(booking_jObj.getString("booked_on"));
+                        bookingList.setBooked_on(booking_jObj.getString("assigned_date"));
                         bookingList.setAddress(booking_jObj.getString("address"));
                         bookingList.setCustomer_name(booking_jObj.getString("customer_name"));
                         bookingList_l.add(bookingList);
@@ -323,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     bookingList.setEmail_id(booking_jObj.getString("email_id"));
                     bookingList.setVehicle_no(booking_jObj.getString("vehicle_no"));
                     bookingList.setStatus(booking_jObj.getString("status"));
-                    bookingList.setBooked_on(booking_jObj.getString("booked_on"));
+                    bookingList.setBooked_on(booking_jObj.getString("assigned_date"));
                     bookingList_l.add(bookingList);
                 }
                 mAdapter.notifyDataSetChanged();
@@ -344,7 +362,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         "Successfully Accepted the booking request");
                 bookingList_l.clear();
                 offset=0;
-                getBookingList("BookingDetails");
+                Intent i = new Intent(this,JobList.class);
+                i.putExtra("booking_id", "");
+                startActivity(i);
             } else {
                 new CustomToast().Show_Toast(getApplicationContext(), rootView,
                         jsonObject.getString("message"));
@@ -355,6 +375,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     static  class BookingDetailsRecyclerViewHolder extends RecyclerView.ViewHolder {
+        private final TextView requestTime;
         RelativeLayout action;
         TextView booking_id, customer_name, customer_number, vehicle_no;
         Button action_accept;
@@ -366,6 +387,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             customer_number = (TextView) itemView.findViewById(R.id.customer_number);
             vehicle_no = (TextView) itemView.findViewById(R.id.vehicle_no);
             action_accept = (Button) itemView.findViewById(R.id.action_accept);
+            requestTime = (TextView) itemView.findViewById(R.id.requestTime);
             //action_reject = (Button) itemView.findViewById(R.id.action_decline);
         }
     }
@@ -455,6 +477,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 userViewHolder.customer_name.setText(bookings.getCustomer_name());
                 userViewHolder.vehicle_no.setText(bookings.getVehicle_no());
                 userViewHolder.customer_number.setText(bookings.getMobile_no());
+                String reqTime =  bookings.getBooked_on();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat simpleFormat = new SimpleDateFormat("MMM dd yyyy hh:mm a");
+                try
+                {
+                    Date date = simpleDateFormat.parse(bookings.getBooked_on());
+                    reqTime =  simpleFormat.format(date);
+                    System.out.println("date : "+simpleDateFormat.format(date));
+                }
+                catch (ParseException ex)
+                {
+                    System.out.println("SYSTEMPRINT simpleDateFormat ParseException "+ex);
+                }
+
+
+                userViewHolder.requestTime.setText(reqTime);
                 userViewHolder.action_accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -556,6 +594,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public void onClick(DialogInterface dialog,int which) {
                     editor.putString("isLoggedIn","false");
                     editor.putString("access_token","1234");
+                    editor.putBoolean("show", true);
                     editor.commit();
                     Intent i=new Intent(MainActivity.this,Login.class);
                     startActivity(i);

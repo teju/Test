@@ -1,35 +1,27 @@
 {
   "project_info": {
-    "project_number": "728890294956",
-    "firebase_url": "https://biker-180415.firebaseio.com",
-    "project_id": "biker-180415",
-    "storage_bucket": "biker-180415.appspot.com"
+    "project_number": "483997519494",
+    "firebase_url": "https://biker-service.firebaseio.com",
+    "project_id": "biker-service",
+    "storage_bucket": "biker-service.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:728890294956:android:318aafe276ce1fbd",
+        "mobilesdk_app_id": "1:483997519494:android:3fcc1464c8f7b913",
         "android_client_info": {
           "package_name": "com.vendor.biker"
         }
       },
       "oauth_client": [
         {
-          "client_id": "728890294956-c29327qkn3dgir89pf18htjb3ojcucg0.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.vendor.biker",
-            "certificate_hash": "f1a24efe9831493dc88b6e7145842635f1326d1a"
-          }
-        },
-        {
-          "client_id": "728890294956-oaegs1sn07m52rngin2dr7q27c2qf08c.apps.googleusercontent.com",
+          "client_id": "483997519494-ge1fj9unkvcg6o7ln2ek4dltgcmucetm.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAk_7IhDRemJBZWO5a7hCbtvv9PcTAvLaA"
+          "current_key": "AIzaSyDEHnzAFPs-G5PcOPOeD6qVtdGzST8h8NE"
         }
       ],
       "services": {
@@ -37,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "728890294956-oaegs1sn07m52rngin2dr7q27c2qf08c.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

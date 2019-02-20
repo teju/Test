@@ -41,6 +41,16 @@ public class JobListModel {
 
     String is_paid;
 
+    public String getBooked_on() {
+        return booked_on;
+    }
+
+    public void setBooked_on(String booked_on) {
+        this.booked_on = booked_on;
+    }
+
+    String booked_on;
+
     public String getMobile_no() {
         return mobile_no;
     }

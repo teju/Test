@@ -4,7 +4,7 @@
     android:background="@color/black"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <com.biker.Utils.MyTextView
+    <com.bikerservice.Utils.MyTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Provide Details"
@@ -14,7 +14,7 @@
         android:textStyle="bold"
         android:gravity="center_horizontal"
         android:layout_marginTop="20dp"/>
-    <com.biker.Utils.MyEditText
+    <com.bikerservice.Utils.MyEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/vehicle_no"
@@ -24,7 +24,7 @@
         android:padding="12dp"
         android:textSize="@dimen/normal"
         android:hint="Vehicle Number"/>
-    <com.biker.Utils.MyEditText
+    <com.bikerservice.Utils.MyEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/email"

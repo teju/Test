@@ -51,6 +51,15 @@
             android:padding="6dp"
             android:textSize="15sp"
             android:layout_width="match_parent"/>
+        <com.vendor.biker.Utils.MyTextView
+            android:layout_height="35dp"
+            android:background="@color/white"
+            android:id="@+id/requestTime"
+            android:textColor="@color/black"
+            android:padding="6dp"
+            android:textSize="15sp"
+            android:layout_width="match_parent"/>
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="35dp"
@@ -109,5 +118,15 @@
             android:padding="6dp"
             android:textSize="15sp"
             android:layout_width="match_parent"/>
+        <com.vendor.biker.Utils.MyTextView
+            android:layout_weight="1"
+            android:background="#ec4d4a"
+            android:layout_height="35dp"
+            android:textColor="@color/white"
+            android:text="Request Time"
+            android:padding="6dp"
+            android:textSize="15sp"
+            android:layout_width="match_parent"/>
+
     </LinearLayout>
 </RelativeLayout>

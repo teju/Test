@@ -5,9 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Build;
-import android.provider.Telephony;
+import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -17,18 +16,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.vendor.biker.Utils.Constants;
 import com.vendor.biker.Utils.CustomToast;
@@ -46,6 +40,8 @@ public class ReferUser extends AppCompatActivity implements
     private TextView phone_no;
     private String phoneNo;
     private String message;
+    private ImageView noti;
+    private ImageView noti_indication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +95,14 @@ public class ReferUser extends AppCompatActivity implements
                 startActivity(i);
             }
         });
-
+        noti = (ImageView)findViewById(R.id.noti);
+        noti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(ReferUser.this, Notifications.class);
+                startActivity(i);
+            }
+        });
     }
 
 
@@ -186,6 +189,8 @@ public class ReferUser extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         profile_name.setText(prefrence.getString("name", ""));
+        TextView noti_count = (TextView) findViewById(R.id.noti_count);
+        Constants.noti_count(this,noti_count);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -225,6 +230,7 @@ public class ReferUser extends AppCompatActivity implements
                 public void onClick(DialogInterface dialog,int which) {
                     editor.putString("isLoggedIn","false");
                     editor.putString("access_token","1234");
+                    editor.putBoolean("show", true);
                     editor.commit();
                     Intent i=new Intent(ReferUser.this,Login.class);
                     startActivity(i);

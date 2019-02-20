@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:background="@color/background"
@@ -8,10 +8,27 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:layout_height="match_parent">
-    <include layout="@layout/header"></include>
+
+    <include layout="@layout/header"
+        android:id="@+id/header"></include>
+
+    <Button
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/shButton"
+        android:visibility="gone"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/hide"
+        android:layout_below="@+id/header"
+        android:onClick="showHideDetails"/>
+
     <ScrollView android:layout_height="match_parent"
         android:background="@color/white"
         android:layout_margin="5dp"
+        android:layout_below="@+id/header"
         android:layout_width="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,6 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="160dp"
             android:id="@+id/logo"
+            android:visibility="visible"
             android:src="@drawable/bierlogo"
             android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal"/>
@@ -43,6 +61,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_marginTop="15dp"
+                android:id="@+id/voucherDetails"
                 android:layout_gravity="center_horizontal"
                 android:layout_height="wrap_content">
                 <com.vendor.biker.Utils.MyTextView
@@ -88,6 +107,11 @@
             android:textAllCaps="true"
             android:textSize="@dimen/normal"
             android:textColor="@color/black" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/userDetails"
+            android:orientation="vertical">
         <com.vendor.biker.Utils.MyEditText
             android:layout_width="match_parent"
             android:background="@android:drawable/editbox_background_normal"
@@ -95,11 +119,11 @@
             android:id="@+id/name"
             android:textSize="@dimen/normal"
             android:inputType="text"
-            android:layout_marginLeft="60dp"
+            android:layout_marginLeft="30dp"
             android:drawableLeft="@drawable/account"
             android:drawablePadding="6dp"
             android:hint="Name"
-            android:layout_marginRight="60dp"
+            android:layout_marginRight="30dp"
             android:layout_marginTop="20dp"
             android:padding="12dp" />
         <com.vendor.biker.Utils.MyEditText
@@ -111,8 +135,8 @@
             android:background="@android:drawable/editbox_background_normal"
             android:hint="Phone Number"
             android:padding="12dp"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:drawableLeft="@drawable/cellphone"
             android:drawablePadding="6dp"
             android:layout_marginTop="10dp"
@@ -126,8 +150,8 @@
             android:hint="Service Centre Name"
             android:padding="12dp"
             android:inputType="text"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:drawableLeft="@drawable/account_multiple"
             android:drawablePadding="6dp"
             android:layout_marginTop="10dp"
@@ -141,18 +165,34 @@
             android:hint="Email"
             android:inputType="textEmailAddress"
             android:textSize="@dimen/normal"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:layout_marginTop="10dp"
             android:drawableLeft="@drawable/email"
             android:drawablePadding="6dp"
             android:textColor="@color/black" />
+        <com.vendor.biker.Utils.MyEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/editbox_background_normal"
+            android:id="@+id/profilePassword"
+            android:padding="12dp"
+            android:hint="Profile Password"
+            android:inputType="textEmailAddress"
+            android:textSize="@dimen/normal"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:drawableLeft="@drawable/account_key"
+            android:drawablePadding="6dp"
+            android:textColor="@color/black" />
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/terms_conditions"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
             android:layout_gravity="center_horizontal">
@@ -190,4 +230,4 @@
             android:text="REGISTER"/>
     </LinearLayout>
     </ScrollView>
-</LinearLayout>
+</RelativeLayout>

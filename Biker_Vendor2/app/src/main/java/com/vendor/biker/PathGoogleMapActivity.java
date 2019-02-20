@@ -1,17 +1,5 @@
 package com.vendor.biker;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,7 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,6 +32,18 @@ import com.vendor.biker.Utils.PrintClass;
 import com.vendor.biker.Utils.post_async;
 import com.vendor.biker.model.PathJSONParser;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class PathGoogleMapActivity extends FragmentActivity {
 
     private static LatLng origin ;
@@ -57,6 +57,9 @@ public class PathGoogleMapActivity extends FragmentActivity {
     private SharedPreferences prefrence;
     private SharedPreferences.Editor editor;
     private String booking_id;
+    private ImageView noti;
+    private ImageView noti_indication;
+
     @Override
     public void onLowMemory() {
         super.onLowMemory();
@@ -66,31 +69,37 @@ public class PathGoogleMapActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_path_google_map);
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        SupportMapFragment fm = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        googleMap = fm.getMap();
-        dest_latitude=Double.parseDouble(getIntent().getStringExtra("latitude"));
-        dest_longitude=Double.parseDouble(getIntent().getStringExtra("longitude"));
-        booking_id=getIntent().getStringExtra("booking_id");
-        PrintClass.printValue("PathGoogleMapActivity latitude ",dest_latitude+" longitude "+dest_longitude);
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        rootView=findViewById(android.R.id.content);
-        prefrence = getSharedPreferences("My_Pref", 0);
-        editor = prefrence.edit();
-
         try {
-            if (checkLocationPermission()) {
-                if (ContextCompat.checkSelfPermission(this,
-                        android.Manifest.permission. ACCESS_FINE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED) {
-                    getLatLong();
+            setContentView(R.layout.activity_path_google_map);
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            SupportMapFragment fm = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            googleMap = fm.getMap();
+            dest_latitude = Double.parseDouble(getIntent().getStringExtra("latitude"));
+            dest_longitude = Double.parseDouble(getIntent().getStringExtra("longitude"));
+            booking_id = getIntent().getStringExtra("booking_id");
+            PrintClass.printValue("PathGoogleMapActivity latitude ", dest_latitude + " longitude " + dest_longitude);
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            rootView = findViewById(android.R.id.content);
+            prefrence = getSharedPreferences("My_Pref", 0);
+            editor = prefrence.edit();
+
+            try {
+                if (checkLocationPermission()) {
+                    if (ContextCompat.checkSelfPermission(this,
+                            android.Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        getLatLong();
+                    }
                 }
+            } catch (Exception e) {
+                PrintClass.printValue("PathGoogleMapActivity Exception ", e.toString());
             }
         } catch (Exception e){
-            PrintClass.printValue("PathGoogleMapActivity Exception ",e.toString());
+            PrintClass.printValue("PathGoogleMapActivity Exception ", e.toString());
+
         }
+
     }
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
@@ -269,6 +278,13 @@ public class PathGoogleMapActivity extends FragmentActivity {
                     .title("Second Point"));
 
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
     }
 
     public void ResponseOfDestinationReached(String resultString) {

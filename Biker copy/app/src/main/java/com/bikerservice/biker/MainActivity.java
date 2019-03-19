@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google_map);
         dialog = new Dialog(this);
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.spinner);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -273,11 +273,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         });
+
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         if (map != null) {
+            showMap(getLatitude,getLongitude,zoom_val);
+
             map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override
                 public void onMapClick(LatLng latLng) {

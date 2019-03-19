@@ -38,7 +38,9 @@ import com.bikerservice.biker.Utils.PrintClass;
 import com.bikerservice.biker.Utils.SmsListener;
 import com.bikerservice.biker.Utils.SmsReceiver;
 import com.bikerservice.biker.Utils.post_async;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.credentials.Credential;
+import com.google.android.gms.auth.api.credentials.HintRequest;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
 import com.google.android.gms.common.ConnectionResult;
@@ -163,7 +165,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Goo
     private void requestHint() throws IntentSender.SendIntentException {
         requestContactPermission();
 
-        /*GoogleApiClient apiClient = new GoogleApiClient.Builder(this)
+        GoogleApiClient apiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .enableAutoManage(this, this)
                 .addApi(Auth.CREDENTIALS_API)
@@ -173,7 +175,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Goo
                 .setPhoneNumberIdentifierSupported(true)
                 .build();
 
-        PendingIntent intent = Auth.CredentialsApi.getHintPickerIntent(
+    /*    PendingIntent intent = Auth.CredentialsApi.getHintPickerIntent(
                 apiClient, hintRequest);
         startIntentSenderForResult(intent.getIntentSender(),
                 RESOLVE_HINT, null, 0, 0, 0);*/
@@ -416,7 +418,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Goo
             }
 
         } catch (Exception e){
-            System.out.println("SYSTEMPRINT error UserRegister "+e.toString());
+            System.out.println("SYSTEMPRINT error "+e.toString());
         }
     }
 

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -17,11 +19,13 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bikerservice.biker.BookingCompleted;
@@ -37,6 +41,7 @@ import com.bikerservice.biker.UserRegister;
 import com.bikerservice.biker.model.BookingList;
 import com.bikerservice.biker.model.NotificationModel;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -129,6 +134,7 @@ public class post_async extends AsyncTask<String, Integer, String> {
 
         StringRequest strReq = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                     @Override
                     public void onResponse(String response) {
                         sendResult(response);
@@ -145,15 +151,40 @@ public class post_async extends AsyncTask<String, Integer, String> {
                     }
                 },
                 new Response.ErrorListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         dialog.cancel();
+                        NetworkResponse response = error.networkResponse;
+                        System.out.println("SYSTEMPRINT NetworkResponse " + response.headers.toString()+" "+error.getMessage()) ;
+                        if (response != null) {
+                            try {
+                                String res = new String(response.data,
+                                        HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                                // Now you can use any deserializer to make sense of data
+                                JSONObject obj = new JSONObject(res);
+                                System.out.println("SYSTEMPRINT onErrorResponse " + " action " + action +
+                                        " res " + obj.toString());
+                                sendResult(res);
+                            } catch (UnsupportedEncodingException e1) {
+                                System.out.println("SYSTEMPRINT onErrorResponse " + " action " + action +
+                                        " res " + e1.toString());
+                                // Couldn't properly decode data to string
+                                e1.printStackTrace();
+                            } catch (JSONException e2) {
+                                System.out.println("SYSTEMPRINT onErrorResponse " + " action " + action +
+                                        " res " + e2.toString());
+                                // returned data is not JSONObject?
+                                e2.printStackTrace();
+                            }
+                        }
                         if(!action.equals("notificationService")) {
+                            System.out.println("SYSTEMPRINT error " + " action " + action +
+                                    " error " + error.toString());
                             Intent i = new Intent(context, ServerError.class);
                             context.startActivity(i);
                         }
-                        System.out.println("SYSTEMPRINT error " + " action " + action +
-                                " error " + error.toString());
+
                     }
                 }) {
             @Override
@@ -187,6 +218,7 @@ public class post_async extends AsyncTask<String, Integer, String> {
         queue.add(strReq);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void sendResult(String resultString) {
         PrintClass.printValue("SYSTEMPRINT postsync  if  ", "action " + action +
                 " resultString " + resultString);

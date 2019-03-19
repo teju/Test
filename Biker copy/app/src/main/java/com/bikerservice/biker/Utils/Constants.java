@@ -68,7 +68,7 @@ public class Constants {
 
             }
         } catch (Exception e){
-            System.out.println("SYSTEMPRINT error UserRegister "+e.toString());
+            System.out.println("SYSTEMPRINT error ResponseOfNotiCount "+e.toString());
         }
     }
 

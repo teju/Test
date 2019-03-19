@@ -22,7 +22,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.bikerservice.biker.R;
 import com.bikerservice.biker.Utils.Constants;
 import com.bikerservice.biker.Utils.CustomToast;
 import com.bikerservice.biker.Utils.IsNetworkConnection;
@@ -239,7 +238,7 @@ public class UserRegister extends AppCompatActivity {
         if(validate()) {
             if (IsNetworkConnection.checkNetworkConnection(UserRegister.this)) {
                 //   String url = Constants.SERVER_URL + "action=ReferFriend";
-                String url = Constants.SERVER_URL + "user/register";
+                String url = Constants.SERVER_URL + "user/user-signup";
                 JSONObject jsonBody = new JSONObject();
                 JSONObject params = new JSONObject();
                 try {
@@ -332,7 +331,7 @@ public class UserRegister extends AppCompatActivity {
                 }
             }
         } catch (Exception e){
-            System.out.println("SYSTEMPRINT error UserRegister "+e.toString());
+            System.out.println("SYSTEMPRINT error "+e.toString());
         }
     }
 
@@ -359,7 +358,7 @@ public class UserRegister extends AppCompatActivity {
             }
 
         } catch (Exception e){
-            System.out.println("SYSTEMPRINT error UserRegister "+e.toString());
+            System.out.println("SYSTEMPRINT error "+e.toString());
         }
     }
 

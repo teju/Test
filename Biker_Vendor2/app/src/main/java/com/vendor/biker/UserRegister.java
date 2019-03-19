@@ -558,7 +558,7 @@ public class UserRegister extends AppCompatActivity {
         if(validate()) {
             if (IsNetworkConnection.checkNetworkConnection(UserRegister.this)) {
                 //   String url = Constants.SERVER_URL + "action=ReferFriend";
-                String url = Constants.SERVER_URL + "user/vendor-register";
+                String url = Constants.SERVER_URL + "user/vendor-signup";
                 JSONObject jsonBody = new JSONObject();
                 JSONObject params = new JSONObject();
                 JSONObject params2 = new JSONObject();

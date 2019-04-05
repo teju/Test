@@ -36,7 +36,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bikerservice.biker.R;
 import com.bikerservice.biker.Utils.Constants;
 import com.bikerservice.biker.Utils.CustomToast;
 import com.bikerservice.biker.Utils.IsNetworkConnection;
@@ -204,8 +203,8 @@ public class PaymentHistory extends AppCompatActivity
                     i.putExtra("type", "edit");
                     startActivity(i);
                 } else {
-                    Intent i=new Intent(this,ServerError.class);
-                    startActivity(i);
+                    new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                            "No Internet Connection");
                 }
                 // Handle the camera action
             } else if (id == R.id.booking_details) {

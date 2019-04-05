@@ -354,8 +354,8 @@ public class JobHistory extends AppCompatActivity implements
                 i.putExtra("type", "edit");
                 startActivity(i);
             } else {
-                Intent i = new Intent(this, ServerError.class);
-                startActivity(i);
+                new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                        "No Internet Connection");
             }
             // Handle the camera action
         } else if (id == R.id.job_list) {

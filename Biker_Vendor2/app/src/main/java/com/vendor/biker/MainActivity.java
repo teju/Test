@@ -147,10 +147,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         }
                     } else {
                         System.out.println("NetworkChangeReceiverieieie " + " isNotAvailable");
-                        Intent i = new Intent(context, ServerError.class);
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(i);
-                        finish();
+                        new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                                "No Internet Connection");
                     }
                 }
             };
@@ -569,8 +567,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 i.putExtra("type", "edit");
                 startActivity(i);
             } else {
-                Intent i=new Intent(this,ServerError.class);
-                startActivity(i);
+                new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                        "No Internet Connection");
             }
             // Handle the camera action
         }  else if (id == R.id.job_list) {

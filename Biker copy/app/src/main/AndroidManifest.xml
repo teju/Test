@@ -60,9 +60,6 @@
             android:name="com.bikerservice.biker.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.bikerservice.biker.ServerError"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.bikerservice.biker.BookingSuccessful"
             android:screenOrientation="portrait" />
         <activity

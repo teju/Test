@@ -1,7 +1,9 @@
 package com.bikerservice.biker.Utils;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -36,7 +38,6 @@ import com.bikerservice.biker.Notifications;
 import com.bikerservice.biker.PaymentHistory;
 import com.bikerservice.biker.R;
 import com.bikerservice.biker.ReachedDestination;
-import com.bikerservice.biker.ServerError;
 import com.bikerservice.biker.UserRegister;
 import com.bikerservice.biker.model.BookingList;
 import com.bikerservice.biker.model.NotificationModel;
@@ -181,10 +182,11 @@ public class post_async extends AsyncTask<String, Integer, String> {
                         if(!action.equals("notificationService")) {
                             System.out.println("SYSTEMPRINT error " + " action " + action +
                                     " error " + error.toString());
-                            Intent i = new Intent(context, ServerError.class);
-                            context.startActivity(i);
+                            ErrorDialog();
+//                            Intent i = new Intent(context, ServerError.class);
+//                            context.startActivity(i);
+                            //Toast.makeText(context,"Something went wrong.Please try again later",Toast.LENGTH_LONG).show();
                         }
-
                     }
                 }) {
             @Override
@@ -216,6 +218,20 @@ public class post_async extends AsyncTask<String, Integer, String> {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(strReq);
+    }
+
+    public void ErrorDialog(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setMessage("Something went wrong.Please try again later");
+        alertDialogBuilder.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        arg0.dismiss();
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

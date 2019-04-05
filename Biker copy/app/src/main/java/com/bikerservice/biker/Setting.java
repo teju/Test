@@ -17,7 +17,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bikerservice.biker.R;
+import com.bikerservice.biker.Utils.CustomToast;
 import com.bikerservice.biker.Utils.IsNetworkConnection;
 
 
@@ -34,6 +34,7 @@ public class Setting extends AppCompatActivity  implements
     TextView profile_name;
     private ImageView noti;
     private ImageView noti_indication;
+    private View rootView;
 
     @Override
     protected void onResume() {
@@ -46,6 +47,7 @@ public class Setting extends AppCompatActivity  implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
        // Constants.statusColor(this);
+        rootView = findViewById(android.R.id.content);
 
         prefrence = getSharedPreferences("My_Pref", 0);
         editor = prefrence.edit();
@@ -114,8 +116,8 @@ public class Setting extends AppCompatActivity  implements
                 i.putExtra("type", "edit");
                 startActivity(i);
             } else {
-                Intent i=new Intent(this,ServerError.class);
-                startActivity(i);
+                new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                        "No Internet Connection");
             }
             // Handle the camera action
         } else if (id == R.id.booking_history) {

@@ -69,6 +69,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Goo
     private String reached_dest="false";
     private ImageView noti;
     private Parcelable credential;
+    private TextView resend_otp;
+    private Dialog mBottomSheetDialog;
+    private Button cancel,login_button;
+    private String getPhone;
+    private boolean dialog_shown = false;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -94,9 +99,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Goo
                     }
                 } else {
                     System.out.println("NetworkChangeReceiverieieie "+" isNotAvailable");
-                    Intent i=new Intent(context,ServerError.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(i);
+                    new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                            "No Internet Connection");
                 }
             }
         };
@@ -108,14 +112,21 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Goo
         phone=(EditText)findViewById(R.id.phone);
         phone.setTypeface(typeface_luci);
         sign_up=(TextView)findViewById(R.id.sign_up);
-        Button login_button = (Button) findViewById(R.id.login_button);
+        login_button = (Button) findViewById(R.id.login_button);
         sign_up.setOnClickListener(this);
         login_button.setTypeface(typeface_luci);
+
+        mBottomSheetDialog = new Dialog(this);
+        mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mBottomSheetDialog.setContentView(R.layout.otp);
+        mBottomSheetDialog.setCanceledOnTouchOutside(false);
+        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
 
         prefrence = getSharedPreferences("My_Pref", 0);
         notiprefrence = getSharedPreferences(getString(R.string.fcm_pref), 0);
         editor = prefrence.edit();
-
         if(Build.VERSION.SDK_INT < 23){
             //your code here
         } else {
@@ -126,6 +137,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Goo
             }
             requestContactPermission();
         }
+        login_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                login();
+            }
+        });
 
     }
 
@@ -243,6 +260,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Goo
     protected void onResume() {
         super.onResume();
         phone.setText("");
+        dialog_shown = false;
     }
 
     public void onTrimMemory(final int level) {
@@ -259,8 +277,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Goo
         }
     }
 
-    public void login(View v){
-        String getPhone=phone.getText().toString();
+    public void login(){
+        getPhone= phone.getText().toString();
 
         if(getPhone.length()==0){
             phone.setError("Phone Number cannot be empty");
@@ -311,18 +329,18 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Goo
 
     public void otpDialog(JSONObject jsonObject) {
         try {
-            final Dialog mBottomSheetDialog = new Dialog(this);
-            mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            mBottomSheetDialog.setContentView(R.layout.otp);
-            mBottomSheetDialog.setCanceledOnTouchOutside(false);
-            mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            mBottomSheetDialog.show();
-            mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
+            System.out.println("otpDialog mBottomSheetDialog "+dialog_shown);
+
+            if(!dialog_shown){
+                dialog_shown = true;
+                mBottomSheetDialog.show();
+            }
             Button submit = (Button) mBottomSheetDialog.findViewById(R.id.submit);
+            cancel = (Button) mBottomSheetDialog.findViewById(R.id.cancel);
             submit.setTypeface(typeface_luci);
 
             TextView textView = (TextView) mBottomSheetDialog.findViewById(R.id.txtview);
+            resend_otp = (TextView) mBottomSheetDialog.findViewById(R.id.resend_otp);
             textView.setTypeface(typeface_luci);
             textView.setText(jsonObject.getString("message"));
             otp = (EditText) mBottomSheetDialog.findViewById(R.id.otp);
@@ -334,6 +352,20 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Goo
                     messageText = msgArr[1];
                     //Toast.makeText(Login.this, "Message: " + messageText, Toast.LENGTH_LONG).show();
                     otp.setText(messageText);
+                }
+            });
+            resend_otp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    login();
+                }
+            });
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mBottomSheetDialog.dismiss();
+                    dialog_shown = false;
+                    otp.setText("");
                 }
             });
             submit.setOnClickListener(new View.OnClickListener() {
@@ -360,7 +392,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Goo
                                 PrintClass.printValue("SYSTEMPRINT PARAMS JSONException ", e.toString());
                             }
                             PrintClass.printValue("SYSTEMPRINT PARAMS", jsonBody.toString());
-                            mBottomSheetDialog.cancel();
+
                             new post_async(Login.this, "LoginOtp").execute(url, jsonBody.toString());
 
                         } else {
@@ -371,7 +403,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Goo
                 }
             });
         }catch (Exception e){
-
+            System.out.println("otpDialog Exception "+e.toString());
         }
 
     }
@@ -394,6 +426,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Goo
                 editor.putString("name",jsonObject.getString("name"));
                 editor.putString("access_token",jsonObject.getString("access_token"));
                 editor.commit();
+                mBottomSheetDialog.dismiss();
+                dialog_shown = false;
+
                 if(reached_dest.equalsIgnoreCase("false")) {
                     Intent i = new Intent(Login.this, MainActivity.class);
                     startActivity(i);
@@ -402,6 +437,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Goo
                     Intent i = new Intent(Login.this, ReachedDestination.class);
                     startActivity(i);
                     finish();
+
                 }
             } else {
 

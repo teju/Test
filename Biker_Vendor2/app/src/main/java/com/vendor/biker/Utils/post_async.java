@@ -1,7 +1,9 @@
 package com.vendor.biker.Utils;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -149,6 +151,7 @@ public class post_async extends AsyncTask<String, Integer, String> {
                             Intent i = new Intent(context, ServerError.class);
                             context.startActivity(i);
                         }*/
+                       ErrorDialog();
                         System.out.println("SYSTEMPRINT error " + " action " + action +
                                 " error " + error.toString());
                     }
@@ -182,6 +185,19 @@ public class post_async extends AsyncTask<String, Integer, String> {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(strReq);
+    }
+    public void ErrorDialog(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setMessage("Something went wrong.Please try again later");
+        alertDialogBuilder.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        arg0.dismiss();
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)

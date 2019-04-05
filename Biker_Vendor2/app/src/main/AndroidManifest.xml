@@ -74,9 +74,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ServerError"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".PathGoogleMapActivity"
             android:screenOrientation="portrait" />
         <activity

@@ -252,13 +252,14 @@ public class PathGoogleMapActivity extends FragmentActivity {
 
         // Destination of route
         String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        String key = "key=" + "AIzaSyDgt34MMDz4ehwGXntZg37JivQLPvVB1Lc";
 
         // Sensor enabled
         String sensor = "sensor=false";
         String mode = "mode=driving";
 
         // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + mode;
+        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + mode + "&" +key;
 
         // Output format
         String output = "json";

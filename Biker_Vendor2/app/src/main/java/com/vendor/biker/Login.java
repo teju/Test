@@ -49,6 +49,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     private SharedPreferences notiprefrence;
     private String getPhoneNo;
     private ImageView noti;
+    private Dialog mBottomSheetDialog;
+    private boolean dialog_shown = false;
+    private Button login_button;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -73,14 +76,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                     }
                 } else {
                     System.out.println("NetworkChangeReceiverieieie "+" isNotAvailable");
-                    Intent i=new Intent(context,ServerError.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(i);
-                    finish();
+                    new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                            "No Internet Connection");
                 }
             }
         };
         registerReceiver(receiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+        login_button = (Button) findViewById(R.id.login_button);
 
         rootView=findViewById(android.R.id.content);
         phone=(EditText)findViewById(R.id.phone);
@@ -97,6 +99,21 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         } else {
             requestContactPermission();
         }
+
+
+        mBottomSheetDialog = new Dialog(this);
+        mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mBottomSheetDialog.setContentView(R.layout.otp);
+        mBottomSheetDialog.setCanceledOnTouchOutside(false);
+        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
+        login_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                login();
+            }
+        });
 
     }
 
@@ -174,7 +191,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         }
     }
 
-    public void login(View v){
+    public void login(){
         String getPhone=phone.getText().toString();
 
         if(getPhone.length()==0){
@@ -210,26 +227,39 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
             final JSONObject jsonObject = new JSONObject(response);
             PrintClass.printValue("UserRegisterREsponse jsonObject "," has data "+jsonObject.toString());
             if(jsonObject.getString("status").equalsIgnoreCase("success")){
-                final Dialog mBottomSheetDialog = new Dialog(this);
-                mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                mBottomSheetDialog.setContentView(R.layout.otp);
-                mBottomSheetDialog.setCancelable(true);
-                mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT);
-                 mBottomSheetDialog.setCanceledOnTouchOutside(false);
-                mBottomSheetDialog.show();
+                if(!dialog_shown){
+                    dialog_shown = true;
+                    mBottomSheetDialog.show();
+                }
                 mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
                 Button submit = (Button) mBottomSheetDialog.findViewById(R.id.submit);
                 TextView textView=(TextView)mBottomSheetDialog.findViewById(R.id.txtview);
                 textView.setText(jsonObject.getString("message"));
+                TextView resend_otp = (TextView) mBottomSheetDialog.findViewById(R.id.resend_otp);
+                Button cancel = (Button) mBottomSheetDialog.findViewById(R.id.cancel);
+
                 otp = (EditText) mBottomSheetDialog.findViewById(R.id.otp);
                 SmsReceiver.bindListener(new SmsListener() {
                     @Override
                     public void messageReceived(String messageText) {
                         String msgArr[] = messageText.split("\\s");
-                        messageText = msgArr[0];
+                        messageText = msgArr[1];
                        // Toast.makeText(Login.this, "Message: " + messageText, Toast.LENGTH_LONG).show();
                         otp.setText(messageText);
+                    }
+                });
+                resend_otp.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        login();
+                    }
+                });
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mBottomSheetDialog.dismiss();
+                        dialog_shown = false;
+                        otp.setText("");
                     }
                 });
                 submit.setOnClickListener(new View.OnClickListener() {
@@ -260,7 +290,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                                     PrintClass.printValue("SYSTEMPRINT PARAMS JSONException ", e.toString());
                                 }
                                 PrintClass.printValue("SYSTEMPRINT PARAMS", jsonBody.toString());
-                                mBottomSheetDialog.dismiss();
                                 System.out.println("setOnClickListener mBottomSheetDialog ");
 
                                 new post_async(Login.this, "LoginOtp").execute(url, jsonBody.toString());
@@ -276,7 +305,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                         jsonObject.getString("message") );
             }
         } catch (Exception e){
-            System.out.println("SYSTEMPRINT error UserRegister "+e.toString());
+            System.out.println("SYSTEMPRINT error UserRegister ResponseOfLogin"+e.toString());
         }
     }
 
@@ -296,7 +325,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 if(jsonObject.has("referel_code")) {
                     editor.putString("referel_code", jsonObject.getString("referel_code"));
                 }
-
+                mBottomSheetDialog.dismiss();
+                dialog_shown = false;
                 editor.commit();
                 notificationService();
                 Intent i = new Intent(Login.this, MainActivity.class);
@@ -315,7 +345,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
             }
 
         } catch (Exception e){
-            System.out.println("SYSTEMPRINT error UserRegister "+e.toString());
+            System.out.println("SYSTEMPRINT error UserRegister ResponseOfLoginOtp "+e.toString());
         }
     }
     @Override

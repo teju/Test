@@ -157,7 +157,6 @@ public class post_async extends AsyncTask<String, Integer, String> {
                     public void onErrorResponse(VolleyError error) {
                         dialog.cancel();
                         NetworkResponse response = error.networkResponse;
-                        System.out.println("SYSTEMPRINT NetworkResponse " + response.headers.toString()+" "+error.getMessage()) ;
                         if (response != null) {
                             try {
                                 String res = new String(response.data,

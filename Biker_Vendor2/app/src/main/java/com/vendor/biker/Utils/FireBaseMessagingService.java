@@ -33,17 +33,20 @@ public class FireBaseMessagingService extends FirebaseMessagingService {
         editor = prefrence.edit();
         editor.putString("isNotiReceived", "true");
 
-        PrintClass.printValue("FireBaseMessagingService RESPONSE ",""+ remoteMessage.getNotification().getClickAction());
+        PrintClass.printValue("FireBaseMessagingService RESPONSE ",""+ remoteMessage.getNotification().getSound());
         Intent i=new Intent(remoteMessage.getNotification().getClickAction());
         i.putExtra("booking_id", remoteMessage.getData().get("booking_id"));
 
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent=PendingIntent.getActivity(this,0,i,PendingIntent.FLAG_ONE_SHOT);
+        Uri alarmSound = Uri.parse("android.resource://com.vendor.biker/raw/notification");
+
         NotificationCompat.Builder builder=new NotificationCompat.Builder(this);
         builder.setFullScreenIntent(pendingIntent, true);
         builder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
-
+        builder.setPriority(NotificationCompat.PRIORITY_LOW); // Set priority to PRIORITY_LOW to mute notification sound
+        builder.setSound(alarmSound);
         builder.setContentTitle(remoteMessage.getNotification().getTitle());
         builder.setStyle((new NotificationCompat.BigTextStyle().bigText(remoteMessage.getNotification().getBody())));
         Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.bierlogo);

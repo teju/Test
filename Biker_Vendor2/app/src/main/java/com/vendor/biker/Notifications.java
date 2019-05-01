@@ -316,6 +316,9 @@ public class Notifications extends AppCompatActivity implements SwipeRefreshLayo
             } else if (notiList.getAction().contains("delivered")) {
                 Intent i = new Intent(Notifications.this, JobHistory.class);
                 startActivity(i);
+            }  else if (notiList.getAction().contains("assigned")) {
+                Intent i = new Intent(Notifications.this, MainActivity.class);
+                startActivity(i);
             } else {
                 Intent i = new Intent(Notifications.this, PaymentHistory.class);
                 startActivity(i);

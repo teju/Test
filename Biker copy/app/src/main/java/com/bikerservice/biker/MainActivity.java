@@ -966,6 +966,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             email.setError("Email Id Invalid");
             return false;
 
+        } else if(getAddress.length() == 0) {
+            new CustomToast().Show_Toast(getApplicationContext(), rootView,
+                    "Please switch in gps and then proceed with bookings " );
+            return false;
+
         } else {
             vehicle_no.setError(null);
             email.setError(null);

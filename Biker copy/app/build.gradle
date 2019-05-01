@@ -18,7 +18,7 @@ android {
         applicationId "com.bikerservice.biker"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 8
+        versionCode 9
         multiDexEnabled true
         versionName "1.2"
         signingConfig signingConfigs.config
